@@ -14,7 +14,27 @@ func Build() *gin.Engine {
 	engine := gin.New()
 	engine.Use(gin.Logger())
 	engine.Use(gin.Recovery())
+	engine.Use(CORS())
 	return engine
+}
+
+func CORS() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		allowedOrigin := "http://localhost:3000"
+		
+		c.Writer.Header().Set("Access-Control-Allow-Origin", allowedOrigin)
+		c.Writer.Header().Set("Access-Control-Allow-Credentials", "true")
+		c.Writer.Header().Set("Access-Control-Allow-Headers", "Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization, accept, origin, Cache-Control, X-Requested-With")
+		c.Writer.Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
+
+		// Handle browser preflight requests, where it asks for allowed origin.
+		if c.Request.Method == "OPTIONS" {
+			c.AbortWithStatus(204)
+			return
+		}
+
+		c.Next()
+	}
 }
 
 func setMethodHandler(method string, path string, fn gin.HandlerFunc, group *gin.RouterGroup) {

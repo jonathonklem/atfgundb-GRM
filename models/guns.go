@@ -14,3 +14,8 @@ type Accessory struct {
 	Manufacturer string `json:"manufacturer"`
 	Model string `json:"model"`
 }
+
+type Maintenance struct {
+	DateDone string `json:"date_done"`
+	MaintenanceDone string `json:"maintenance_type"`
+}
