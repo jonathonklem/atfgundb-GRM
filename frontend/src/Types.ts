@@ -1,9 +1,9 @@
-interface Accessory {
+export interface Accessory {
     name: string,
     manufacturer: string,
     model: string,
 }
-interface Gun {
+export interface Gun {
     name: string,
     manufacturer: string,
     model: string,
@@ -13,7 +13,7 @@ interface Gun {
 
 }
 
-interface Ammo {
+export interface Ammo {
     name: string,
     amount: BigInteger,
     grain: string,

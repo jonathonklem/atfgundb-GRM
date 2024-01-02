@@ -1,7 +1,6 @@
 import React from 'react';
 import logo from './logo.svg';
-import './App.css';
-import './Types';
+import {Ammo, Gun} from './Types';
 
 const getenv = require('getenv');
 
@@ -46,9 +45,9 @@ class App extends React.Component {
     return (
       <div className="App">
         <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
+          <img src={logo} className="w-40 block m-auto" alt="logo" />
         </header>
-        <input type="button" onClick={() => this.callApi()} value="Call API"/>
+        <input type="button" onClick={() => this.callApi()} value="FETCH"/>
         <p>
           {this.state.guns}
         </p>
