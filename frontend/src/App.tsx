@@ -1,6 +1,8 @@
 import React from 'react';
 import logo from './logo.svg';
 import './App.css';
+import './Types';
+
 const getenv = require('getenv');
 
 const url = getenv.string('REACT_APP_API');
@@ -19,7 +21,7 @@ class App extends React.Component {
     .then((response) => response.json())
     .then((response) => {
       let output = "";
-      response.forEach((item:any) => {
+      response.forEach((item:Gun) => {
         output += item.name + ",";
       })
       this.setState({guns: output})
@@ -34,7 +36,7 @@ class App extends React.Component {
     .then((response) => response.json())
     .then((response) => {
       let output = "";
-      response.forEach((item:any) => {
+      response.forEach((item:Ammo) => {
         output += item.name + ","
       })
       this.setState({ammo: output})
