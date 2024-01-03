@@ -1,10 +1,13 @@
 import React from 'react';
 import logo from './logo.svg';
 import {Ammo, Gun} from './Types';
+import { useAuth0 } from '@auth0/auth0-react';
+import Authenticated from './components/authenticated';
 
 const getenv = require('getenv');
 
 const url = getenv.string('REACT_APP_API');
+
 
 class App extends React.Component {
   state = {guns: null, ammo: null};
@@ -41,22 +44,36 @@ class App extends React.Component {
       this.setState({ammo: output})
     });
   }
+ 
   render() {
-    return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="w-40 block m-auto" alt="logo" />
-        </header>
-        <input type="button" onClick={() => this.callApi()} value="FETCH"/>
-        <p>
-          {this.state.guns}
-        </p>
-        <p>
-          {this.state.ammo}
-        </p>
-      </div>
-    );
+    return (<Authenticated/>);
   }
+  /*render() {
+    if (this.authenticated) {
+      return (
+        <div className="App">
+          <header className="App-header">
+            <img src={logo} className="w-40 block m-auto" alt="logo" />
+          </header>
+          <input type="button" onClick={() => this.callApi()} value="FETCH"/>
+          <p>
+            {this.state.guns}
+          </p>
+          <p>
+            {this.state.ammo}
+          </p>
+        </div>
+      );
+    } else {
+      return (
+        <div>
+          <p>Please sign in</p>
+          <LoginButton />
+        </div>
+      )
+    }
+    
+  }*/
 }
 
 export default App;
