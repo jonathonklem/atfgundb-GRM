@@ -1,4 +1,4 @@
-package main
+package db
 
 import (
 	"context"
@@ -10,9 +10,10 @@ import (
 	"os"
 	"log"
 	"atfgundb.com/app/models"
+	"time"
 )
 
-func main() {
+func getClient() *mongo.Client{
 	err := godotenv.Load()
 	if err != nil {
 		log.Fatal("Error loading .env file")
@@ -23,18 +24,43 @@ func main() {
 	// Use the SetServerAPIOptions() method to set the Stable API version to 1
 	serverAPI := options.ServerAPI(options.ServerAPIVersion1)
 	opts := options.Client().ApplyURI(mongoString).SetServerAPIOptions(serverAPI)
-
+	
 	// Create a new client and connect to the server
 	client, err := mongo.Connect(context.TODO(), opts)
 	if err != nil {
 		panic(err)
 	}
+
+	return client
+}
+
+func InsertUpdateUser(user *models.User) {
+	client := getClient()
+
 	defer func() {
-		if err = client.Disconnect(context.TODO()); err != nil {
+		if err := client.Disconnect(context.TODO()); err != nil {
 		panic(err)
 		}
 	}()
-	
+	usersCollection := client.Database("ATFGunDB").Collection("users")
+	opts := options.Update().SetUpsert(true)
+
+	filter := bson.D{{"email", user.Email}, {"id", user.ID}, {"name", user.Name}}
+
+	update := bson.D{
+		{"$set", bson.D{{"lastlogin",time.Now().Format(time.RFC3339)}}},
+	}
+
+	log.Println("Right before updateone()")
+	_, err := usersCollection.UpdateOne(context.TODO(), filter, update, opts)
+
+	if err != nil {
+		log.Println("Err wasnt nil")
+		log.Fatal(err)
+	}
+}
+func DontExecute() {
+	client := getClient()
 	usersCollection := client.Database("ATFGunDB").Collection("users")
 	
 	// Pass these options to the Find method
