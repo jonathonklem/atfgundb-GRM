@@ -9,6 +9,7 @@ import {
     Link,
 } from "react-router-dom";
 import Guns from "./guns/index";
+import AddGun from "./guns/add";
 
 const getenv = require('getenv');
 const url = getenv.string('REACT_APP_API');
@@ -16,8 +17,12 @@ const url = getenv.string('REACT_APP_API');
 const Dashboard = () => {
     var [profileSaved, setProfileSaved] = useState(false);
 
-    const {user, isAuthenticated} = useAuth0();
+    const {user, isAuthenticated, isLoading} = useAuth0();
 
+    if (isLoading) {
+        return <div>Loading...</div>;
+    }
+    
     if (!profileSaved) {
         if (user) {
             user.id = user.sub?.split("|")[1];
@@ -44,22 +49,26 @@ const Dashboard = () => {
                         path="/"
                         element={
                             <div>
-                                <ul>
-                                    <li><Link className="bg-red-800 text-slate-50 py-2 px-4 w-1/4 block my-2 text-center mx-auto" to="/guns">Guns</Link></li>
-                                    <li><Link className="bg-red-800 text-slate-50 py-2 px-4 w-1/4 block my-2 text-center mx-auto" to="/ammo">Ammo</Link></li>
-                                    <li><Link className="bg-red-800 text-slate-50 py-2 px-4 w-1/4 block my-2 text-center mx-auto" to="/trips">Range Trips</Link></li>
-                                    <li><Link className="bg-red-800 text-slate-50 py-2 px-4 w-1/4 block my-2 text-center mx-auto" to="/accessories">Accessories</Link></li>
-                                    <li><Link className="bg-red-800 text-slate-50 py-2 px-4 w-1/4 block my-2 text-center mx-auto" to="/maintenance">Maintenance</Link></li>
-                                </ul>
-                                <LogoutButton/>
+                                Put something here
                             </div>
                         }
                     ></Route>
                     <Route
-                        path="/guns"
-                        element={<Guns />}
-                    ></Route>
+                        path="guns"
+                       
+                    >
+                        <Route index  element={<Guns UserId={userId} />} />
+                        <Route path="add" element={<AddGun />} />
+                    </Route>
                 </Routes>
+                <ul className="mt-4 fixed -bottom-2 w-full left-0">
+                    <li className="inline-block w-2/12"><Link className="bg-red-800 text-slate-50 py-2 px-4 w-full inline-block my-2 text-center mx-auto" to="/guns">Guns</Link></li>
+                    <li className="inline-block w-2/12"><Link className="bg-red-800 text-slate-50 py-2 px-4 w-full inline-block my-2 text-center mx-auto" to="/ammo">Ammo</Link></li>
+                    <li className="inline-block w-2/12"><Link className="bg-red-800 text-slate-50 py-2 px-4 w-full inline-block my-2 text-center mx-auto" to="/trips">Sess.</Link></li>
+                    <li className="inline-block w-2/12"><Link className="bg-red-800 text-slate-50 py-2 px-4 w-full inline-block my-2 text-center mx-auto" to="/accessories">Acc.</Link></li>
+                    <li className="inline-block w-2/12"><Link className="bg-red-800 text-slate-50 py-2 px-4 w-full inline-block my-2 text-center mx-auto" to="/maintenance">Maint.</Link></li>
+                    <li className="inline-block w-2/12"><LogoutButton /></li>
+                </ul>
             </Router>
         )
     } else {

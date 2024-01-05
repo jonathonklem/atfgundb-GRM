@@ -12,7 +12,6 @@ func main() {
 	routing.AddRoute(engine, "/ammo", routing.GET, api.ListAmmo)
 	routing.AddRoute(engine, "/users/saveVisit", routing.POST, api.UserSaveVisit)
 
-
 	if err := engine.Run(); err != nil {
 		log.Printf("Error starting gin %v", err)
 	}
