@@ -1,10 +1,10 @@
 import React from "react";
 
-const GunTable = (props) => {
+const AmmoTable = (props) => {
     if (props.guns?.length === 0) {
         return (
             <div>
-                <p>No guns yet.</p>
+                <p>No ammo yet.</p>
             </div>
         )
     } else { 
@@ -13,14 +13,14 @@ const GunTable = (props) => {
                 <thead>
                 <tr>
                     <th>Name</th>
-                    <th>Round Count</th>
+                    <th>Count</th>
                 </tr>
                 </thead>
                 <tbody>
-                {props.guns.map((gun) => (
+                {props.ammo.map((item) => (
                     <tr>
-                        <td>{gun.name}</td>
-                        <td>{gun.roundcount}</td>
+                        <td>{item.name}</td>
+                        <td>{item.amount}</td>
                     </tr>
                 ))}
                 </tbody>
@@ -28,4 +28,4 @@ const GunTable = (props) => {
         )  
     }
 }
-export default GunTable;   
+export default AmmoTable;   

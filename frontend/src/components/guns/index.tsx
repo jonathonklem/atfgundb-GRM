@@ -5,7 +5,6 @@ import {
     Route,
     Link,
 } from "react-router-dom";
-import AddGun from "./add";
 import GunsTable from "./gunTable";
 
 const getenv = require('getenv');

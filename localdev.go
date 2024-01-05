@@ -11,6 +11,7 @@ func main() {
 	routing.AddRoute(engine, "/guns", routing.GET, api.ListGuns)
 	routing.AddRoute(engine, "/guns/add", routing.POST, api.AddGun)
 	routing.AddRoute(engine, "/ammo", routing.GET, api.ListAmmo)
+	routing.AddRoute(engine, "/ammo/add", routing.POST, api.AddAmmo)
 	routing.AddRoute(engine, "/users/saveVisit", routing.POST, api.UserSaveVisit)
 
 	if err := engine.Run(); err != nil {

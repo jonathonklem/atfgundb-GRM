@@ -10,6 +10,9 @@ import {
 } from "react-router-dom";
 import Guns from "./guns/index";
 import AddGun from "./guns/add";
+import Ammo from "./ammo/index";
+import AddAmmo from "./ammo/add";
+
 
 const getenv = require('getenv');
 const url = getenv.string('REACT_APP_API');
@@ -53,12 +56,13 @@ const Dashboard = () => {
                             </div>
                         }
                     ></Route>
-                    <Route
-                        path="guns"
-                       
-                    >
+                    <Route path="guns">
                         <Route index  element={<Guns UserId={userId} />} />
                         <Route path="add" element={<AddGun UserId={userId}/>} />
+                    </Route>
+                    <Route path="ammo">
+                        <Route index element={<Ammo UserId={userId}/>} />
+                        <Route path="add" element={<AddAmmo UserId={userId}/>} />
                     </Route>
                 </Routes>
                 <ul className="mt-4 fixed -bottom-6 w-full left-0">

@@ -8,15 +8,25 @@ export interface Gun {
     manufacturer: string,
     model: string,
     caliber: string,
-    round_count: BigInteger,
+    roundcount: Number,
+    user_id: string,
     accessories: Accessory[],
 
 }
 
+export interface AmmoPurchase {
+    name: string,
+    count: Number,
+    grain: string,
+    user_id: string,
+    price: Number,
+    date: string,
+}
 export interface Ammo {
     name: string,
-    amount: BigInteger,
+    amount: Number,
     grain: string,
-    average_price: BigInteger,
+    user_id: string,
+    average_price: Number,
     last_price: BigInteger,
 }
