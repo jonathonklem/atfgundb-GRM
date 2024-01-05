@@ -58,7 +58,7 @@ const Dashboard = () => {
                        
                     >
                         <Route index  element={<Guns UserId={userId} />} />
-                        <Route path="add" element={<AddGun />} />
+                        <Route path="add" element={<AddGun UserId={userId}/>} />
                     </Route>
                 </Routes>
                 <ul className="mt-4 fixed -bottom-6 w-full left-0">

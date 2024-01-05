@@ -14,6 +14,32 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
+func InsertUpdateGun(gun *models.Gun) {
+	client := getClient()
+
+	defer func() {
+		if err := client.Disconnect(context.TODO()); err != nil {
+			panic(err)
+		}
+	}()
+	gunsCollection := client.Database("ATFGunDB").Collection("guns")
+	opts := options.Update().SetUpsert(true)
+
+	filter := bson.D{{"name", gun.Name}, {"manufacturer", gun.Manufacturer}, {"caliber", gun.Caliber}, {"model", gun.Model}, {"user_id", gun.UserID}}
+
+	update := bson.D{
+		{"$set", bson.D{{"roundcount", gun.RoundCount}}},
+	}
+
+	log.Println("Right before updateone()")
+	_, err := gunsCollection.UpdateOne(context.TODO(), filter, update, opts)
+
+	if err != nil {
+		log.Println("Err wasnt nil")
+		log.Fatal(err)
+	}
+}
+
 func getClient() *mongo.Client {
 	err := godotenv.Load()
 	if err != nil {
@@ -50,7 +76,7 @@ func GetGuns(user *models.User) []models.Gun {
 	findOptions.SetLimit(100)
 
 	// Here's an array in which you can store the decoded documents
-	var results []models.Gun
+	var results []models.Gun = make([]models.Gun, 0)
 
 	// Passing bson.D{{}} as the filter matches all documents in the collection
 	cur, err := gunsCollection.Find(context.TODO(), bson.D{{"user_id", user.ID}}, findOptions)

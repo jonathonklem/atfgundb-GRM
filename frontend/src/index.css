@@ -543,12 +543,12 @@ video {
   position: relative;
 }
 
-.-bottom-4 {
-  bottom: -1rem;
-}
-
 .-bottom-6 {
   bottom: -1.5rem;
+}
+
+.-top-4 {
+  top: -1rem;
 }
 
 .left-0 {
@@ -663,7 +663,7 @@ video {
   color: rgb(248 250 252 / var(--tw-text-opacity));
 }
 
-input[type="text"] {
+input[type="text"], input[type="number"] {
   padding: 0.25rem;
   --tw-text-opacity: 1;
   color: rgb(64 64 64 / var(--tw-text-opacity));
@@ -676,14 +676,14 @@ input[type="text"] {
   box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
 }
 
-input[type="text"]:focus {
+input[type="text"]:focus, input[type="number"]:focus {
   --tw-border-opacity: 1;
   border-color: rgb(99 102 241 / var(--tw-border-opacity));
   --tw-ring-opacity: 1;
   --tw-ring-color: rgb(99 102 241 / var(--tw-ring-opacity));
 }
 
-input[type="text"] {
+input[type="text"], input[type="number"] {
   display: block;
   width: 100%;
   border-radius: 0.375rem;
@@ -692,7 +692,7 @@ input[type="text"] {
 }
 
 @media (min-width: 640px) {
-  input[type="text"] {
+  input[type="text"], input[type="number"] {
     font-size: 0.875rem;
     line-height: 1.25rem;
   }

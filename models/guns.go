@@ -6,6 +6,7 @@ type Gun struct {
 	Model        string      `json:"model"`
 	Caliber      string      `json:"caliber"`
 	RoundCount   int         `json:"roundcount"`
+	UserID       string      `json:"user_id"`
 	Accessories  []Accessory `json:"accessories"`
 }
 
