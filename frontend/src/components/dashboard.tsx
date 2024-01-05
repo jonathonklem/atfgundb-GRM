@@ -61,12 +61,12 @@ const Dashboard = () => {
                         <Route path="add" element={<AddGun />} />
                     </Route>
                 </Routes>
-                <ul className="mt-4 fixed -bottom-2 w-full left-0">
-                    <li className="inline-block w-2/12"><Link className="bg-red-800 text-slate-50 py-2 px-4 w-full inline-block my-2 text-center mx-auto" to="/guns">Guns</Link></li>
-                    <li className="inline-block w-2/12"><Link className="bg-red-800 text-slate-50 py-2 px-4 w-full inline-block my-2 text-center mx-auto" to="/ammo">Ammo</Link></li>
-                    <li className="inline-block w-2/12"><Link className="bg-red-800 text-slate-50 py-2 px-4 w-full inline-block my-2 text-center mx-auto" to="/trips">Sess.</Link></li>
-                    <li className="inline-block w-2/12"><Link className="bg-red-800 text-slate-50 py-2 px-4 w-full inline-block my-2 text-center mx-auto" to="/accessories">Acc.</Link></li>
-                    <li className="inline-block w-2/12"><Link className="bg-red-800 text-slate-50 py-2 px-4 w-full inline-block my-2 text-center mx-auto" to="/maintenance">Maint.</Link></li>
+                <ul className="mt-4 fixed -bottom-6 w-full left-0">
+                    <li className="inline-block w-2/12"><Link className="bg-red-800 text-slate-50 py-2 px-4 w-full inline-block my-2 text-center mx-auto" to="/guns"><img className="w-6 m-auto" src="/pistol.png" /></Link></li>
+                    <li className="inline-block w-2/12"><Link className="bg-red-800 text-slate-50 py-2 px-4 w-full inline-block my-2 text-center mx-auto" to="/ammo"><img className="w-6 m-auto" src="/bullet.png" /></Link></li>
+                    <li className="inline-block w-2/12"><Link className="bg-red-800 text-slate-50 py-2 px-4 w-full inline-block my-2 text-center mx-auto" to="/trips"><img className="w-6 m-auto" src="/range.png" /></Link></li>
+                    <li className="inline-block w-2/12"><Link className="bg-red-800 text-slate-50 py-2 px-4 w-full inline-block my-2 text-center mx-auto" to="/accessories"><img className="w-6 m-auto" src="/scope.png" /></Link></li>
+                    <li className="inline-block w-2/12"><Link className="bg-red-800 text-slate-50 py-2 px-4 w-full inline-block my-2 text-center mx-auto" to="/maintenance"><img className="w-6 m-auto" src="/tool.png" /></Link></li>
                     <li className="inline-block w-2/12"><LogoutButton /></li>
                 </ul>
             </Router>
