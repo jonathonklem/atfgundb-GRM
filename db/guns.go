@@ -14,7 +14,7 @@ func InsertUpdateGun(gun *models.Gun) {
 	client := getClient()
 
 	defer func() {
-		if err := client.Disconnect(context.TODO()); err != nil {
+		if err := client.Disconnect(context.Background()); err != nil {
 			panic(err)
 		}
 	}()
@@ -28,7 +28,7 @@ func InsertUpdateGun(gun *models.Gun) {
 	}
 
 	log.Println("Right before updateone()")
-	_, err := gunsCollection.UpdateOne(context.TODO(), filter, update, opts)
+	_, err := gunsCollection.UpdateOne(context.Background(), filter, update, opts)
 
 	if err != nil {
 		log.Println("Err wasnt nil")
@@ -40,7 +40,7 @@ func GetGuns(user *models.User) []models.Gun {
 	client := getClient()
 
 	defer func() {
-		if err := client.Disconnect(context.TODO()); err != nil {
+		if err := client.Disconnect(context.Background()); err != nil {
 			panic(err)
 		}
 	}()
@@ -54,14 +54,14 @@ func GetGuns(user *models.User) []models.Gun {
 	var results []models.Gun = make([]models.Gun, 0)
 
 	// Passing bson.D{{}} as the filter matches all documents in the collection
-	cur, err := gunsCollection.Find(context.TODO(), bson.D{{"user_id", user.ID}}, findOptions)
+	cur, err := gunsCollection.Find(context.Background(), bson.D{{"user_id", user.ID}}, findOptions)
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	// Finding multiple documents returns a cursor
 	// Iterating through the cursor allows us to decode documents one at a time
-	for cur.Next(context.TODO()) {
+	for cur.Next(context.Background()) {
 
 		// create a value into which the single document can be decoded
 		var elem models.Gun
@@ -79,7 +79,7 @@ func GetGuns(user *models.User) []models.Gun {
 	}
 
 	// Close the cursor once finished
-	cur.Close(context.TODO())
+	cur.Close(context.Background())
 
 	fmt.Printf("Found multiple documents (array of pointers): %+v\n", results)
 	return results

@@ -15,7 +15,7 @@ func InsertUpdateUser(user *models.User) {
 	client := getClient()
 
 	defer func() {
-		if err := client.Disconnect(context.TODO()); err != nil {
+		if err := client.Disconnect(context.Background()); err != nil {
 			panic(err)
 		}
 	}()
@@ -29,7 +29,7 @@ func InsertUpdateUser(user *models.User) {
 	}
 
 	log.Println("Right before updateone()")
-	_, err := usersCollection.UpdateOne(context.TODO(), filter, update, opts)
+	_, err := usersCollection.UpdateOne(context.Background(), filter, update, opts)
 
 	if err != nil {
 		log.Println("Err wasnt nil")

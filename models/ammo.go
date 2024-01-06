@@ -6,7 +6,7 @@ import (
 
 type Ammo struct {
 	Name         string             `json:"name"`
-	Count        int                `json:"amount"`
+	Count        int                `json:"amount" bson:"count"`
 	Grain        string             `json:"grain"`
 	Caliber      string             `json:"caliber"`
 	Averageprice float32            `json:"average_price"`
@@ -16,7 +16,7 @@ type Ammo struct {
 }
 
 type AmmoPurchase struct {
-	AmmoId        string             `json:"ammo_id"`
+	AmmoId        string             `json:"ammo_id" bson:"ammo_id"`
 	Price         float32            `json:"price"`
 	Quantity      int                `json:"quantity"`
 	QuantityUsed  int                `json:"quantityused"`
