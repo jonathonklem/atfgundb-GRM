@@ -23,6 +23,7 @@ export interface AmmoPurchase {
     date: string,
 }
 export interface Ammo {
+    ID?: Number,
     name: string,
     amount: Number,
     grain: string,

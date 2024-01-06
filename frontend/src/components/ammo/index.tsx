@@ -24,7 +24,11 @@ const Ammo = (props) => {
     }
     return (
         <div>
-            <ul> <li><Link className="bg-red-800 text-slate-50 py-2 px-4 w-1/4 block my-2 text-center mx-auto" to="/ammo/add">Add Ammo</Link></li></ul>
+            <ul className="text-center"> 
+                <li className="inline-block mx-2"><Link className="bg-red-800 text-slate-50 py-2 px-4 block my-2 text-center mx-auto" to="/ammo/add">Add</Link></li>
+                <li className="inline-block mx-2"><Link className="bg-red-800 text-slate-50 py-2 px-4 block my-2 text-center mx-auto" to="/ammo/purchase">Purchase</Link></li>
+                <li className="inline-block mx-2"><Link className="bg-red-800 text-slate-50 py-2 px-4 block my-2 text-center mx-auto" to="/ammo/dispose">Dispose</Link></li>
+            </ul>
             <AmmoTable ammo={ammo} />
         </div>
     );

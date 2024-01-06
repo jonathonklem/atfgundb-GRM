@@ -4,10 +4,25 @@ import (
 	"log"
 	"net/http"
 
+	"time"
+
 	"atfgundb.com/app/db"
 	"atfgundb.com/app/models"
 	"github.com/gin-gonic/gin"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 )
+
+func AddAmmoPurchase(c *gin.Context) {
+	var ammoPurchase models.AmmoPurchase
+
+	if err := c.BindJSON(&ammoPurchase); err != nil {
+		log.Fatal("Unable to BindJSON")
+	}
+
+	ammoPurchase.DatePurchased = primitive.NewDateTimeFromTime(time.Now())
+	db.InsertAmmoPurchase(&ammoPurchase)
+	c.JSON(http.StatusOK, "{success: true}")
+}
 
 func AddAmmo(c *gin.Context) {
 	var ammo models.Ammo

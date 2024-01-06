@@ -15,6 +15,25 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
+func InsertAmmoPurchase(ammoPurchase *models.AmmoPurchase) {
+	client := getClient()
+
+	defer func() {
+		if err := client.Disconnect(context.TODO()); err != nil {
+			panic(err)
+		}
+	}()
+
+	ammoPurchaseCollection := client.Database("ATFGunDB").Collection("ammo_purchases")
+
+	insertResult, err := ammoPurchaseCollection.InsertOne(context.TODO(), ammoPurchase)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	fmt.Println("Inserted a single document: ", insertResult.InsertedID)
+}
+
 func InsertUpdateAmmo(ammo *models.Ammo) {
 	client := getClient()
 

@@ -5,19 +5,20 @@ import (
 )
 
 type Ammo struct {
-	Name         string  `json:"name"`
-	Count        int     `json:"amount"`
-	Grain        string  `json:"grain"`
-	Caliber      string  `json:"caliber"`
-	Averageprice float32 `json:"average_price"`
-	LastPrice    float32 `json:"last_price"`
-	UserID       string  `json:"user_id"`
+	Name         string             `json:"name"`
+	Count        int                `json:"amount"`
+	Grain        string             `json:"grain"`
+	Caliber      string             `json:"caliber"`
+	Averageprice float32            `json:"average_price"`
+	LastPrice    float32            `json:"last_price"`
+	UserID       string             `json:"user_id"`
+	ID           primitive.ObjectID `bson:"_id"`
 }
 
 type AmmoPurchase struct {
-	AmmoId        string              `json:"ammo_id"`
-	Price         float32             `json:"price"`
-	Quantity      int                 `json:"quantity"`
-	QuantityUsed  int                 `json:"quantityused"`
-	DatePurchased primitive.Timestamp `json:"date_purchased"`
+	AmmoId        string             `json:"ammo_id"`
+	Price         float32            `json:"price"`
+	Quantity      int                `json:"quantity"`
+	QuantityUsed  int                `json:"quantityused"`
+	DatePurchased primitive.DateTime `json:"date_purchased"`
 }
