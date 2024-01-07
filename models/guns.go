@@ -8,8 +8,9 @@ type Gun struct {
 	Model        string             `json:"model"`
 	Caliber      string             `json:"caliber"`
 	RoundCount   int                `json:"roundcount"`
-	UserID       string             `json:"user_id"`
-	Accessories  []Accessory        `json:"accessories"`
+	UserID       string             `json:"user_id" bson:"user_id"`
+	Accessories  []Accessory        `json:"accessories" bson:"accessories"`
+	Maintenance  []Maintenance      `json:"maintenance" bson:"maintenance"`
 	ID           primitive.ObjectID `bson:"_id"`
 }
 
@@ -20,6 +21,6 @@ type Accessory struct {
 }
 
 type Maintenance struct {
-	DateDone        string `json:"date_done"`
-	MaintenanceDone string `json:"maintenance_type"`
+	DateDone        primitive.DateTime `json:"date_done"`
+	MaintenanceType string             `json:"maintenance_type"`
 }

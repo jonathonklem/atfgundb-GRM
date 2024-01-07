@@ -4,6 +4,7 @@ export interface Accessory {
     model: string,
 }
 export interface Gun {
+    ID: string,
     name: string,
     manufacturer: string,
     model: string,

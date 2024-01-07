@@ -5,10 +5,34 @@ import (
 
 	"log"
 
+	"time"
+
 	"atfgundb.com/app/db"
 	"atfgundb.com/app/models"
 	"github.com/gin-gonic/gin"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 )
+
+func AddMaintenanceToGun(c *gin.Context) {
+	var maintenance models.Maintenance
+	var gun models.Gun
+
+	log.Printf("Received gun+id: %s\n", c.Query("gun_id"))
+
+	gun = db.GetGun(c.Query("gun_id"))
+
+	if err := c.BindJSON(&maintenance); err != nil {
+		log.Fatal("Unable to BindJSON")
+	}
+
+	// set maintenance datetime to right now
+	maintenance.DateDone = primitive.NewDateTimeFromTime(time.Now())
+
+	gun.Maintenance = append(gun.Maintenance, maintenance)
+
+	db.UpdateGun(gun)
+	c.JSON(http.StatusOK, "{success: true}")
+}
 
 func AddGun(c *gin.Context) {
 	var gun models.Gun

@@ -10,6 +10,7 @@ func main() {
 	engine := routing.Build()
 	routing.AddRoute(engine, "/guns", routing.GET, api.ListGuns)
 	routing.AddRoute(engine, "/guns/add", routing.POST, api.AddGun)
+	routing.AddRoute(engine, "/guns/addMaintenance", routing.POST, api.AddMaintenanceToGun)
 	routing.AddRoute(engine, "/ammo", routing.GET, api.ListAmmo)
 	routing.AddRoute(engine, "/ammo/add", routing.POST, api.AddAmmo)
 	routing.AddRoute(engine, "/ammo/dispose", routing.GET, api.DisposeAmmo)

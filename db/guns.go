@@ -11,6 +11,54 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
+func UpdateGun(gun models.Gun) {
+	client := getClient()
+
+	defer func() {
+		if err := client.Disconnect(context.Background()); err != nil {
+			panic(err)
+		}
+	}()
+
+	gunsCollection := client.Database("ATFGunDB").Collection("guns")
+
+	filter := bson.D{{"_id", gun.ID}}
+	// pass all fields to be updated
+	update := bson.D{{"$set", bson.D{{"name", gun.Name}, {"manufacturer", gun.Manufacturer}, {"model", gun.Model}, {"caliber", gun.Caliber}, {"roundcount", gun.RoundCount}, {"accessories", gun.Accessories}, {"maintenance", gun.Maintenance}}}}
+
+	_, err := gunsCollection.UpdateOne(context.Background(), filter, update)
+	if err != nil {
+		log.Fatal(err)
+	}
+}
+
+func GetGun(gunId string) models.Gun {
+	client := getClient()
+
+	defer func() {
+		if err := client.Disconnect(context.Background()); err != nil {
+			panic(err)
+		}
+	}()
+
+	gunsCollection := client.Database("ATFGunDB").Collection("guns")
+
+	var gun models.Gun
+
+	id, _ := primitive.ObjectIDFromHex(gunId)
+	fmt.Printf("id: %s\n", id)
+	filter := bson.D{{"_id", id}}
+
+	err := gunsCollection.FindOne(context.Background(), filter).Decode(&gun)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	fmt.Printf("Found gun %s - %d\n", gun.Name, gun.RoundCount)
+
+	return gun
+}
+
 func InsertGun(gun *models.Gun) {
 	client := getClient()
 
