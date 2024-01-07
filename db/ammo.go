@@ -91,6 +91,8 @@ func InsertAmmoPurchase(ammoPurchase *models.AmmoPurchase) {
 
 	ammoPurchaseCollection := client.Database("ATFGunDB").Collection("ammo_purchases")
 
+	ammoPurchase.ID = primitive.NewObjectID()
+
 	insertResult, err := ammoPurchaseCollection.InsertOne(context.Background(), ammoPurchase)
 	if err != nil {
 		log.Fatal(err)
@@ -197,6 +199,26 @@ func InsertAmmoPurchase(ammoPurchase *models.AmmoPurchase) {
 
 }
 
+func UpdateAmmoCount(ammo *models.Ammo) {
+	client := getClient()
+
+	defer func() {
+		if err := client.Disconnect(context.Background()); err != nil {
+			panic(err)
+		}
+	}()
+
+	ammoCollection := client.Database("ATFGunDB").Collection("ammo")
+
+	filter := bson.D{{"_id", ammo.ID}}
+	update := bson.D{{"$set", bson.D{{"count", ammo.Count}}}}
+
+	_, err := ammoCollection.UpdateOne(context.Background(), filter, update)
+	if err != nil {
+		log.Fatal(err)
+	}
+}
+
 func InsertUpdateAmmo(ammo *models.Ammo) {
 	client := getClient()
 
@@ -211,16 +233,44 @@ func InsertUpdateAmmo(ammo *models.Ammo) {
 	filter := bson.D{{"name", ammo.Name}, {"caliber", ammo.Caliber}, {"grain", ammo.Grain}, {"user_id", ammo.UserID}}
 
 	update := bson.D{
-		{"$set", bson.D{{"count", 0}}},
+		{"$set", bson.D{{"count", ammo.Count}}},
 	}
 
+	log.Println("Filter: %v\nUpdate:%v\n", filter, update)
+
 	log.Println("Right before updateone()")
-	_, err := ammoCollection.UpdateOne(context.Background(), filter, update, opts)
+	results, err := ammoCollection.UpdateOne(context.Background(), filter, update, opts)
+
+	log.Println("results: %v\n", results)
 
 	if err != nil {
 		log.Println("Err wasnt nil")
 		log.Fatal(err)
 	}
+}
+
+func GetAmmoById(ammoId string) models.Ammo {
+	client := getClient()
+
+	defer func() {
+		if err := client.Disconnect(context.Background()); err != nil {
+			panic(err)
+		}
+	}()
+	ammoCollection := client.Database("ATFGunDB").Collection("ammo")
+
+	var result models.Ammo
+
+	id, _ := primitive.ObjectIDFromHex(ammoId)
+	filter := bson.D{{"_id", id}}
+
+	err := ammoCollection.FindOne(context.Background(), filter).Decode(&result)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	fmt.Printf("Found a single document: %+v\n", result)
+	return result
 }
 
 func GetAmmo(user *models.User) []models.Ammo {
@@ -256,8 +306,6 @@ func GetAmmo(user *models.User) []models.Ammo {
 		if err != nil {
 			log.Fatal(err)
 		}
-
-		fmt.Printf("Found ammo %s - %d\n", elem.Name, elem.Count)
 		results = append(results, elem)
 	}
 
@@ -267,7 +315,5 @@ func GetAmmo(user *models.User) []models.Ammo {
 
 	// Close the cursor once finished
 	cur.Close(context.Background())
-
-	fmt.Printf("Found multiple documents (array of pointers): %+v\n", results)
 	return results
 }

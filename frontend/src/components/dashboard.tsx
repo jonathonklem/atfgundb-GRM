@@ -13,6 +13,7 @@ import AddGun from "./guns/add";
 import Ammo from "./ammo/index";
 import AddAmmo from "./ammo/add";
 import PurchaseAmmo from "./ammo/purchaseAmmo";
+import Dispose from "./ammo/dispose";
 
 
 const getenv = require('getenv');
@@ -65,6 +66,7 @@ const Dashboard = () => {
                         <Route index element={<Ammo UserId={userId}/>} />
                         <Route path="add" element={<AddAmmo UserId={userId}/>} />
                         <Route path="purchase" element={<PurchaseAmmo UserId={userId}/>} />
+                        <Route path="dispose" element={<Dispose UserId={userId}/>} />
                     </Route>
                 </Routes>
                 <ul className="mt-4 fixed -bottom-6 w-full left-0">

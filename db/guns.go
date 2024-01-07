@@ -7,11 +7,15 @@ import (
 
 	"atfgundb.com/app/models"
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-func InsertUpdateGun(gun *models.Gun) {
+func InsertGun(gun *models.Gun) {
 	client := getClient()
+
+	// ensure it's new id
+	gun.ID = primitive.NewObjectID()
 
 	defer func() {
 		if err := client.Disconnect(context.Background()); err != nil {

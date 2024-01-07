@@ -5,21 +5,21 @@ import (
 )
 
 type Ammo struct {
-	Name         string             `json:"name"`
+	Name         string             `json:"name" bson:"name"`
 	Count        int                `json:"amount" bson:"count"`
-	Grain        string             `json:"grain"`
-	Caliber      string             `json:"caliber"`
-	Averageprice float32            `json:"average_price"`
-	LastPrice    float32            `json:"last_price"`
-	UserID       string             `json:"user_id"`
+	Grain        string             `json:"grain" bson:"grain"`
+	Caliber      string             `json:"caliber" bson:"caliber"`
+	Averageprice float64            `json:"average_price" bson:"average_price"`
+	LastPrice    float64            `json:"last_price" bson:"last_price"`
+	UserID       string             `json:"user_id" bson:"user_id"`
 	ID           primitive.ObjectID `bson:"_id"`
 }
 
 type AmmoPurchase struct {
 	ID            primitive.ObjectID `bson:"_id"`
 	AmmoId        string             `json:"ammo_id" bson:"ammo_id"`
-	Price         float32            `json:"price"`
-	Quantity      int                `json:"quantity"`
-	QuantityUsed  int                `json:"quantityused"`
-	DatePurchased primitive.DateTime `json:"date_purchased"`
+	Price         float64            `json:"price" bson:"price"`
+	Quantity      int                `json:"quantity" bson:"quantity"`
+	QuantityUsed  int                `json:"quantityused" bson:"quantityused"`
+	DatePurchased primitive.DateTime `json:"date_purchased" bson:"date_purchased"`
 }

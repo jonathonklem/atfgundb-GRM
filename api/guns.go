@@ -18,7 +18,7 @@ func AddGun(c *gin.Context) {
 	}
 
 	log.Println("Calling insertupdategun")
-	db.InsertUpdateGun(&gun)
+	db.InsertGun(&gun)
 	c.JSON(http.StatusOK, "{success: true}")
 }
 

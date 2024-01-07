@@ -22,6 +22,7 @@ func AddAmmoPurchase(c *gin.Context) {
 
 	ammoPurchase.DatePurchased = primitive.NewDateTimeFromTime(time.Now())
 	db.InsertAmmoPurchase(&ammoPurchase)
+
 	c.JSON(http.StatusOK, "{success: true}")
 }
 
@@ -46,14 +47,10 @@ func consumeAmmo(ammoId string, quantity int) error {
 
 	for _, ammoPurchase := range ammoPurchases {
 		if (ammoPurchase.Quantity - ammoPurchase.QuantityUsed) >= (quantity) {
-			log.Printf("Found object with remaining >= quantity: %v", ammoPurchase)
-
 			ammoPurchase.QuantityUsed += quantity
 			quantityConsumed = quantity
 		} else {
-			log.Printf("Found object with remaining < quantity: %v", ammoPurchase)
 			available := ammoPurchase.Quantity - ammoPurchase.QuantityUsed
-			log.Printf("available: %v", available)
 
 			ammoPurchase.QuantityUsed += available
 			quantityConsumed += available
@@ -65,6 +62,13 @@ func consumeAmmo(ammoId string, quantity int) error {
 		}
 		quantity -= quantityConsumed
 	}
+
+	// next update quantity on actual ammo id
+	ammo := db.GetAmmoById(ammoId)
+	log.Printf("ammo: %v", ammo)
+	ammo.Count -= quantityConsumed
+	log.Printf("ammo: %v", ammo)
+	db.InsertUpdateAmmo(&ammo)
 
 	// i guess we're not really returning an error...
 	return nil
