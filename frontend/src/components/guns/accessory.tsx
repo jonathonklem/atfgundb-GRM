@@ -1,7 +1,7 @@
 import React from "react";
 import {Gun} from "../../Types";
 
-const Maintenance = (props) => {
+const Accessory = (props) => {
     const [guns, setGuns] = React.useState<Gun[]>([]);
     const [successMessage, setSuccessMessage] = React.useState('');
     const [gunId, setGunId] = React.useState('');
@@ -10,22 +10,15 @@ const Maintenance = (props) => {
         fetchGuns();
     }, []);
 
-    function fetchGuns() {
-        fetch(props.Url+'/guns?user_id='+props.UserId)
-            .then(response => response.json())
-            .then(data => setGuns(data));
-    }
-
-    function handleSubmit(e)  {
+    function handleSubmit(e) {
         e.preventDefault();
-
         const form = e.target;
         const formData = new FormData(form);
         
         const formJson = Object.fromEntries(formData.entries());
 
         // post formJson to our env var url
-        fetch(props.Url + '/guns/addMaintenance?gun_id='+gunId, {
+        fetch(props.Url + '/guns/addAccessory?gun_id='+gunId, {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -36,9 +29,15 @@ const Maintenance = (props) => {
             .then(response => response.json())
             .then(data => console.log(data));
 
-        setSuccessMessage("Maintenance added successfully!");
+        setSuccessMessage("Accessory added successfully!");
         // clear form
         form.reset();
+    }
+
+    function fetchGuns() {
+        fetch(props.Url+'/guns?user_id='+props.UserId)
+            .then(response => response.json())
+            .then(data => setGuns(data));
     }
 
     return (
@@ -54,11 +53,13 @@ const Maintenance = (props) => {
                         ))}
                     </select>
                 </div></label> 
-                <label className="block my-2 mx-auto text-center"><div className="block w-1/3 mx-auto">Maintenance Type</div><div className="block w-full p-2 w-1/2 mx-auto"><input type="text" name="maintenance_type" /></div></label>
+                <label className="block my-2 mx-auto text-center"><div className="block w-1/3 mx-auto">Name</div><div className="block w-full p-2 w-1/2 mx-auto"><input type="text" name="name" /></div></label>
+                <label className="block my-2 mx-auto text-center"><div className="block w-1/3 mx-auto">Manufacturer</div><div className="block w-full p-2 w-1/2 mx-auto"><input type="text" name="manufacturer" /></div></label>
+                <label className="block my-2 mx-auto text-center"><div className="block w-1/3 mx-auto">Model</div><div className="block w-full p-2 w-1/2 mx-auto"><input type="text" name="model" /></div></label>
                 <button className="rounded-md bg-red-800 text-slate-50 py-2 px-4 w-1/4 block my-2 text-center mx-auto">Submit</button>
             </form>
         </>
-    );
+    )
 }
 
-export default Maintenance;
+export default Accessory;

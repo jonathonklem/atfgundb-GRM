@@ -15,6 +15,7 @@ import AddAmmo from "./ammo/add";
 import PurchaseAmmo from "./ammo/purchaseAmmo";
 import Dispose from "./ammo/dispose";
 import Maintenance from "./guns/maintenance";
+import Accessory from "./guns/accessory";
 
 
 const getenv = require('getenv');
@@ -63,6 +64,7 @@ const Dashboard = () => {
                         <Route index  element={<Guns UserId={userId} />} />
                         <Route path="add" element={<AddGun UserId={userId}/>} />
                         <Route path="maintenance" element={<Maintenance Url={url} UserId={userId}/>} />
+                        <Route path="accessories" element={<Accessory Url={url} UserId={userId}/>} />
                     </Route>
                     <Route path="ammo">
                         <Route index element={<Ammo UserId={userId}/>} />
@@ -75,7 +77,7 @@ const Dashboard = () => {
                     <li className="inline-block w-2/12"><Link className="bg-red-800 text-slate-50 py-2 px-4 w-full inline-block my-2 text-center mx-auto" to="/guns"><img className="w-6 m-auto" src="/pistol.png" /></Link></li>
                     <li className="inline-block w-2/12"><Link className="bg-red-800 text-slate-50 py-2 px-4 w-full inline-block my-2 text-center mx-auto" to="/ammo"><img className="w-6 m-auto" src="/bullet.png" /></Link></li>
                     <li className="inline-block w-2/12"><Link className="bg-red-800 text-slate-50 py-2 px-4 w-full inline-block my-2 text-center mx-auto" to="/trips"><img className="w-6 m-auto" src="/range.png" /></Link></li>
-                    <li className="inline-block w-2/12"><Link className="bg-red-800 text-slate-50 py-2 px-4 w-full inline-block my-2 text-center mx-auto" to="/accessories"><img className="w-6 m-auto" src="/scope.png" /></Link></li>
+                    <li className="inline-block w-2/12"><Link className="bg-red-800 text-slate-50 py-2 px-4 w-full inline-block my-2 text-center mx-auto" to="/guns/accessories"><img className="w-6 m-auto" src="/scope.png" /></Link></li>
                     <li className="inline-block w-2/12"><Link className="bg-red-800 text-slate-50 py-2 px-4 w-full inline-block my-2 text-center mx-auto" to="/guns/maintenance"><img className="w-6 m-auto" src="/tool.png" /></Link></li>
                     <li className="inline-block w-2/12"><LogoutButton /></li>
                 </ul>

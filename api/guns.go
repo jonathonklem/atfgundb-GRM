@@ -13,6 +13,24 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
+func AddAccessoryToGun(c *gin.Context) {
+	var accessory models.Accessory
+	var gun models.Gun
+
+	log.Printf("Received gun+id: %s\n", c.Query("gun_id"))
+
+	gun = db.GetGun(c.Query("gun_id"))
+
+	if err := c.BindJSON(&accessory); err != nil {
+		log.Fatal("Unable to BindJSON")
+	}
+
+	gun.Accessories = append(gun.Accessories, accessory)
+
+	db.UpdateGun(gun)
+	c.JSON(http.StatusOK, "{success: true}")
+}
+
 func AddMaintenanceToGun(c *gin.Context) {
 	var maintenance models.Maintenance
 	var gun models.Gun
