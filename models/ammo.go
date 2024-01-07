@@ -16,6 +16,7 @@ type Ammo struct {
 }
 
 type AmmoPurchase struct {
+	ID            primitive.ObjectID `bson:"_id"`
 	AmmoId        string             `json:"ammo_id" bson:"ammo_id"`
 	Price         float32            `json:"price"`
 	Quantity      int                `json:"quantity"`

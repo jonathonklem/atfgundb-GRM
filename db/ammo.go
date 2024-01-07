@@ -11,6 +11,75 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
+func UpdateAmmoPurchase(ammoPurchase *models.AmmoPurchase) {
+	client := getClient()
+
+	defer func() {
+		if err := client.Disconnect(context.Background()); err != nil {
+			panic(err)
+		}
+	}()
+
+	ammoPurchaseCollection := client.Database("ATFGunDB").Collection("ammo_purchases")
+
+	filter := bson.D{{"_id", ammoPurchase.ID}}
+	update := bson.D{{"$set", bson.D{{"quantityused", ammoPurchase.QuantityUsed}}}}
+
+	_, err := ammoPurchaseCollection.UpdateOne(context.Background(), filter, update)
+	if err != nil {
+		log.Fatal(err)
+	}
+}
+
+// "active" ammo purchase are anything where quantityused < quantity
+func GetAmmoActivePurchases(ammoId string) []models.AmmoPurchase {
+	client := getClient()
+
+	defer func() {
+		if err := client.Disconnect(context.Background()); err != nil {
+			panic(err)
+		}
+	}()
+
+	ammoPurchaseCollection := client.Database("ATFGunDB").Collection("ammo_purchases")
+
+	// Pass these options to the Find method
+	findOptions := options.Find()
+
+	// Here's an array in which you can store the decoded documents
+	var results []models.AmmoPurchase = make([]models.AmmoPurchase, 0)
+
+	// search ammoPurchaseCollection where ammo_id = ammoId and quantity > quantityused
+	cur, err := ammoPurchaseCollection.Find(context.Background(), bson.D{{"ammo_id", ammoId}, {"$expr", bson.D{{"$gt", bson.A{"$quantity", "$quantityused"}}}}}, findOptions)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	// Finding multiple documents returns a cursor
+	// Iterating through the cursor allows us to decode documents one at a time
+	for cur.Next(context.Background()) {
+		// create a value into which the single document can be decoded
+		var elem models.AmmoPurchase
+		err := cur.Decode(&elem)
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		fmt.Printf("Found ammo purchase %s - %d\n", elem.AmmoId, elem.Quantity)
+		results = append(results, elem)
+	}
+
+	if err := cur.Err(); err != nil {
+		log.Fatal(err)
+	}
+
+	// Close the cursor once finished
+	cur.Close(context.Background())
+
+	fmt.Printf("Found multiple documents (array of pointers): %+v\n", results)
+	return results
+}
+
 func InsertAmmoPurchase(ammoPurchase *models.AmmoPurchase) {
 	client := getClient()
 
@@ -29,7 +98,21 @@ func InsertAmmoPurchase(ammoPurchase *models.AmmoPurchase) {
 
 	fmt.Println("Inserted a single document: ", insertResult.InsertedID)
 
-	// perform aggregate pipeline search to get total count of ammo matching ammo id and user id
+	// example query
+	/*
+		[{
+		$match: {
+			ammoid: "659891d98dfe5a666c0ef25e"
+		}
+		},	  $match: {
+			ammoid: "659891d98dfe5a666c0ef25e"
+		}
+		},
+		{$group: {
+				_id: null,
+				totalAmount: {$sum: {$subtract: ["$quantity", "$quantityused"]}},
+		}}]
+	*/
 	results, err := ammoPurchaseCollection.Aggregate(context.Background(), bson.A{
 		bson.D{{"$match", bson.D{{"ammo_id", ammoPurchase.AmmoId}}}},
 		bson.D{{"$group", bson.D{{"_id", "$ammo_id"}, {"totalAmount", bson.D{{"$sum", bson.D{{"$subtract", bson.A{"$quantity", "$quantityused"}}}}}}}}},
@@ -52,7 +135,31 @@ func InsertAmmoPurchase(ammoPurchase *models.AmmoPurchase) {
 		}
 	}
 
-	// perform aggregate pipeline search to get total count of ammo matching ammo id
+	// example query
+	/*
+		[{
+		$match: {
+			ammoid: "659891d98dfe5a666c0ef25e"
+		}
+		},
+		{$group: {
+				_id: "$price",
+				totalAmount: {$sum: {$subtract: ["$quantity", "$quantityused"]}},
+		}},
+		{$addFields: {
+			costContribution: {$multiply: ["$_id", "$totalAmount"]},
+		}},
+		{$group: {
+			_id: null,
+			finalAmount: {$sum: "$totalAmount"},
+			totalCost: {$sum: "$costContribution"}
+
+		}},
+		{$project: {
+			_id: null,
+			averageCost: {$divide: ["$totalCost", "$finalAmount"]}
+		}}]
+	*/
 	results, err = ammoPurchaseCollection.Aggregate(context.Background(), bson.A{
 		bson.D{{"$match", bson.D{{"ammo_id", ammoPurchase.AmmoId}}}},
 		bson.D{{"$group", bson.D{{"_id", "$price"}, {"totalAmount", bson.D{{"$sum", bson.D{{"$subtract", bson.A{"$quantity", "$quantityused"}}}}}}}}},
