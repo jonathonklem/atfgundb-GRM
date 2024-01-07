@@ -654,6 +654,10 @@ video {
   text-align: center;
 }
 
+.text-right {
+  text-align: right;
+}
+
 .text-xl {
   font-size: 1.25rem;
   line-height: 1.75rem;
@@ -701,6 +705,27 @@ select, input[type="text"], input[type="number"] {
     font-size: 0.875rem;
     line-height: 1.25rem;
   }
+}
+
+td {
+  padding: 0.5rem;
+}
+
+table {
+  width: 75%;
+}
+
+tr:nth-of-type(2n) {
+  --tw-bg-opacity: 1;
+  background-color: rgb(107 114 128 / var(--tw-bg-opacity));
+}
+
+thead {
+  border-bottom-width: 8px;
+}
+
+th {
+  padding-bottom: 0.75rem;
 }
 
 :is(:where(.dark) .dark\:bg-slate-800) {

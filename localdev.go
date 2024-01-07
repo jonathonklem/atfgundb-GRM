@@ -17,6 +17,7 @@ func main() {
 	routing.AddRoute(engine, "/ammo/dispose", routing.GET, api.DisposeAmmo)
 	routing.AddRoute(engine, "/ammo/purchase", routing.POST, api.AddAmmoPurchase)
 	routing.AddRoute(engine, "/users/saveVisit", routing.POST, api.UserSaveVisit)
+	routing.AddRoute(engine, "/range/addTrip", routing.POST, api.AddRangeTrip)
 
 	if err := engine.Run(); err != nil {
 		log.Printf("Error starting gin %v", err)

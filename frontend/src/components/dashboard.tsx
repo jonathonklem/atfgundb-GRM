@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useState } from 'react';
 import { useAuth0 } from "@auth0/auth0-react";
 import LogoutButton from "./logout";
@@ -16,39 +16,50 @@ import PurchaseAmmo from "./ammo/purchaseAmmo";
 import Dispose from "./ammo/dispose";
 import Maintenance from "./guns/maintenance";
 import Accessory from "./guns/accessory";
-
+import RangeTrip from "./rangetrips/index";
 
 const getenv = require('getenv');
 const url = getenv.string('REACT_APP_API');
 
-const Dashboard = () => {
+
+const Dashboard = (props) => {
     var [profileSaved, setProfileSaved] = useState(false);
 
-    const {user, isAuthenticated, isLoading} = useAuth0();
+    const {user, isAuthenticated, isLoading  } = useAuth0();
+
+
+    function saveProfile() {
+        if (props.authToken) {
+            if (user) {
+                user.id = user.sub?.split("|")[1];
+            }
+            
+            fetch(`${url}/users/saveVisit`, {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                    'Authorization' : 'Bearer ' + props.authToken
+                },
+                body: JSON.stringify(user)
+            })
+                .then(response => response.json())
+                .then(data => setProfileSaved(true));
+        }
+    }
+
 
     if (isLoading) {
         return <div>Loading...</div>;
     }
-    
-    if (!profileSaved) {
-        if (user) {
-            user.id = user.sub?.split("|")[1];
-        }
-        
-        fetch(`${url}/users/saveVisit`, {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(user)
-        })
-            .then(response => response.json())
-            .then(data => setProfileSaved(true));
-    }
 
     if (isAuthenticated) {
+        if (!profileSaved) {
+            saveProfile();
+        }
+
         const userId = user?.sub?.split("|")[1];
+        
         return (
             <Router>
                 <Routes>
@@ -56,7 +67,7 @@ const Dashboard = () => {
                         path="/"
                         element={
                             <div>
-                                Put something here
+                               Auth token: {props.authToken}
                             </div>
                         }
                     ></Route>
@@ -71,6 +82,9 @@ const Dashboard = () => {
                         <Route path="add" element={<AddAmmo UserId={userId}/>} />
                         <Route path="purchase" element={<PurchaseAmmo UserId={userId}/>} />
                         <Route path="dispose" element={<Dispose UserId={userId}/>} />
+                    </Route>
+                    <Route path="trips">
+                        <Route index element={<RangeTrip Url={url} UserId={userId}/>} />
                     </Route>
                 </Routes>
                 <ul className="mt-4 fixed -bottom-6 w-full left-0">

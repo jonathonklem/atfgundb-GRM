@@ -8,3 +8,23 @@ select, input[type="text"], input[type="number"] {
   @apply focus:ring-indigo-500 focus:border-indigo-500;
   @apply block w-full sm:text-sm border-gray-300 rounded-md;
 }
+
+td {
+  @apply p-2;
+}
+
+table {
+  @apply w-9/12;
+}
+
+tr:nth-of-type(2n) {
+  @apply bg-gray-500;
+}
+
+thead {
+  @apply border-b-8;
+}
+
+th {
+  @apply pb-3;
+}

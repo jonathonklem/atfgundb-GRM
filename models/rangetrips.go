@@ -1,9 +1,13 @@
 package models
 
+import "go.mongodb.org/mongo-driver/bson/primitive"
+
 type RangeTrip struct {
-	DateDone string `json:"date_done"`
-	Location string `json:"location"`
-	AmmoId string `json:"ammo_id"`
-	GunId string `json:"gun_id"`
-	QuantityUsed int `json:"quantity_used"`
+	DateDone     primitive.DateTime `json:"date_done,omitempty" bson:"date_done,omitempty""`
+	Location     string             `json:"location" bson:"location"`
+	AmmoId       primitive.ObjectID `json:"ammo_id" bson:"ammo_id"`
+	GunId        primitive.ObjectID `json:"gun_id" bson:"gun_id"`
+	QuantityUsed int                `json:"quantity_used" bson:"quantity_used"`
+	UserId       string             `json:"user_id" bson:"user_id"`
+	ID           primitive.ObjectID `json:"id,omitempty" bson:"_id,omitempty"`
 }

@@ -20,7 +20,7 @@ const GunTable = (props) => {
                 {props.guns.map((gun) => (
                     <tr>
                         <td>{gun.name}</td>
-                        <td>{gun.roundcount}</td>
+                        <td className="text-right">{gun.roundcount}</td>
                     </tr>
                 ))}
                 </tbody>

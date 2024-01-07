@@ -18,7 +18,7 @@ const AmmoTable = (props) => {
                 {props.ammo.map((item) => (
                     <tr>
                         <td>{item.name}</td>
-                        <td>{item.amount}</td>
+                        <td className="text-right">{item.amount}</td>
                     </tr>
                 ))}
                 </tbody>
