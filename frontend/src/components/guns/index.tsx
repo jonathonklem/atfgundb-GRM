@@ -1,16 +1,12 @@
 import React from "react";
 import {
-    BrowserRouter as Router,
-    Routes,
-    Route,
     Link,
 } from "react-router-dom";
 import GunsTable from "./gunTable";
 
-const getenv = require('getenv');
-const url = getenv.string('REACT_APP_API');
-
 const Guns = (props) => {
+  const url = props.Url;
+
   const [guns, setGuns] = React.useState([]);
 
   React.useEffect(() => {

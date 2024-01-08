@@ -1,9 +1,8 @@
 import React from "react";
 
-const getenv = require('getenv');
-const url = getenv.string('REACT_APP_API');
-
 const AddAmmo = (props) => {
+    const url = props.Url;
+
     const [successMessage, setSuccessMessage] = React.useState('');
 
     function handleSubmit(e) {

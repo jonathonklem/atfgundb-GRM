@@ -1,16 +1,11 @@
 import React from "react";
 import {
-    BrowserRouter as Router,
-    Routes,
-    Route,
     Link,
 } from "react-router-dom";
 import AmmoTable from "./ammoTable";
 
-const getenv = require('getenv');
-const url = getenv.string('REACT_APP_API');
-
 const Ammo = (props) => {
+    const url = props.Url;
     const [ammo, setAmmo] = React.useState([]);
 
     React.useEffect(() => {

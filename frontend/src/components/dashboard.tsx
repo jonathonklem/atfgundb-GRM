@@ -77,21 +77,21 @@ const Dashboard = (props) => {
                         <Route path="accessories" element={<Accessory authToken={props.authToken} Url={url} UserId={userId}/>} />
                     </Route>
                     <Route path="ammo">
-                        <Route index element={<Ammo authToken={props.authToken} UserId={userId}/>} />
-                        <Route path="add" element={<AddAmmo authToken={props.authToken} UserId={userId}/>} />
-                        <Route path="purchase" element={<PurchaseAmmo authToken={props.authToken} UserId={userId}/>} />
-                        <Route path="dispose" element={<Dispose authToken={props.authToken} UserId={userId}/>} />
+                        <Route index element={<Ammo authToken={props.authToken} Url={url} UserId={userId}/>} />
+                        <Route path="add" element={<AddAmmo authToken={props.authToken} Url={url} UserId={userId}/>} />
+                        <Route path="purchase" element={<PurchaseAmmo authToken={props.authToken} Url={url} UserId={userId}/>} />
+                        <Route path="dispose" element={<Dispose authToken={props.authToken} Url={url} UserId={userId}/>} />
                     </Route>
                     <Route path="trips">
                         <Route index element={<RangeTrip authToken={props.authToken} Url={url} UserId={userId}/>} />
                     </Route>
                 </Routes>
                 <ul className="mt-4 fixed -bottom-6 w-full left-0">
-                    <li className="inline-block w-2/12"><Link className="bg-red-800 text-slate-50 py-2 px-4 w-full inline-block my-2 text-center mx-auto" to="/guns"><img className="w-6 m-auto" src="/pistol.png" /></Link></li>
-                    <li className="inline-block w-2/12"><Link className="bg-red-800 text-slate-50 py-2 px-4 w-full inline-block my-2 text-center mx-auto" to="/ammo"><img className="w-6 m-auto" src="/bullet.png" /></Link></li>
-                    <li className="inline-block w-2/12"><Link className="bg-red-800 text-slate-50 py-2 px-4 w-full inline-block my-2 text-center mx-auto" to="/trips"><img className="w-6 m-auto" src="/range.png" /></Link></li>
-                    <li className="inline-block w-2/12"><Link className="bg-red-800 text-slate-50 py-2 px-4 w-full inline-block my-2 text-center mx-auto" to="/guns/accessories"><img className="w-6 m-auto" src="/scope.png" /></Link></li>
-                    <li className="inline-block w-2/12"><Link className="bg-red-800 text-slate-50 py-2 px-4 w-full inline-block my-2 text-center mx-auto" to="/guns/maintenance"><img className="w-6 m-auto" src="/tool.png" /></Link></li>
+                    <li className="inline-block w-2/12"><Link className="bg-red-800 text-slate-50 py-2 px-4 w-full inline-block my-2 text-center mx-auto" to="/guns"><img alt="Guns" className="w-6 m-auto" src="/pistol.png" /></Link></li>
+                    <li className="inline-block w-2/12"><Link className="bg-red-800 text-slate-50 py-2 px-4 w-full inline-block my-2 text-center mx-auto" to="/ammo"><img alt="Ammo" className="w-6 m-auto" src="/bullet.png" /></Link></li>
+                    <li className="inline-block w-2/12"><Link className="bg-red-800 text-slate-50 py-2 px-4 w-full inline-block my-2 text-center mx-auto" to="/trips"><img alt="Range Trips" className="w-6 m-auto" src="/range.png" /></Link></li>
+                    <li className="inline-block w-2/12"><Link className="bg-red-800 text-slate-50 py-2 px-4 w-full inline-block my-2 text-center mx-auto" to="/guns/accessories"><img alt="Accessories" className="w-6 m-auto" src="/scope.png" /></Link></li>
+                    <li className="inline-block w-2/12"><Link className="bg-red-800 text-slate-50 py-2 px-4 w-full inline-block my-2 text-center mx-auto" to="/guns/maintenance"><img alt="Maintenance" className="w-6 m-auto" src="/tool.png" /></Link></li>
                     <li className="inline-block w-2/12"><LogoutButton /></li>
                 </ul>
             </Router>

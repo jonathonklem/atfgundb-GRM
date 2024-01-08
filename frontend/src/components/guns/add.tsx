@@ -1,11 +1,7 @@
 import React from "react";
-import { Link } from "react-router-dom";
-
-const getenv = require('getenv');
-const url = getenv.string('REACT_APP_API');
 
 const AddGun = (props) => {
-    
+    const url = props.Url;
     const [successMessage, setSuccessMessage] = React.useState('');
 
     function handleSubmit(e) {

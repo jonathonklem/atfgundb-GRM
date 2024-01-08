@@ -36,7 +36,7 @@ const RangeTrip = (props) => {
     React.useEffect(() => {
         fetchGuns();
         fetchAmmo();
-    }, []);
+    }, [fetchGuns,fetchAmmo]);
 
     function handleSubmit(e)  {
         e.preventDefault();

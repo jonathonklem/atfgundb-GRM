@@ -1,10 +1,9 @@
 import React from "react";
 import {Ammo} from "../../Types";
 
-const getenv = require('getenv');
-const url = getenv.string('REACT_APP_API');
-
 const Dispose = (props) => {
+    const url = props.Url;
+
     const [successMessage, setSuccessMessage] = React.useState('');
     const [ammo, setAmmo] = React.useState<Ammo[]>([]);
     const [ammoId, setAmmoId] = React.useState('');
