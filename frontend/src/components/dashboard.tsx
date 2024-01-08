@@ -71,8 +71,8 @@ const Dashboard = (props) => {
                         }
                     ></Route>
                     <Route path="guns">
-                        <Route index  element={<Guns authToken={props.authToken} UserId={userId} />} />
-                        <Route path="add" element={<AddGun authToken={props.authToken} UserId={userId}/>} />
+                        <Route index  element={<Guns authToken={props.authToken} Url={url} UserId={userId} />} />
+                        <Route path="add" element={<AddGun authToken={props.authToken} Url={url} UserId={userId}/>} />
                         <Route path="maintenance" element={<Maintenance authToken={props.authToken} Url={url} UserId={userId}/>} />
                         <Route path="accessories" element={<Accessory authToken={props.authToken} Url={url} UserId={userId}/>} />
                     </Route>

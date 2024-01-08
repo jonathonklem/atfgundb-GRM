@@ -12,7 +12,14 @@ const PurchaseAmmo = (props) => {
     }, []);
 
     function fetchAmmo() {
-        fetch(`${url}/ammo?user_id=`+props.UserId)
+        fetch(`${url}/ammo?user_id=`+props.UserId, {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization' : 'Bearer ' + props.authToken
+            }
+        })
         .then((response) => response.json())
         .then((data) => setAmmo(data));
     }
