@@ -16,7 +16,7 @@ import Dispose from "./ammo/dispose";
 import Maintenance from "./guns/maintenance";
 import Accessory from "./guns/accessory";
 import RangeTrip from "./rangetrips/index";
-
+import Reports from "./reports";
 const getenv = require('getenv');
 const url = getenv.string('REACT_APP_API');
 
@@ -65,8 +65,10 @@ const Dashboard = (props) => {
                     <Route 
                         path="/"
                         element={
-                            <div>
-                               Auth token: {props.authToken}
+                            <div className="">
+                                <h1 className="mt-8 text-center text-3xl font-bold mb-4">Welcome to GunDB</h1>
+                                <p className="text-justify mx-auto mb-8 block max-w-md">With GunDB, you can effortlessly keep tabs on your ammo purchases, range trips, and gun collection, providing a streamlined approach to firearm management. Easily log details of each ammunition purchase, including quantity, caliber, and date, ensuring you always have an accurate inventory at your fingertips.  
+                                </p><p className="text-justify mx-auto block max-w-md">Track your range sessions, recording the firearms used, and rounds fired. Organize your gun collection with comprehensive profiles, featuring essential information about each firearm. Whether you're a seasoned gun enthusiast or a new firearm owner, GunDB simplifies the process of monitoring and maintaining your shooting supplies and equipment.</p>
                             </div>
                         }
                     ></Route>
@@ -85,14 +87,18 @@ const Dashboard = (props) => {
                     <Route path="trips">
                         <Route index element={<RangeTrip authToken={props.authToken} Url={url} UserId={userId}/>} />
                     </Route>
+                    <Route path="reports">
+                        <Route index element={<Reports authToken={props.authToken} Url={url} UserId={userId}/>} />
+                    </Route>
                 </Routes>
-                <ul className="mt-4 fixed -bottom-6 w-full left-0">
-                    <li className="inline-block w-2/12"><Link className="bg-red-800 text-slate-50 py-2 px-4 w-full inline-block my-2 text-center mx-auto" to="/guns"><img alt="Guns" className="w-6 m-auto" src="/pistol.png" /></Link></li>
-                    <li className="inline-block w-2/12"><Link className="bg-red-800 text-slate-50 py-2 px-4 w-full inline-block my-2 text-center mx-auto" to="/ammo"><img alt="Ammo" className="w-6 m-auto" src="/bullet.png" /></Link></li>
-                    <li className="inline-block w-2/12"><Link className="bg-red-800 text-slate-50 py-2 px-4 w-full inline-block my-2 text-center mx-auto" to="/trips"><img alt="Range Trips" className="w-6 m-auto" src="/range.png" /></Link></li>
-                    <li className="inline-block w-2/12"><Link className="bg-red-800 text-slate-50 py-2 px-4 w-full inline-block my-2 text-center mx-auto" to="/guns/accessories"><img alt="Accessories" className="w-6 m-auto" src="/scope.png" /></Link></li>
-                    <li className="inline-block w-2/12"><Link className="bg-red-800 text-slate-50 py-2 px-4 w-full inline-block my-2 text-center mx-auto" to="/guns/maintenance"><img alt="Maintenance" className="w-6 m-auto" src="/tool.png" /></Link></li>
-                    <li className="inline-block w-2/12"><LogoutButton /></li>
+                <ul className="mt-4 fixed -bottom-6 w-full left-0 text-center bg-red-800">
+                    <li className="inline-block w-1/12"><Link className="bg-red-800 text-slate-50 py-2 px-4 w-full inline-block my-2 text-center mx-auto" to="/guns"><img alt="Guns" className="w-6 m-auto" src="/pistol.png" /></Link></li>
+                    <li className="inline-block w-1/12"><Link className="bg-red-800 text-slate-50 py-2 px-4 w-full inline-block my-2 text-center mx-auto" to="/ammo"><img alt="Ammo" className="w-6 m-auto" src="/bullet.png" /></Link></li>
+                    <li className="inline-block w-1/12"><Link className="bg-red-800 text-slate-50 py-2 px-4 w-full inline-block my-2 text-center mx-auto" to="/trips"><img alt="Range Trips" className="w-6 m-auto" src="/range.png" /></Link></li>
+                    <li className="inline-block w-1/12"><Link className="bg-red-800 text-slate-50 py-2 px-4 w-full inline-block my-2 text-center mx-auto" to="/guns/accessories"><img alt="Accessories" className="w-6 m-auto" src="/scope.png" /></Link></li>
+                    <li className="inline-block w-1/12"><Link className="bg-red-800 text-slate-50 py-2 px-4 w-full inline-block my-2 text-center mx-auto" to="/guns/maintenance"><img alt="Maintenance" className="w-6 m-auto" src="/tool.png" /></Link></li>
+                    <li className="inline-block w-1/12"><Link className="bg-red-800 text-slate-50 py-2 px-4 w-full inline-block my-2 text-center mx-auto" to="/reports"><img alt="Reports" className="w-6 m-auto" src="/pie-chart.png" /></Link></li>
+                    <li className="inline-block w-1/12"><LogoutButton /></li>
                 </ul>
             </Router>
         )
