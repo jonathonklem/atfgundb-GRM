@@ -22,7 +22,8 @@ const Accessory = (props) => {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization' : 'Bearer ' + props.authToken
             }, 
             body: JSON.stringify(formJson)
         })
@@ -35,14 +36,21 @@ const Accessory = (props) => {
     }
 
     function fetchGuns() {
-        fetch(props.Url+'/guns?user_id='+props.UserId)
+        fetch(props.Url+'/guns?user_id='+props.UserId, {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization' : 'Bearer ' + props.authToken
+            }
+        })
             .then(response => response.json())
             .then(data => setGuns(data));
     }
 
     return (
         <>
-            <h1 className="text-center font-bold text-xl py-2 bg-red-800 text-slate-50">Maintenance</h1>
+            <h1 className="text-center font-bold text-xl py-2 bg-red-800 text-slate-50">Accessories</h1>
             <em className="text-center green-600 block my-2">{successMessage}</em>
             <form onSubmit={handleSubmit} className="text-center pb-16">
                 <label className="block my-2 mx-auto text-center"><div className="block w-1/3 mx-auto">Gun</div><div className="block w-full p-2 mx-auto">

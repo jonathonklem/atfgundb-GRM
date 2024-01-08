@@ -1,4 +1,3 @@
-import React, { useEffect } from "react";
 import { useState } from 'react';
 import { useAuth0 } from "@auth0/auth0-react";
 import LogoutButton from "./logout";
@@ -72,19 +71,19 @@ const Dashboard = (props) => {
                         }
                     ></Route>
                     <Route path="guns">
-                        <Route index  element={<Guns UserId={userId} />} />
-                        <Route path="add" element={<AddGun UserId={userId}/>} />
-                        <Route path="maintenance" element={<Maintenance Url={url} UserId={userId}/>} />
-                        <Route path="accessories" element={<Accessory Url={url} UserId={userId}/>} />
+                        <Route index  element={<Guns authToken={props.authToken} UserId={userId} />} />
+                        <Route path="add" element={<AddGun authToken={props.authToken} UserId={userId}/>} />
+                        <Route path="maintenance" element={<Maintenance authToken={props.authToken} Url={url} UserId={userId}/>} />
+                        <Route path="accessories" element={<Accessory authToken={props.authToken} Url={url} UserId={userId}/>} />
                     </Route>
                     <Route path="ammo">
-                        <Route index element={<Ammo UserId={userId}/>} />
-                        <Route path="add" element={<AddAmmo UserId={userId}/>} />
-                        <Route path="purchase" element={<PurchaseAmmo UserId={userId}/>} />
-                        <Route path="dispose" element={<Dispose UserId={userId}/>} />
+                        <Route index element={<Ammo authToken={props.authToken} UserId={userId}/>} />
+                        <Route path="add" element={<AddAmmo authToken={props.authToken} UserId={userId}/>} />
+                        <Route path="purchase" element={<PurchaseAmmo authToken={props.authToken} UserId={userId}/>} />
+                        <Route path="dispose" element={<Dispose authToken={props.authToken} UserId={userId}/>} />
                     </Route>
                     <Route path="trips">
-                        <Route index element={<RangeTrip Url={url} UserId={userId}/>} />
+                        <Route index element={<RangeTrip authToken={props.authToken} Url={url} UserId={userId}/>} />
                     </Route>
                 </Routes>
                 <ul className="mt-4 fixed -bottom-6 w-full left-0">

@@ -11,7 +11,14 @@ const Maintenance = (props) => {
     }, []);
 
     function fetchGuns() {
-        fetch(props.Url+'/guns?user_id='+props.UserId)
+        fetch(props.Url+'/guns?user_id='+props.UserId, {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization' : 'Bearer ' + props.authToken
+            }
+        })
             .then(response => response.json())
             .then(data => setGuns(data));
     }
@@ -29,7 +36,8 @@ const Maintenance = (props) => {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization' : 'Bearer ' + props.authToken
             }, 
             body: JSON.stringify(formJson)
         })

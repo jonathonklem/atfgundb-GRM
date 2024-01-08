@@ -5,26 +5,38 @@ const RangeTrip = (props) => {
     const [successMessage, setSuccessMessage] = React.useState('');
     const [guns, setGuns] = React.useState<Gun[]>([]);
     const [ammo, setAmmo] = React.useState<Ammo[]>([]);
-    const [gunId, setGunId] = React.useState('');
-    const [ammoId, setAmmoId] = React.useState('');
-    const [roundCount, setRoundCount] = React.useState(0);
 
-    React.useEffect(() => {
-        fetchGuns();
-        fetchAmmo();
-    }, []);
 
     function fetchGuns() {
-        fetch(props.Url+'/guns?user_id='+props.UserId)
+        fetch(props.Url+'/guns?user_id='+props.UserId, {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization' : 'Bearer ' + props.authToken
+            }
+        })
             .then(response => response.json())
             .then(data => setGuns(data));
     }
 
     function fetchAmmo() {
-        fetch(props.Url+'/ammo?user_id='+props.UserId)
-            .then(response => response.json())
+        fetch(props.Url+'/ammo?user_id='+props.UserId, {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization' : 'Bearer ' + props.authToken
+            }
+        })
+            .then(response => response.json()) 
             .then(data => setAmmo(data));
     }
+    
+    React.useEffect(() => {
+        fetchGuns();
+        fetchAmmo();
+    }, []);
 
     function handleSubmit(e)  {
         e.preventDefault();
@@ -44,7 +56,8 @@ const RangeTrip = (props) => {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization' : 'Bearer ' + props.authToken
             }, 
             body: JSON.stringify(clearObject)
         })
@@ -62,7 +75,7 @@ const RangeTrip = (props) => {
             <em className="text-center green-600 block my-2">{successMessage}</em>
             <form onSubmit={handleSubmit} className="text-center pb-16">
                 <label className="block my-2 mx-auto text-center"><div className="block w-1/3 mx-auto">Gun</div><div className="block w-full p-2 mx-auto">
-                    <select name="gun_id" onChange={e => {setGunId(e.target.value)}}>
+                    <select name="gun_id">
                         <option>Choose</option>
                         {guns.map((gun) => (
                             <option value={gun.ID}>{gun.name}</option>

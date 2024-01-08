@@ -25,7 +25,14 @@ const Dispose = (props) => {
         e.preventDefault();
         const form = e.target;
 
-        fetch(`${url}/ammo/dispose?ammo_id=`+ammoId+`&quantity=`+quantity)
+        fetch(`${url}/ammo/dispose?ammo_id=`+ammoId+`&quantity=`+quantity, {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization' : 'Bearer ' + props.authToken
+            }
+        })
             .then(response => response.json())
             .then(data => console.log(data));
 

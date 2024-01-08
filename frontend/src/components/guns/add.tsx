@@ -26,7 +26,8 @@ const AddGun = (props) => {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization' : 'Bearer ' + props.authToken
             }, 
             body: JSON.stringify(clearObject)
         })
