@@ -92,12 +92,12 @@ const Dashboard = (props) => {
                     </Route>
                 </Routes>
                 <ul className="mt-4 fixed -bottom-6 w-full left-0 text-center bg-red-800">
-                    <li className="inline-block w-1/12"><Link className="bg-red-800 text-slate-50 py-2 px-4 w-full inline-block my-2 text-center mx-auto" to="/guns"><img alt="Guns" className="w-6 m-auto" src="/pistol.png" /></Link></li>
-                    <li className="inline-block w-1/12"><Link className="bg-red-800 text-slate-50 py-2 px-4 w-full inline-block my-2 text-center mx-auto" to="/ammo"><img alt="Ammo" className="w-6 m-auto" src="/bullet.png" /></Link></li>
-                    <li className="inline-block w-1/12"><Link className="bg-red-800 text-slate-50 py-2 px-4 w-full inline-block my-2 text-center mx-auto" to="/trips"><img alt="Range Trips" className="w-6 m-auto" src="/range.png" /></Link></li>
-                    <li className="inline-block w-1/12"><Link className="bg-red-800 text-slate-50 py-2 px-4 w-full inline-block my-2 text-center mx-auto" to="/guns/accessories"><img alt="Accessories" className="w-6 m-auto" src="/scope.png" /></Link></li>
-                    <li className="inline-block w-1/12"><Link className="bg-red-800 text-slate-50 py-2 px-4 w-full inline-block my-2 text-center mx-auto" to="/guns/maintenance"><img alt="Maintenance" className="w-6 m-auto" src="/tool.png" /></Link></li>
-                    <li className="inline-block w-1/12"><Link className="bg-red-800 text-slate-50 py-2 px-4 w-full inline-block my-2 text-center mx-auto" to="/reports"><img alt="Reports" className="w-6 m-auto" src="/pie-chart.png" /></Link></li>
+                    <li className="inline-block w-1/12"><Link className="bg-red-800 text-slate-50 py-2 w-full inline-block my-2 text-center mx-auto" to="/guns"><img alt="Guns" className="w-6 m-auto" src="/pistol.png" /></Link></li>
+                    <li className="inline-block w-1/12"><Link className="bg-red-800 text-slate-50 py-2 w-full inline-block my-2 text-center mx-auto" to="/ammo"><img alt="Ammo" className="w-6 m-auto" src="/bullet.png" /></Link></li>
+                    <li className="inline-block w-1/12"><Link className="bg-red-800 text-slate-50 py-2 w-full inline-block my-2 text-center mx-auto" to="/trips"><img alt="Range Trips" className="w-6 m-auto" src="/range.png" /></Link></li>
+                    <li className="inline-block w-1/12"><Link className="bg-red-800 text-slate-50 py-2 w-full inline-block my-2 text-center mx-auto" to="/guns/accessories"><img alt="Accessories" className="w-6 m-auto" src="/scope.png" /></Link></li>
+                    <li className="inline-block w-1/12"><Link className="bg-red-800 text-slate-50 py-2 w-full inline-block my-2 text-center mx-auto" to="/guns/maintenance"><img alt="Maintenance" className="w-6 m-auto" src="/tool.png" /></Link></li>
+                    <li className="inline-block w-1/12"><Link className="bg-red-800 text-slate-50 py-2 w-full inline-block my-2 text-center mx-auto" to="/reports"><img alt="Reports" className="w-6 m-auto" src="/pie-chart.png" /></Link></li>
                     <li className="inline-block w-1/12"><LogoutButton /></li>
                 </ul>
             </Router>
