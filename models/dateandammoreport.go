@@ -6,10 +6,10 @@ import (
 
 type DateAndAmmoReport struct {
 	ID struct {
-		DateDone primitive.DateTime `json:"date_done" bson:"date_done"`
+		DateDone string `json:"date_done" bson:"date_done"`
 		AmmoID   primitive.ObjectID `json:"ammo_id" bson:"ammo_id"`
 	} `json:"_id" bson:"_id"`
 	AmmoName []string           `json:"ammo_name" bson:"ammo_name"`
-	Date     primitive.DateTime `json:"date" bson:"date"`
+	Date     string `json:"date" bson:"date"`
 	Count    int                `json:"count" bson:"count"`
 }

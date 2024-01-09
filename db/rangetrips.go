@@ -65,7 +65,8 @@ func GetDateAndAmmoReport(userId string, date_done string) []models.DateAndAmmoR
 
 	results, err := rangeTripsCollection.Aggregate(context.Background(), bson.A{
 		bson.D{{"$match", bson.D{{"user_id", userId}, {"date_done", bson.D{{"$gt", primitiveDateDone}}}}}},
-		bson.D{{"$group", bson.D{{"_id", bson.D{{"date_done", "$date_done"}, {"ammo_id", "$ammo_id"}}}, {"count", bson.D{{"$sum", "$quantity_used"}}}}}},
+		//bson.D{{"$group", bson.D{{"_id", bson.D{{"date_done", "$date_done"}, {"ammo_id", "$ammo_id"}}}, {"count", bson.D{{"$sum", "$quantity_used"}}}}}},
+		bson.D{{"$group", bson.D{{"_id", bson.D{{"date_done", bson.D{{"$dateToString", bson.D{{"format", "%Y-%m-%dT00:00:00.00Z"}, {"date", "$date_done"}}}}}, {"ammo_id", "$ammo_id"}}}, {"count", bson.D{{"$sum", "$quantity_used"}}}}}},
 		bson.D{{"$lookup", bson.D{{"from", "ammo"}, {"localField", "_id.ammo_id"}, {"foreignField", "_id"}, {"as", "ammo"}}}},
 		bson.D{{"$project", bson.D{{"ammo_name", "$ammo.name"}, {"date", "$_id.date_done"}, {"count", "$count"}}}},
 	})
