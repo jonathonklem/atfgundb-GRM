@@ -39,6 +39,7 @@ const Reports = (props) => {
     
     const [from, setFrom] = useState(getFormattedDate(thirtyDaysAgo));
     const [to, setTo] = useState(getFormattedDate(today));
+    const [totalRoundCount, setTotalRoundCount] = useState(0);
 
     React.useEffect(() => {
         if (from > to) {
@@ -74,6 +75,12 @@ const Reports = (props) => {
             ammo_types.push(key);
           }
 
+          var roundCount = 0;
+          for (var i=0; i<data.length; i++) {
+            roundCount += data[i].count;
+          }
+
+            setTotalRoundCount(roundCount);
 
           // we now have unique dates (labels) and unique ammo types
           // we need to create a dataset for each ammo type
@@ -143,6 +150,7 @@ const Reports = (props) => {
             <input className="inline-block w-1/4 text-neutral-700" type="date" name="from" onChange={ (e) => {setFrom(e.target.value) }} value={from}/>
             <label className="inline-block w-1/4 text-center">To</label>
             <input className="inline-block w-1/4 text-neutral-700" type="date" name="to" onChange={ (e) =>  { setTo(e.target.value) }} value={to} />
+            <div className="font-bold text-center mt-2">Total Rounds for Period: {totalRoundCount}</div>
             <Bar className="mt-2 bg-gray-500 mb-14 h-4/6" 
                 data={chartData}
                 options={{
