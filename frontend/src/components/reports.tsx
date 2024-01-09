@@ -8,53 +8,104 @@ import { Bar } from "react-chartjs-2";
 ChartJS.register(...registerables);
 const Data = [
     {
-      id: 1,
-      year: 2016,
-      userGain: 80000,
-      userLost: 823
+      userGain: 0,
     },
     {
-      id: 2,
-      year: 2017,
-      userGain: 45677,
-      userLost: 345
+      userGain: 0,
     },
-    {
-      id: 3,
-      year: 2018,
-      userGain: 78888,
-      userLost: 555
-    },
-    {
-      id: 4,
-      year: 2019,
-      userGain: 90000,
-      userLost: 4555
-    },
-    {
-      id: 5,
-      year: 2020,
-      userGain: 4300,
-      userLost: 234
-    }
   ];
 
 const Reports = (props) => {
+    const colorArr = [
+      "#5e738b", // Slate Blue
+      "#8d8676", // Taupe Gray
+      "#7d8491", // Blue Gray
+      "#a09fad", // Ash Gray
+      "#7c8f8f", // Dark Slate Gray
+      "#848482", // Battleship Gray
+      "#768080", // Grayish Blue
+      "#6d7f7d", // Cadet Blue
+      "#738276", // Pewter Blue
+      "#6f7d7d", // Gray Olive
+      "#727f76", // Sage Gray
+      "#757d74"  // Slate Gray
+      // Add more colors as needed
+    ];
+    React.useEffect(() => {
+      fetch(props.Url + '/range/getDateAndAmmoReport?user_id='+props.UserId+'&date_done=2024-01-01', {
+        method: 'GET',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization' : 'Bearer ' + props.authToken
+        }})
+        .then((response) => response.json())
+        .then((data) => {
+          console.log(data);
+
+          // this is ugly, but using data.map was causing duplicate ammo types to be added
+          const label_map: { [key: string]: number } = {};
+          for (var i = 0; i < data.length; i++) {
+            label_map[data[i].date.split("T")[0]] = 0;
+          }
+          const labels = Object.keys(label_map);
+
+          const ammo_types_map: { [key: string]: number } = {};
+          for (var i = 0; i < data.length; i++) {
+            ammo_types_map[data[i].ammo_name[0]] = 0;
+          }
+
+          const ammo_types: string[] = [];
+          for (var key in ammo_types_map) {
+            ammo_types.push(key);
+            ammo_types.push(key);
+            ammo_types.push(key);
+          }
+
+
+          // we now have unique dates (labels) and unique ammo types
+          // we need to create a dataset for each ammo type
+          // each dataset needs to have a data array with the same length as the labels array
+
+          var datasetvals = [] as any[];
+          for (var j = 0; j < ammo_types.length; j++) {
+            var dataset = {label: ammo_types[j], data: [] as number[], backgroundColor: [
+                  colorArr[j],
+                ],
+                color: "black",
+                borderColor: "black",
+                borderWidth: 2};
+          
+            for (var i = 0; i < labels.length; i++) {
+              var ammo_count = 0;
+              // we could have multiple "date" entries for the same date and ammo type
+              // this needs to be fixed at the query level but this also solves the no-null issue and making sure the dataset length
+              // is the same as the labels length
+              for (var k = 0; k < data.length; k++) {
+                if (data[k].date.split("T")[0] == labels[i] && data[k].ammo_name[0] == ammo_types[j]) {
+                  ammo_count += data[k].count;
+                }
+              }
+              dataset.data.push(ammo_count);
+            }
+
+            datasetvals.push(dataset);
+          }
+          setChartData({
+            labels: labels,
+            datasets: datasetvals,
+          });
+        }
+        );
+
+    }, []);
+
     const [chartData, setChartData] = useState({
-        labels: Data.map((data) => data.year), 
+        labels: ["2024-01-01", "2024-01-02"], 
         datasets: [
           {
-            label: "Users Gained ",
-            data: Data.map((data) => data.userGain),
-            backgroundColor: [
-              "rgba(75,192,192,1)",
-              "#ecf0f1",
-              "#50AF95",
-              "#f3ba2f",
-              "#2a71d0"
-            ],
-            borderColor: "black",
-            borderWidth: 2
+            label: "5.56",
+            data: [0,0],
           }
         ]
       });
@@ -65,15 +116,38 @@ const Reports = (props) => {
             <Bar className="bg-gray-500 mb-14 h-4/6" 
                 data={chartData}
                 options={{
-                plugins: {
-                    title: {
-                    display: true,
-                    text: "Users Gained between 2016-2020"
+                  plugins: {
+                      title: {
+                        display: true,
+                        text: "Ammo Used Per Day",
+                        color: "black",
+                      },
+                      legend: {
+                        labels : {
+                          color: "black",
+                        },
+                        display: true,
+                      }
+                  },
+                  // set font color to black for all labels
+                  scales: {
+                    x: {
+                      ticks: {
+                        color: "black",
+                      },
+                      grid: {
+                        color: "black",
+                      },
                     },
-                    legend: {
-                    display: false
-                    }
-                }
+                    y: {
+                      ticks: {
+                        color: "black",
+                      },
+                      grid: {
+                        color: "black",
+                      },
+                    },
+                  },
                 }}
             />
         </>
