@@ -31,8 +31,17 @@ const Reports = (props) => {
       "#757d74"  // Slate Gray
       // Add more colors as needed
     ];
+    const today = new Date();
+    const thirtyDaysAgo = new Date();
+    thirtyDaysAgo.setDate(today.getDate() - 30);
+
+    today.toDateString()
+    
+    const [from, setFrom] = useState(getFormattedDate(thirtyDaysAgo));
+    const [to, setTo] = useState(getFormattedDate(today));
+    
     React.useEffect(() => {
-      fetch(props.Url + '/range/getDateAndAmmoReport?user_id='+props.UserId+'&date_done=2024-01-01', {
+      fetch(props.Url + '/range/getDateAndAmmoReport?user_id='+props.UserId+'&date_done=2024-01-01&date_from=' + from +'&date_to=' + to, {
         method: 'GET',
         headers: {
             'Accept': 'application/json',
@@ -96,7 +105,7 @@ const Reports = (props) => {
         }
         );
 
-    }, []);
+    }, [from,to]);
 
     const [chartData, setChartData] = useState({
         labels: ["2024-01-01", "2024-01-02"], 
@@ -106,12 +115,30 @@ const Reports = (props) => {
             data: [0,0],
           }
         ]
-      });
+    });
+
+    function getFormattedDate(date) {
+        var year = date.getFullYear();
+      
+        var month = (1 + date.getMonth()).toString();
+        month = month.length > 1 ? month : '0' + month;
+      
+        var day = date.getDate().toString();
+        day = day.length > 1 ? day : '0' + day;
+        
+        return year + '-' + month + '-' + day;
+      }
+
+ 
 
     return (
         <>
-            <h1 className="text-center font-bold text-xl py-2 bg-red-800 text-slate-50">View Reports</h1>
-            <Bar className="bg-gray-500 mb-14 h-4/6" 
+            <h1 className="text-center font-bold text-xl py-2 mb-2 bg-red-800 text-slate-50">View Reports</h1>
+            <label className="inline-block w-1/4 text-center">From</label>
+            <input className="inline-block w-1/4 text-neutral-700" type="date" name="from" onChange={ (e) => {setFrom(e.target.value) }} value={from}/>
+            <label className="inline-block w-1/4 text-center">To</label>
+            <input className="inline-block w-1/4 text-neutral-700" type="date" name="to" onChange={ (e) =>  { setTo(e.target.value) }} value={to} />
+            <Bar className="mt-2 bg-gray-500 mb-14 h-4/6" 
                 data={chartData}
                 options={{
                   plugins: {
