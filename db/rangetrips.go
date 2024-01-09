@@ -11,10 +11,8 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-func GetDateAndAmmoReport(userId string, date_done string) []models.DateAndAmmoReport {
+func GetDateAndAmmoReport(userId string, date_from string, date_to string) []models.DateAndAmmoReport {
 	client := getClient()
-
-	log.Printf("userId: %v\ndate_done: %v", userId, date_done)
 
 	defer func() {
 		if err := client.Disconnect(context.Background()); err != nil {
@@ -25,11 +23,11 @@ func GetDateAndAmmoReport(userId string, date_done string) []models.DateAndAmmoR
 
 	// example query
 	/* [{
-	$match: {user_id: "110522579750586824658", date_done: {$gt:  ISODate("2024-01-05")}}
+			$match: {user_id: "110522579750586824658", date_done: {$gte:  ISODate("2024-01-07"), $lt: ISODate("2024-01-10")} }
 		},{
 			$group: {
 				"_id": {
-					date_done: "$date_done",
+					date_done: {$dateToString: { format: "%Y-%m-%dT00:53:00.48Z", date: "$date_done"}},
 					ammo_id: "$ammo_id"
 				},
 				count: {$sum: "$quantity_used"}
@@ -43,8 +41,8 @@ func GetDateAndAmmoReport(userId string, date_done string) []models.DateAndAmmoR
 				}
 		}, {
 			$project: {
-				ammo_name: "$ammo[0].name",
-				date: "$_id.date_done",
+				ammo_name: "$ammo.name",
+				date: {$dateFromString: {dateString: "$_id.date_done"}},
 				count: "$count"
 			}
 		}]
@@ -55,16 +53,21 @@ func GetDateAndAmmoReport(userId string, date_done string) []models.DateAndAmmoR
 
 	// doing the date conversion piecemeal because having one long bson.D entry was causing problems
 	// TODO WHY IS TIME.PARSE NOT WORKING
-	date_done_time, err := time.Parse("2006-01-02 15:04:05.000000", date_done+" 00:00:00.000000")
-
+	date_from_time, err := time.Parse("2006-01-02 15:04:05.000000", date_from+" 00:00:00.000000")
+	
+	if err != nil {
+		log.Fatal(err)
+	}
+	date_to_time, err := time.Parse("2006-01-02 15:04:05.000000", date_to+" 00:00:00.000000")
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	primitiveDateDone := primitive.NewDateTimeFromTime(date_done_time)
+	primitiveFrom := primitive.NewDateTimeFromTime(date_from_time)
+	primitiveTo := primitive.NewDateTimeFromTime(date_to_time)
 
 	results, err := rangeTripsCollection.Aggregate(context.Background(), bson.A{
-		bson.D{{"$match", bson.D{{"user_id", userId}, {"date_done", bson.D{{"$gt", primitiveDateDone}}}}}},
+		bson.D{{"$match", bson.D{{"user_id", userId}, {"date_done", bson.D{{"$gte", primitiveFrom}, {"$lt", primitiveTo}}}}}},
 		//bson.D{{"$group", bson.D{{"_id", bson.D{{"date_done", "$date_done"}, {"ammo_id", "$ammo_id"}}}, {"count", bson.D{{"$sum", "$quantity_used"}}}}}},
 		bson.D{{"$group", bson.D{{"_id", bson.D{{"date_done", bson.D{{"$dateToString", bson.D{{"format", "%Y-%m-%dT00:00:00.00Z"}, {"date", "$date_done"}}}}}, {"ammo_id", "$ammo_id"}}}, {"count", bson.D{{"$sum", "$quantity_used"}}}}}},
 		bson.D{{"$lookup", bson.D{{"from", "ammo"}, {"localField", "_id.ammo_id"}, {"foreignField", "_id"}, {"as", "ammo"}}}},

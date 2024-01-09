@@ -39,15 +39,20 @@ const Reports = (props) => {
     
     const [from, setFrom] = useState(getFormattedDate(thirtyDaysAgo));
     const [to, setTo] = useState(getFormattedDate(today));
-    
+
     React.useEffect(() => {
-      fetch(props.Url + '/range/getDateAndAmmoReport?user_id='+props.UserId+'&date_done=2024-01-01&date_from=' + from +'&date_to=' + to, {
-        method: 'GET',
-        headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-            'Authorization' : 'Bearer ' + props.authToken
-        }})
+        if (from > to) {
+            const oldTo = to;
+            setTo(from);
+            setFrom(oldTo);
+        }
+        fetch(props.Url + '/range/getDateAndAmmoReport?user_id='+props.UserId+'&date_done=2024-01-01&date_from=' + from +'&date_to=' + to, {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization' : 'Bearer ' + props.authToken
+            }})
         .then((response) => response.json())
         .then((data) => {
           console.log(data);

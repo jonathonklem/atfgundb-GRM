@@ -11,9 +11,10 @@ import (
 
 func GetDateAndAmmoReport(c *gin.Context) {
 	userId := c.Query("user_id")
-	dateDone := c.Query("date_done")
+	dateFrom := c.Query("date_from")
+	dateTo := c.Query("date_to")
 
-	dateAndAmmoReport := db.GetDateAndAmmoReport(userId, dateDone)
+	dateAndAmmoReport := db.GetDateAndAmmoReport(userId, dateFrom, dateTo)
 
 	c.JSON(http.StatusOK, dateAndAmmoReport)
 }
