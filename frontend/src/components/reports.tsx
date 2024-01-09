@@ -58,8 +58,6 @@ const Reports = (props) => {
           const ammo_types: string[] = [];
           for (var key in ammo_types_map) {
             ammo_types.push(key);
-            ammo_types.push(key);
-            ammo_types.push(key);
           }
 
 
@@ -82,7 +80,7 @@ const Reports = (props) => {
               // this needs to be fixed at the query level but this also solves the no-null issue and making sure the dataset length
               // is the same as the labels length
               for (var k = 0; k < data.length; k++) {
-                if (data[k].date.split("T")[0] == labels[i] && data[k].ammo_name[0] == ammo_types[j]) {
+                if (data[k].date.split("T")[0] === labels[i] && data[k].ammo_name[0] === ammo_types[j]) {
                   ammo_count += data[k].count;
                 }
               }
