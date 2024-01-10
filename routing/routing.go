@@ -2,7 +2,6 @@ package routing
 
 import (
 	"errors"
-	"fmt"
 	"strings"
 
 	"github.com/dgrijalva/jwt-go"
@@ -41,15 +40,10 @@ func CheckJWT() gin.HandlerFunc {
 		// remove Bearer prefix from token
 		providedToken = strings.Replace(providedToken, "Bearer ", "", 1)
 
-		token, err := jwt.Parse(providedToken, getKey)
+		_, err := jwt.Parse(providedToken, getKey)
 		if err != nil {
-			c.AbortWithStatusJSON(401, gin.H{"error": "No Authorization header provided"})
+			c.AbortWithStatusJSON(401, gin.H{"error": "Invalid authorization header"})
 			return
-		}
-
-		claims := token.Claims.(jwt.MapClaims)
-		for key, value := range claims {
-			fmt.Printf("claim: %s\t%v\n", key, value)
 		}
 
 		c.Next()
@@ -79,7 +73,8 @@ func getKey(token *jwt.Token) (interface{}, error) {
 
 func CORS() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		allowedOrigin := "http://localhost:3000"
+		// TODO: make this configurable
+		allowedOrigin := os.Getenv("ALLOWED_ORIGIN")
 
 		c.Writer.Header().Set("Access-Control-Allow-Origin", allowedOrigin)
 		c.Writer.Header().Set("Access-Control-Allow-Credentials", "true")

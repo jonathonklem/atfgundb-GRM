@@ -10,3 +10,28 @@
 ## Backend
 1. Make sure .env is populated in the root directory with the proper mongodb connection string
 2. Run `go run localdev.go` to start local web server
+
+## Environment Variables
+1. local dev go reads `ALLOWED_ORIGIN` prod does as well but that's managed in aws (`aws ssm put-parameter --name "/ATFGUNDBMiddleware/config/allowed_origin" --type "String" --value "https://dw7nq8qexc11l.cloudfront.net" --overwrite`)
+
+## Installation Prerequisites
+1. Need to have aws cli
+    `curl "https://awscli.amazonaws.com/AWSCLIV2.pkg" -o "AWSCLIV2.pkg"`
+    `sudo installer -pkg AWSCLIV2.pkg -target /`
+2. Need to have serverless
+    `npm install -g serverless`
+3. Need serverless finch
+    `npm install --save serverless-finch`
+
+## Installation steps
+1. Run `make` to build the aws go file
+2. `sls deploy` uploads go file to lambda
+3. Run `npm run build` inside of frontend 
+4. 
+
+## Serverless additional information
+1. May need to run `aws configure` and add the keys
+2. Initially had to set the proper parameter name with `aws ssm put-parameter --name "/ATFGUNDBMiddleware/config/allowed_origin" --type "String" --value "X.X.X.X"`
+3. Serverless was being finicky so had to add aws creds this way `serverless config credentials --provider aws --key XXXXXXXX --secret "YYYYYYYYYY"`
+
+Guide followed from: https://www.kantega.no/blogg/running-go-and-react-on-aws-using-lambda
