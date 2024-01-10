@@ -2,20 +2,15 @@ package db
 
 import (
 	"context"
-	"log"
+	//"log"
 	"os"
 
-	"github.com/joho/godotenv"
+	//"github.com/joho/godotenv"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
 func getClient() *mongo.Client {
-	err := godotenv.Load()
-	if err != nil {
-		log.Fatal("Error loading .env file")
-	}
-
 	mongoString := os.Getenv("MONGO_URL")
 
 	// Use the SetServerAPIOptions() method to set the Stable API version to 1
