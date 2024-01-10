@@ -25,8 +25,8 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "cross-env REACT_APP_API=http://localhost:8080 react-scripts start && tailwindcss -i ./input.css -o ./src/index.css --watch",
-    "build": "react-scripts build",
+    "start": "cross-env AUDIENCE=https://localhost:8080 REACT_APP_API=https://localhost:8080 react-scripts start && tailwindcss -i ./input.css -o ./src/index.css --watch",
+    "build": "cross-env AUDIENCE=https://txdcr1sizh.execute-api.us-east-1.amazonaws.com/ REACT_APP_API=https://txdcr1sizh.execute-api.us-east-1.amazonaws.com/dev react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "build:css": "tailwindcss -i ./input.css -o ./src/index.css"
