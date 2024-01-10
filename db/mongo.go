@@ -2,7 +2,7 @@ package db
 
 import (
 	"context"
-	//"log"
+	"log"
 	"os"
 
 	//"github.com/joho/godotenv"
@@ -12,7 +12,7 @@ import (
 
 func getClient() *mongo.Client {
 	mongoString := os.Getenv("MONGO_URL")
-
+	log.Println("mongoString: " + mongoString)
 	// Use the SetServerAPIOptions() method to set the Stable API version to 1
 	serverAPI := options.ServerAPI(options.ServerAPIVersion1)
 	opts := options.Client().ApplyURI(mongoString).SetServerAPIOptions(serverAPI)

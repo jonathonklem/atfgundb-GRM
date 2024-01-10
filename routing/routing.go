@@ -3,7 +3,7 @@ package routing
 import (
 	"errors"
 	"strings"
-
+	"os"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
 	"github.com/lestrrat/go-jwx/jwk"
