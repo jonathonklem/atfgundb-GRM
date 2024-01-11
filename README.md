@@ -17,7 +17,7 @@
 2. Run `go run localdev.go` to start local web server
 
 ## Environment Variables
-1. local dev go reads `ALLOWED_ORIGIN` prod does as well but that's managed in aws (`aws ssm put-parameter --name "/ATFGUNDBMiddleware/config/allowed_origin" --type "String" --value "https://dw7nq8qexc11l.cloudfront.net" --overwrite`)
+1. local dev go reads `ALLOWED_ORIGIN` prod does as well but that's managed in aws (`aws ssm put-parameter --name "/ATFGUNDBMiddleware/config/allowed_origin" --type "String" --value "https://dashboard.atfgundb.com" --overwrite`) --- NO TRAILING SLASH!!!!
 2. local dev go reads `MONGO_URL` prod does same as #1
 
 ## Installation Prerequisites

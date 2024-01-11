@@ -8,7 +8,7 @@ import { createAuth0Client } from '@auth0/auth0-spa-js';
 const refreshAccessToken = async (setAuthToken) => {
   try {
     const auth0 = await createAuth0Client({
-      domain: 'dev-bxzha665kfgz0ltz.us.auth0.com',
+      domain: 'auth.atfgundb.com',
       clientId: 'juK0uHzgNj7H5lpskbPx34CEzlqVYHvF'
     });
 
