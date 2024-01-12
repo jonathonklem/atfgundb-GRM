@@ -5,47 +5,15 @@ const Dispose = (props) => {
     const url = props.Url;
 
     const [successMessage, setSuccessMessage] = React.useState('');
-    const [ammo, setAmmo] = React.useState<Ammo[]>([]);
     const [ammoId, setAmmoId] = React.useState('');
     const [quantity, setQuantity] = React.useState(0);
-
-    // fetch ammo from url and store in ammo state 
-    React.useEffect(() => {
-        fetchAmmo();
-    }, []);
-
-    function fetchAmmo() {
-        fetch(`${url}/ammo?user_id=`+props.UserId,
-        {
-            method: 'GET',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-                'Authorization' : 'Bearer ' + props.authToken
-            }
-        })
-        .then((response) => response.json())
-        .then((data) => setAmmo(data));
-    }
 
     function handleSubmit(e) {
         e.preventDefault();
         const form = e.target;
 
-        fetch(`${url}/ammo/dispose?ammo_id=`+ammoId+`&quantity=`+quantity, {
-            method: 'GET',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-                'Authorization' : 'Bearer ' + props.authToken
-            }
-        })
-            .then(response => response.json())
-            .then(data => console.log(data));
-
-        setSuccessMessage("Ammo Disposed Successfully!");
-        // clear form
-        form.reset();
+        setSuccessMessage("Disposing.....")
+        props.DisposeAmmo(ammoId, quantity, () => {setSuccessMessage("Ammo Disposed Successfully!"); form.reset();})
     }
     
     return (
@@ -56,7 +24,7 @@ const Dispose = (props) => {
                 <label className="block my-2 mx-auto text-center"><div className="block w-1/3 mx-auto">Ammo</div><div className="block w-full p-2 mx-auto">
                         <select name="ammo_id" onChange={e => setAmmoId(e.target.value)}>
                             <option>Choose</option>
-                            {ammo.map((item: Ammo) => (
+                            {props.Ammo.map((item: Ammo) => (
                                 <option value={item?.ID?.toString()} >{item.name}</option>
                             ))}
                         </select>

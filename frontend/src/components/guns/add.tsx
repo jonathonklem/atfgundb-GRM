@@ -17,21 +17,11 @@ const AddGun = (props) => {
         clearObject.user_id = props.UserId;
         clearObject.roundcount =  Number(formJson.roundcountstring);
 
-        // post formJson to our env var url
-        fetch(`${url}/guns/add`, {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-                'Authorization' : 'Bearer ' + props.authToken
-            }, 
-            body: JSON.stringify(clearObject)
-        })
-            .then(response => response.json())
-            .then(data => console.log(data));
-        setSuccessMessage("Added Gun Successfully!");
+        setSuccessMessage("Adding.....");
+        
+        props.AddGun(clearObject, () => {setSuccessMessage("Added Gun Successfully!");form.reset();});
         // clear form
-        form.reset();
+        
     }
     return (
         <>

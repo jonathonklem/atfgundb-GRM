@@ -9,7 +9,7 @@ const GunTable = (props) => {
         )
     } else { 
         return (
-            <table className="mx-auto">
+            <table className="mx-auto mb-16">
                 <thead>
                 <tr>
                     <th>Name</th>

@@ -18,21 +18,8 @@ const AddAmmo = (props) => {
         clearObject.user_id = props.UserId;
         clearObject.amount =  Number(formJson.count);
 
-        // post formJson to our env var url
-        fetch(`${url}/ammo/add`, {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-                'Authorization' : 'Bearer ' + props.authToken
-            }, 
-            body: JSON.stringify(clearObject)
-        })
-            .then(response => response.json())
-            .then(data => console.log(data));
-        setSuccessMessage("Added Ammo Successfully!");
-        // clear form
-        form.reset();
+        setSuccessMessage("Adding.....");
+        props.AddAmmo(clearObject, () => {setSuccessMessage("Added Ammo Successfully!");form.reset();});
     }
     return (
         <>
