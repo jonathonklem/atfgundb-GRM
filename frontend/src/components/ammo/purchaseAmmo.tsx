@@ -4,25 +4,6 @@ import {Ammo} from "../../Types";
 const PurchaseAmmo = (props) => {
     const url = props.Url;
     const [successMessage, setSuccessMessage] = React.useState('');
-    const [ammo, setAmmo] = React.useState<Ammo[]>([]);
-
-    // fetch ammo from url and store in ammo state 
-    React.useEffect(() => {
-        fetchAmmo();
-    }, []);
-
-    function fetchAmmo() {
-        fetch(`${url}/ammo?user_id=`+props.UserId, {
-            method: 'GET',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-                'Authorization' : 'Bearer ' + props.authToken
-            }
-        })
-        .then((response) => response.json())
-        .then((data) => setAmmo(data));
-    }
 
     function handleSubmit(e) {
         e.preventDefault();
@@ -38,24 +19,11 @@ const PurchaseAmmo = (props) => {
         clearObject.quantity =  Number(formJson.quantity);
         clearObject.price =  Number(formJson.price);
 
-        // post formJson to our env var url
-        fetch(`${url}/ammo/purchase`, {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-                'Authorization' : 'Bearer ' + props.authToken
-            }, 
-            body: JSON.stringify(clearObject)
-        })
-            .then(response => response.json())
-            .then(data => console.log(data));
-        setSuccessMessage("Purchased Ammo Successfully!");
-        // clear form
-        form.reset();
+        setSuccessMessage("Saving.....");
+        props.PurchaseAmmo(clearObject, () => {setSuccessMessage("Purchased Ammo Successfully!");form.reset();});
     }
 
-    if (ammo.length === 0) {
+    if (props.Ammo.length === 0) {
         return (<div>No ammo types to purchase yet.  Add ammo first.</div>)
     }
 
@@ -67,7 +35,7 @@ const PurchaseAmmo = (props) => {
                 <label className="block my-2 mx-auto text-center"><div className="block w-1/3 mx-auto">Ammo</div><div className="block w-full p-2 mx-auto">
                         <select name="ammo_id">
                             <option>Choose</option>
-                            {ammo.map((item: Ammo) => (
+                            {props.Ammo.map((item: Ammo) => (
                                 <option value={item?.ID?.toString()}>{item.name}</option>
                             ))}
                         </select>

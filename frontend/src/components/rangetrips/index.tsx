@@ -3,40 +3,6 @@ import {Gun, Ammo} from "../../Types";
 
 const RangeTrip = (props) => {
     const [successMessage, setSuccessMessage] = React.useState('');
-    const [guns, setGuns] = React.useState<Gun[]>([]);
-    const [ammo, setAmmo] = React.useState<Ammo[]>([]);
-
-
-    function fetchGuns() {
-        fetch(props.Url+'/guns?user_id='+props.UserId, {
-            method: 'GET',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-                'Authorization' : 'Bearer ' + props.authToken
-            }
-        })
-            .then(response => response.json())
-            .then(data => setGuns(data));
-    }
-
-    function fetchAmmo() {
-        fetch(props.Url+'/ammo?user_id='+props.UserId, {
-            method: 'GET',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-                'Authorization' : 'Bearer ' + props.authToken
-            }
-        })
-            .then(response => response.json()) 
-            .then(data => setAmmo(data));
-    }
-    
-    React.useEffect(() => {
-        fetchGuns();
-        fetchAmmo();
-    }, []);
 
     function handleSubmit(e)  {
         e.preventDefault();
@@ -51,22 +17,8 @@ const RangeTrip = (props) => {
         clearObject.user_id = props.UserId;
         clearObject.quantity_used =  Number(formJson.quantity_used);
 
-        // post formJson to our env var url
-        fetch(props.Url + '/range/addTrip', {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-                'Authorization' : 'Bearer ' + props.authToken
-            }, 
-            body: JSON.stringify(clearObject)
-        })
-            .then(response => response.json())
-            .then(data => console.log(data));
-
-        setSuccessMessage("Range Trip added successfully!");
-        // clear form
-        form.reset();
+        setSuccessMessage("Saving.....");
+        props.AddRangeTrip(clearObject, () => {setSuccessMessage("Range Trip added successfully!");form.reset();});
     }
 
     return (
@@ -77,7 +29,7 @@ const RangeTrip = (props) => {
                 <label className="block my-2 mx-auto text-center"><div className="block w-1/3 mx-auto">Gun</div><div className="block w-full p-2 mx-auto">
                     <select name="gun_id">
                         <option>Choose</option>
-                        {guns.map((gun) => (
+                        {props.Guns.map((gun) => (
                             <option value={gun.ID}>{gun.name}</option>
                         ))}
                     </select>
@@ -85,7 +37,7 @@ const RangeTrip = (props) => {
                 <label className="block my-2 mx-auto text-center"><div className="block w-1/3 mx-auto">Ammo</div><div className="block w-full p-2 mx-auto">
                         <select name="ammo_id">
                             <option>Choose</option>
-                            {ammo.map((item: Ammo) => (
+                            {props.Ammo.map((item: Ammo) => (
                                 <option value={item?.ID?.toString()}>{item.name}</option>
                             ))}
                         </select>

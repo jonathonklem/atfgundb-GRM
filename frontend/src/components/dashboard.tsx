@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useAuth0 } from "@auth0/auth0-react";
 import LogoutButton from "./logout";
 import {
@@ -7,9 +7,10 @@ import {
     Route,
     Link,
 } from "react-router-dom";
+import {Gun, Ammo} from "../Types";
 import Guns from "./guns/index";
 import AddGun from "./guns/add";
-import Ammo from "./ammo/index";
+import AmmoIndex from "./ammo/index";
 import AddAmmo from "./ammo/add";
 import PurchaseAmmo from "./ammo/purchaseAmmo";
 import Dispose from "./ammo/dispose";
@@ -17,15 +18,136 @@ import Maintenance from "./guns/maintenance";
 import Accessory from "./guns/accessory";
 import RangeTrip from "./rangetrips/index";
 import Reports from "./reports";
+
+
 const getenv = require('getenv');
 const url = getenv.string('REACT_APP_API');
 
 
 const Dashboard = (props) => {
     var [profileSaved, setProfileSaved] = useState(false);
+    const [guns, setGuns] = useState<Gun[]>([]);
+    const [ammo, setAmmo] = useState<Ammo[]>([]);
+    const [userId, setUserId] = useState('');
 
     const {user, isAuthenticated, isLoading  } = useAuth0();
 
+    function fetchGuns() {
+        fetch(url+'/guns?user_id='+userId, {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization' : 'Bearer ' + props.authToken
+            }
+        })
+            .then(response => response.json())
+            .then(data => setGuns(data));
+    }
+    function addGun(clearObject, callback) {
+        // post formJson to our env var url
+        fetch(`${url}/guns/add`, {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization' : 'Bearer ' + props.authToken
+            }, 
+            body: JSON.stringify(clearObject)
+        })
+            .then(response => response.json())
+            .then(data => console.log(data)).then(() => fetchGuns()).then(() => callback());
+    }
+
+    function purchaseAmmo(clearObject, callback) {
+        // post formJson to our env var url
+        fetch(`${url}/ammo/purchase`, {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization' : 'Bearer ' + props.authToken
+            }, 
+            body: JSON.stringify(clearObject)
+        })
+            .then(response => response.json())
+            .then(data => console.log(data)).then(() => {callback()}).then(() => fetchAmmo());
+
+    }
+    function addAmmo (clearObject, callback) {
+        // post formJson to our env var url
+        fetch(`${url}/ammo/add`, {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization' : 'Bearer ' + props.authToken
+            }, 
+            body: JSON.stringify(clearObject)
+        })
+            .then(response => response.json())
+            .then(data => console.log(data)).then(() => {callback(); fetchAmmo();});
+    }
+    function fetchAmmo() {
+        fetch(url+'/ammo?user_id='+userId, {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization' : 'Bearer ' + props.authToken
+            }
+        })
+            .then(response => response.json()) 
+            .then(data => setAmmo(data));
+    }
+
+    function disposeAmmo(ammoId, quantity, callback) {
+        fetch(`${url}/ammo/dispose?ammo_id=`+ammoId+`&quantity=`+quantity, {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization' : 'Bearer ' + props.authToken
+            }
+        })
+            .then(response => response.json())
+            .then(data => console.log(data)).then(() => {callback(); fetchAmmo()});
+
+    }
+
+    function addMaintenance(gunId, formJson, callback) {
+        // post formJson to our env var url
+        fetch(url + '/guns/addMaintenance?gun_id='+gunId, {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization' : 'Bearer ' + props.authToken
+            }, 
+            body: JSON.stringify(formJson)
+        })
+            .then(response => response.json())
+            .then(data => console.log(data)).then(() => callback());
+    }
+
+    function addAccessory(gunId, formJson, callback) {
+        // post formJson to our env var url
+        fetch(url+ '/guns/addAccessory?gun_id='+gunId, {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization' : 'Bearer ' + props.authToken
+            }, 
+            body: JSON.stringify(formJson)
+        })
+            .then(response => response.json())
+            .then(data => console.log(data)).then(() => callback());
+    }
+
+    useEffect(() => {
+        setUserId(user?.sub?.split("|")[1] || '');
+    }, [user]);
 
     function saveProfile() {
         if (props.authToken) {
@@ -43,8 +165,24 @@ const Dashboard = (props) => {
                 body: JSON.stringify(user)
             })
                 .then(response => response.json())
-                .then(data => setProfileSaved(true));
+                .then(data => setProfileSaved(true)).then(() => fetchGuns()).then(() => fetchAmmo());   // avoid weird race type condition
         }
+    }
+
+    function addRangeTrip(clearObject, callback) {
+         // post formJson to our env var url
+         fetch(url+ '/range/addTrip', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization' : 'Bearer ' + props.authToken
+            }, 
+            body: JSON.stringify(clearObject)
+        })
+            .then(response => response.json())
+            .then(data => console.log(data)).then(() => callback()).then(() => fetchGuns()).then(() => fetchAmmo());
+
     }
 
 
@@ -73,19 +211,19 @@ const Dashboard = (props) => {
                         }
                     ></Route>
                     <Route path="guns">
-                        <Route index  element={<Guns authToken={props.authToken} Url={url} UserId={userId} />} />
-                        <Route path="add" element={<AddGun authToken={props.authToken} Url={url} UserId={userId}/>} />
-                        <Route path="maintenance" element={<Maintenance authToken={props.authToken} Url={url} UserId={userId}/>} />
-                        <Route path="accessories" element={<Accessory authToken={props.authToken} Url={url} UserId={userId}/>} />
+                        <Route index  element={<Guns Guns={guns} authToken={props.authToken} Url={url} UserId={userId} />} />
+                        <Route path="add" element={<AddGun AddGun={addGun} authToken={props.authToken} Url={url} UserId={userId}/>} />
+                        <Route path="maintenance" element={<Maintenance AddMaintenance={addMaintenance} Guns={guns} authToken={props.authToken} Url={url} UserId={userId}/>} />
+                        <Route path="accessories" element={<Accessory AddAccessory={addAccessory} Guns={guns} authToken={props.authToken} Url={url} UserId={userId}/>} />
                     </Route>
                     <Route path="ammo">
-                        <Route index element={<Ammo authToken={props.authToken} Url={url} UserId={userId}/>} />
-                        <Route path="add" element={<AddAmmo authToken={props.authToken} Url={url} UserId={userId}/>} />
-                        <Route path="purchase" element={<PurchaseAmmo authToken={props.authToken} Url={url} UserId={userId}/>} />
-                        <Route path="dispose" element={<Dispose authToken={props.authToken} Url={url} UserId={userId}/>} />
+                        <Route index element={<AmmoIndex authToken={props.authToken} Ammo={ammo}/>} />
+                        <Route path="add" element={<AddAmmo AddAmmo={addAmmo} authToken={props.authToken} Url={url} UserId={userId}/>} />
+                        <Route path="purchase" element={<PurchaseAmmo Ammo={ammo} PurchaseAmmo={purchaseAmmo} authToken={props.authToken} Url={url} UserId={userId}/>} />
+                        <Route path="dispose" element={<Dispose DisposeAmmo={disposeAmmo} Ammo={ammo} authToken={props.authToken} Url={url} UserId={userId}/>} />
                     </Route>
                     <Route path="trips">
-                        <Route index element={<RangeTrip authToken={props.authToken} Url={url} UserId={userId}/>} />
+                        <Route index element={<RangeTrip AddRangeTrip={addRangeTrip} Guns={guns} Ammo={ammo} authToken={props.authToken} Url={url} UserId={userId}/>} />
                     </Route>
                     <Route path="reports">
                         <Route index element={<Reports authToken={props.authToken} Url={url} UserId={userId}/>} />

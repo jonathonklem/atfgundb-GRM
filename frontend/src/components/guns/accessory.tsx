@@ -2,13 +2,8 @@ import React from "react";
 import {Gun} from "../../Types";
 
 const Accessory = (props) => {
-    const [guns, setGuns] = React.useState<Gun[]>([]);
     const [successMessage, setSuccessMessage] = React.useState('');
     const [gunId, setGunId] = React.useState('');
-
-    React.useEffect(() => {
-        fetchGuns();
-    }, []);
 
     function handleSubmit(e) {
         e.preventDefault();
@@ -17,35 +12,11 @@ const Accessory = (props) => {
         
         const formJson = Object.fromEntries(formData.entries());
 
-        // post formJson to our env var url
-        fetch(props.Url + '/guns/addAccessory?gun_id='+gunId, {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-                'Authorization' : 'Bearer ' + props.authToken
-            }, 
-            body: JSON.stringify(formJson)
-        })
-            .then(response => response.json())
-            .then(data => console.log(data));
-
-        setSuccessMessage("Accessory added successfully!");
-        // clear form
-        form.reset();
-    }
-
-    function fetchGuns() {
-        fetch(props.Url+'/guns?user_id='+props.UserId, {
-            method: 'GET',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-                'Authorization' : 'Bearer ' + props.authToken
-            }
-        })
-            .then(response => response.json())
-            .then(data => setGuns(data));
+        setSuccessMessage("Adding.....")
+        props.AddAccessory(gunId, formJson, () => {
+            setSuccessMessage("Accessory added successfully!");
+            form.reset();
+        });
     }
 
     return (
@@ -56,7 +27,7 @@ const Accessory = (props) => {
                 <label className="block my-2 mx-auto text-center"><div className="block w-1/3 mx-auto">Gun</div><div className="block w-full p-2 mx-auto">
                     <select name="gun_id" onChange={e => {setGunId(e.target.value)}}>
                         <option>Choose</option>
-                        {guns.map((gun) => (
+                        {props.Guns.map((gun) => (
                             <option value={gun.ID}>{gun.name}</option>
                         ))}
                     </select>
