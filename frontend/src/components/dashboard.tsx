@@ -145,12 +145,20 @@ const Dashboard = (props) => {
             .then(data => console.log(data)).then(() => callback());
     }
 
+
     useEffect(() => {
-        setUserId(user?.sub?.split("|")[1] || '');
+        if (props.LocalDev) {
+            setUserId('110522579750586824658');
+            fetchGuns();
+            fetchAmmo();
+        } else {
+            setUserId(user?.sub?.split("|")[1] || '');
+        }
     }, [user]);
 
+    
     function saveProfile() {
-        if (props.authToken) {
+        if (props.authToken && !props.LocalDev) {
             if (user) {
                 user.id = user.sub?.split("|")[1];
             }
@@ -186,17 +194,16 @@ const Dashboard = (props) => {
     }
 
 
-    if (isLoading) {
+    if (isLoading && !props.LocalDev) {
         return <div>Loading...</div>;
     }
 
-    if (isAuthenticated) {
-        if (!profileSaved) {
+    if (isAuthenticated || props.LocalDev) {
+        if (!profileSaved && !props.LocalDev) {
             saveProfile();
+            const userId = user?.sub?.split("|")[1];
         }
 
-        const userId = user?.sub?.split("|")[1];
-        
         return (
             <Router>
                 <Routes>
