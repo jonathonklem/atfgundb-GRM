@@ -112,6 +112,25 @@ func InsertGun(gun *models.Gun) {
 	}
 }
 
+func RemoveGun(gunId string) {
+	client := getClient()
+
+	defer func() {
+		if err := client.Disconnect(context.Background()); err != nil {
+			panic(err)
+		}
+	}()
+	gunsCollection := client.Database("ATFGunDB").Collection("guns")
+
+	id, _ := primitive.ObjectIDFromHex(gunId)
+	filter := bson.D{{"_id", id}}
+
+	_, err := gunsCollection.DeleteOne(context.Background(), filter)
+	if err != nil {
+		log.Fatal(err)
+	}
+}
+
 func GetGuns(user *models.User) []models.Gun {
 	client := getClient()
 

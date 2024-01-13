@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState  } from 'react';
 import { useAuth0 } from "@auth0/auth0-react";
 import LogoutButton from "./logout";
 import {
@@ -6,6 +6,7 @@ import {
     Routes,
     Route,
     Link,
+    Navigate 
 } from "react-router-dom";
 import {Gun, Ammo} from "../Types";
 import Guns from "./guns/index";
@@ -18,17 +19,19 @@ import Maintenance from "./guns/maintenance";
 import Accessory from "./guns/accessory";
 import RangeTrip from "./rangetrips/index";
 import Reports from "./reports";
+import ViewGun from "./guns/view";
 
 
 const getenv = require('getenv');
 const url = getenv.string('REACT_APP_API');
 
-
 const Dashboard = (props) => {
+    const defaultUserId = props.LocalDev ? '110522579750586824658' : '';
+
     var [profileSaved, setProfileSaved] = useState(false);
     const [guns, setGuns] = useState<Gun[]>([]);
     const [ammo, setAmmo] = useState<Ammo[]>([]);
-    const [userId, setUserId] = useState('');
+    const [userId, setUserId] = useState(defaultUserId);
 
     const {user, isAuthenticated, isLoading  } = useAuth0();
 
@@ -145,12 +148,22 @@ const Dashboard = (props) => {
             .then(data => console.log(data)).then(() => callback());
     }
 
+
     useEffect(() => {
-        setUserId(user?.sub?.split("|")[1] || '');
+        if (props.LocalDev) {
+            console.log('here');
+            setUserId('110522579750586824658');
+            console.log("USerID: " + userId);
+            fetchGuns();
+            fetchAmmo();
+        } else {
+            setUserId(user?.sub?.split("|")[1] || '');
+        }
     }, [user]);
 
+    
     function saveProfile() {
-        if (props.authToken) {
+        if (props.authToken && !props.LocalDev) {
             if (user) {
                 user.id = user.sub?.split("|")[1];
             }
@@ -185,18 +198,29 @@ const Dashboard = (props) => {
 
     }
 
+    function removeGun(gunId) {
+        fetch(url+ '/guns/remove?gun_id='+gunId, {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization' : 'Bearer ' + props.authToken
+            }
+        }).then(() => fetchGuns());
+       // window.location.href="/"; // can't imagine there's not a more elegant solution...
+    }
 
-    if (isLoading) {
+
+    if (isLoading && !props.LocalDev) {
         return <div>Loading...</div>;
     }
 
-    if (isAuthenticated) {
-        if (!profileSaved) {
+    if (isAuthenticated || props.LocalDev) {
+        if (!profileSaved && !props.LocalDev) {
             saveProfile();
+            const userId = user?.sub?.split("|")[1];
         }
 
-        const userId = user?.sub?.split("|")[1];
-        
         return (
             <Router>
                 <Routes>
@@ -215,6 +239,7 @@ const Dashboard = (props) => {
                         <Route path="add" element={<AddGun AddGun={addGun} authToken={props.authToken} Url={url} UserId={userId}/>} />
                         <Route path="maintenance" element={<Maintenance AddMaintenance={addMaintenance} Guns={guns} authToken={props.authToken} Url={url} UserId={userId}/>} />
                         <Route path="accessories" element={<Accessory AddAccessory={addAccessory} Guns={guns} authToken={props.authToken} Url={url} UserId={userId}/>} />
+                        <Route path="view/:id" element={<ViewGun RemoveGun={removeGun} Guns={guns} authToken={props.authToken} Url={url} UserId={userId} />} />
                     </Route>
                     <Route path="ammo">
                         <Route index element={<AmmoIndex authToken={props.authToken} Ammo={ammo}/>} />

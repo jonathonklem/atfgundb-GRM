@@ -13,6 +13,16 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
+func RemoveGun(c *gin.Context) {
+	gun_id := c.Query("gun_id")
+	if gun_id == "" {
+		c.JSON(http.StatusOK, "{error: 'Invalid GunID'}")
+	}
+
+	db.RemoveGun(gun_id)
+
+	c.JSON(http.StatusOK, "{success: true}")
+}
 func AddAccessoryToGun(c *gin.Context) {
 	var accessory models.Accessory
 	var gun models.Gun

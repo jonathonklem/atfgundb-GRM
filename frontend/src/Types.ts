@@ -12,6 +12,7 @@ export interface Gun {
     roundcount: Number,
     user_id: string,
     accessories: Accessory[],
+    maintenance: Maintenance[],
 
 }
 
@@ -22,6 +23,11 @@ export interface AmmoPurchase {
     user_id: string,
     price: Number,
     date: string,
+}
+
+export interface Maintenance {
+    maintenance_type: string,
+    date_done: string,
 }
 export interface Ammo {
     ID?: Number,
