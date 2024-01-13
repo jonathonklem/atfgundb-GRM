@@ -27,7 +27,7 @@ if (localDev) {
       }}
     >
       <React.StrictMode>
-        <App  LocalDev={localDev} />
+        <App LocalDev={localDev} />
       </React.StrictMode>
     </Auth0Provider>
   );
