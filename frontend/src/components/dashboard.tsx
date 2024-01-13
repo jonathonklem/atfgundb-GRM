@@ -198,8 +198,15 @@ const Dashboard = (props) => {
 
     }
 
-    function removeGun() {
-        console.log('here');
+    function removeGun(gunId) {
+        fetch(url+ '/guns/remove?gun_id='+gunId, {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization' : 'Bearer ' + props.authToken
+            }
+        }).then(() => fetchGuns());
        // window.location.href="/"; // can't imagine there's not a more elegant solution...
     }
 
