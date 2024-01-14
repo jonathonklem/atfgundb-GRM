@@ -3,6 +3,9 @@ import { useAuth0 } from "@auth0/auth0-react";
 import LoginButton from "./login";
 import Dashboard from "./dashboard";
 import { createAuth0Client } from '@auth0/auth0-spa-js';
+import {
+  BrowserRouter as Router,
+} from "react-router-dom";
 
 
 const refreshAccessToken = async (setAuthToken) => {

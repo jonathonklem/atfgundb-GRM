@@ -7,6 +7,7 @@ import (
 
 	"time"
 
+	"atfgundb.com/app/routing"
 	"atfgundb.com/app/db"
 	"atfgundb.com/app/models"
 	"github.com/gin-gonic/gin"
@@ -19,9 +20,13 @@ func RemoveGun(c *gin.Context) {
 		c.JSON(http.StatusOK, "{error: 'Invalid GunID'}")
 	}
 
-	db.RemoveGun(gun_id)
-
-	c.JSON(http.StatusOK, "{success: true}")
+	if db.UserOwnsGun(gun_id, routing.UserId) {
+		db.RemoveGun(gun_id)
+		c.JSON(http.StatusOK, "{success: true}")		
+	} else {
+		c.JSON(http.StatusUnauthorized, "{error: 'Unauthorized'}")
+	}
+	
 }
 func AddAccessoryToGun(c *gin.Context) {
 	var accessory models.Accessory
@@ -35,10 +40,16 @@ func AddAccessoryToGun(c *gin.Context) {
 		log.Fatal("Unable to BindJSON")
 	}
 
-	gun.Accessories = append(gun.Accessories, accessory)
+	if db.UserOwnsGun(c.Query("gun_id"), routing.UserId) {
+		gun.Accessories = append(gun.Accessories, accessory)
 
-	db.UpdateGun(gun)
-	c.JSON(http.StatusOK, "{success: true}")
+		db.UpdateGun(gun)
+		c.JSON(http.StatusOK, "{success: true}")
+	} else {
+		c.JSON(http.StatusUnauthorized, "{error: 'Unauthorized'}")
+	}
+
+	
 }
 
 func AddMaintenanceToGun(c *gin.Context) {
@@ -47,19 +58,23 @@ func AddMaintenanceToGun(c *gin.Context) {
 
 	log.Printf("Received gun+id: %s\n", c.Query("gun_id"))
 
-	gun = db.GetGun(c.Query("gun_id"))
+	if db.UserOwnsGun(c.Query("gun_id"), routing.UserId) {
+		gun = db.GetGun(c.Query("gun_id"))
 
-	if err := c.BindJSON(&maintenance); err != nil {
-		log.Fatal("Unable to BindJSON")
+		if err := c.BindJSON(&maintenance); err != nil {
+			log.Fatal("Unable to BindJSON")
+		}
+
+		// set maintenance datetime to right now
+		maintenance.DateDone = primitive.NewDateTimeFromTime(time.Now())
+
+		gun.Maintenance = append(gun.Maintenance, maintenance)
+
+		db.UpdateGun(gun)
+		c.JSON(http.StatusOK, "{success: true}")
+	} else {
+		c.JSON(http.StatusUnauthorized, "{error: 'Unauthorized'}")
 	}
-
-	// set maintenance datetime to right now
-	maintenance.DateDone = primitive.NewDateTimeFromTime(time.Now())
-
-	gun.Maintenance = append(gun.Maintenance, maintenance)
-
-	db.UpdateGun(gun)
-	c.JSON(http.StatusOK, "{success: true}")
 }
 
 func AddGun(c *gin.Context) {
@@ -69,17 +84,17 @@ func AddGun(c *gin.Context) {
 		log.Fatal("Unable to BindJSON")
 	}
 
-	log.Println("Calling insertupdategun")
-	db.InsertGun(&gun)
-	c.JSON(http.StatusOK, "{success: true}")
+	if (gun.UserID != routing.UserId) {
+		c.JSON(http.StatusUnauthorized, "{error: 'Unauthorized'}")
+	} else {
+		db.InsertGun(&gun)
+		c.JSON(http.StatusOK, "{success: true}")
+	}
 }
 
 func ListGuns(c *gin.Context) {
-	// TODO: is this authentication safe?  I don't think it is
-	// but it appears that we're limiting where requests are coming from.....
-
 	var user models.User
-	user.ID = c.Query("user_id")
+	user.ID = c.Query("user_id")	// automatically blocked in router if invalid auth
 
 	guns := db.GetGuns(&user)
 	for i := range guns {

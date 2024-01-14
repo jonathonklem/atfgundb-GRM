@@ -4,6 +4,7 @@ import (
 	"log"
 	"net/http"
 
+	"atfgundb.com/app/routing"
 	"atfgundb.com/app/db"
 	"atfgundb.com/app/models"
 	"github.com/gin-gonic/gin"
@@ -33,6 +34,21 @@ func AddRangeTrip(c *gin.Context) {
 	if err := c.BindJSON(&rangeTrip); err != nil {
 		log.Printf("Error binding JSON: %v", err)
 		log.Fatal("Unable to BindJSON RangeTrip")
+	}
+
+	if rangeTrip.UserId != routing.UserId {
+		c.JSON(http.StatusUnauthorized, "{error: 'Unauthorized'}")
+		return
+	}
+
+	if !db.UserOwnsGun(rangeTrip.GunId.Hex(), routing.UserId) {
+		c.JSON(http.StatusUnauthorized, "{error: 'Unauthorized'}")
+		return
+	}
+
+	if !db.UserOwnsAmmo(rangeTrip.AmmoId.Hex(), routing.UserId) {
+		c.JSON(http.StatusUnauthorized, "{error: 'Unauthorized'}")
+		return
 	}
 
 	db.InsertRangeTrip(&rangeTrip)

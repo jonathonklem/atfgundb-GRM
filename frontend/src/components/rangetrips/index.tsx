@@ -1,14 +1,11 @@
 import React from "react";
-import {Gun, Ammo} from "../../Types";
+import {Ammo} from "../../Types";
 import CreatableSelect from 'react-select/creatable';
-import OptionsType from "react-select";
-import ValueType from "react-select";
 
 const RangeTrip = (props) => {
     const [successMessage, setSuccessMessage] = React.useState('');
     const [rangeOptions, setRangeOptions] = React.useState<Array<{ label: string; value: string }>>([]);
     const [ranges, setRanges] = React.useState<string[]>([]);
-    const [filteredGuns, setFilteredGuns] = React.useState<Gun[]>(props.Guns);
     const [filteredAmmo, setFilteredAmmo] = React.useState<Ammo[]>(props.Ammo);
 
     React.useEffect(() => {

@@ -4,17 +4,22 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { Auth0Provider } from '@auth0/auth0-react';
+import {
+  BrowserRouter as Router,
+} from "react-router-dom";
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 
-const localDev = true;
+const localDev = false;
 
 if (localDev) {
   root.render(
     <React.StrictMode>
-      <App LocalDev={localDev}/>
+      <Router>
+        <App LocalDev={localDev}/>
+      </Router>
     </React.StrictMode>
   );
 } else {
@@ -27,7 +32,9 @@ if (localDev) {
       }}
     >
       <React.StrictMode>
-        <App LocalDev={localDev} />
+        <Router>
+          <App LocalDev={localDev} />
+        </Router>
       </React.StrictMode>
     </Auth0Provider>
   );

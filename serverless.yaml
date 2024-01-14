@@ -106,6 +106,27 @@ functions:
           path: /range/getDateAndAmmoReport
           method: get
           cors: true # This allows OPTION requests to pass trough the AWS API Gateway
+  RemoveGun:
+    handler: bin/aws
+    events:
+      - http:
+          path: /guns/remove
+          method: get
+          cors: true # This allows OPTION requests to pass trough the AWS API Gateway
+  RemoveAmmo:
+    handler: bin/aws
+    events:
+      - http:
+          path: /ammo/remove
+          method: get
+          cors: true # This allows OPTION requests to pass trough the AWS API Gateway
+  GetRangeTrips:
+    handler: bin/aws
+    events:
+      - http:
+          path: /range/getRangeTrips
+          method: get
+          cors: true # This allows OPTION requests to pass trough the AWS API Gateway
 # Frontend deploy plugin config
 plugins:
   - serverless-finch

@@ -100,6 +100,31 @@ func GetAmmoActivePurchases(ammoId string) []models.AmmoPurchase {
 	return results
 }
 
+func UserOwnsAmmo(ammoId string, userId string) bool {
+	client := getClient()
+
+	defer func() {
+		if err := client.Disconnect(context.Background()); err != nil {
+			panic(err)
+		}
+	}()
+
+	ammoCollection := client.Database("ATFGunDB").Collection("ammo")
+
+	id, _ := primitive.ObjectIDFromHex(ammoId)
+	filter := bson.D{{"_id", id}, {"user_id", userId}}
+
+	var result models.Ammo
+
+	err := ammoCollection.FindOne(context.Background(), filter).Decode(&result)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	fmt.Printf("Found a single document: %+v\n", result)
+	return result.ID != primitive.NilObjectID
+}
+
 func InsertAmmoPurchase(ammoPurchase *models.AmmoPurchase) {
 	client := getClient()
 

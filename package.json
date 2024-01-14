@@ -4,6 +4,6 @@
   },
   "scripts": {
     "build": "make && cd frontend && npm run build",
-    "deploy": "sls deploy && sls client deploy && aws cloudfront create-invalidation --distribution-id E2N6NU2GM9LGTL --paths '/*'"
+    "deploy": "sls deploy && sls client deploy"
   }
 }

@@ -4,7 +4,6 @@ import (
 	"errors"
 	"os"
 	"strings"
-
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
 	"github.com/lestrrat/go-jwx/jwk"
@@ -27,6 +26,7 @@ func Build() *gin.Engine {
 
 	return engine
 }
+var UserId string
 
 func CheckJWT() gin.HandlerFunc {
 	return func(c *gin.Context) {
@@ -44,9 +44,23 @@ func CheckJWT() gin.HandlerFunc {
 			// remove Bearer prefix from token
 			providedToken = strings.Replace(providedToken, "Bearer ", "", 1)
 
-			_, err := jwt.Parse(providedToken, getKey)
+			token, err := jwt.Parse(providedToken, getKey)
 			if err != nil {
 				c.AbortWithStatusJSON(401, gin.H{"error": "Invalid authorization header"})
+				return
+			}
+
+			claims := token.Claims.(jwt.MapClaims)
+			for key, value := range claims {
+				if key == "sub" {
+					valueString := string(value.(string))
+					UserId = strings.Split(valueString, "|")[1]
+				}
+			}
+
+			// easiest method, short circuit this to only allow the user to access their own data
+			if c.Query("user_id") != "" && c.Query("user_id") != UserId {
+				c.AbortWithStatusJSON(401, gin.H{"error": "Invalid user_id"})
 				return
 			}
 

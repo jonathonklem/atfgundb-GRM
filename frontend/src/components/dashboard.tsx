@@ -6,7 +6,8 @@ import {
     Routes,
     Route,
     Link,
-    Navigate 
+    Navigate,
+    useLocation
 } from "react-router-dom";
 import {Gun, Ammo, RangeTripType} from "../Types";
 import Guns from "./guns/index";
@@ -21,6 +22,10 @@ import RangeTrip from "./rangetrips/index";
 import Reports from "./reports";
 import ViewGun from "./guns/view";
 import ViewAmmo from "./ammo/view";
+import ReactGA from 'react-ga';
+
+// Initialize React Ga with your tracking ID
+ReactGA.initialize('G-51Z216F6XZ');
 
 
 const getenv = require('getenv');
@@ -28,6 +33,7 @@ const url = getenv.string('REACT_APP_API');
 
 const Dashboard = (props) => {
     const defaultUserId = props.LocalDev ? '110522579750586824658' : '';
+    const location = useLocation();
 
     var [profileSaved, setProfileSaved] = useState(false);
     const [guns, setGuns] = useState<Gun[]>([]);
@@ -174,6 +180,10 @@ const Dashboard = (props) => {
     }
 
     useEffect(() => {
+        ReactGA.pageview(location.pathname + location.search);
+    }, [location]);
+
+    useEffect(() => {
         if (props.LocalDev) {
             console.log('here');
             setUserId('110522579750586824658');
@@ -204,7 +214,7 @@ const Dashboard = (props) => {
                 body: JSON.stringify(user)
             })
                 .then(response => response.json())
-                .then(data => setProfileSaved(true)).then(() => fetchGuns()).then(() => fetchAmmo());   // avoid weird race type condition
+                .then(data => setProfileSaved(true)).then(() => fetchGuns()).then(() => fetchAmmo()).then(() => fetchRangeTrips());   // avoid weird race type condition
         }
     }
 
@@ -248,7 +258,7 @@ const Dashboard = (props) => {
         }
 
         return (
-            <Router>
+            <>
                 <Routes>
                     <Route 
                         path="/"
@@ -290,7 +300,7 @@ const Dashboard = (props) => {
                     <li className="inline-block w-1/12"><Link className="bg-red-800 text-slate-50 py-2 w-full inline-block my-2 text-center mx-auto" to="/reports"><img alt="Reports" className="w-6 m-auto" src="/pie-chart.png" /></Link></li>
                     <li className="inline-block w-1/12"><LogoutButton /></li>
                 </ul>
-            </Router>
+            </>
         )
     } else {
         return (

@@ -32,6 +32,29 @@ func UpdateGun(gun models.Gun) {
 	}
 }
 
+func UserOwnsGun(gunId string, userId string) bool {
+	client := getClient()
+
+	defer func() {
+		if err := client.Disconnect(context.Background()); err != nil {
+			panic(err)
+		}
+	}()
+	gunsCollection := client.Database("ATFGunDB").Collection("guns")
+
+	id, _ := primitive.ObjectIDFromHex(gunId)
+	filter := bson.D{{"_id", id}, {"user_id", userId}}
+
+	var gun models.Gun
+
+	err := gunsCollection.FindOne(context.Background(), filter).Decode(&gun)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	return gun.ID != primitive.NilObjectID
+}
+
 func GetGunById(gunId primitive.ObjectID) models.Gun {
 	client := getClient()
 
