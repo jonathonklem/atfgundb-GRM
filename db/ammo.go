@@ -11,6 +11,26 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
+func RemoveAmmo(ammoId string) {
+	client := getClient()
+
+	defer func() {
+		if err := client.Disconnect(context.Background()); err != nil {
+			panic(err)
+		}
+	}()
+
+	ammoCollection := client.Database("ATFGunDB").Collection("ammo")
+
+	id, _ := primitive.ObjectIDFromHex(ammoId)
+	filter := bson.D{{"_id", id}}
+
+	_, err := ammoCollection.DeleteOne(context.Background(), filter)
+	if err != nil {
+		log.Fatal(err)
+	}
+}
+
 func UpdateAmmoPurchase(ammoPurchase *models.AmmoPurchase) {
 	client := getClient()
 

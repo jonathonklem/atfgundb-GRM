@@ -2,8 +2,9 @@ package routing
 
 import (
 	"errors"
-	"strings"
 	"os"
+	"strings"
+
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
 	"github.com/lestrrat/go-jwx/jwk"
@@ -29,24 +30,29 @@ func Build() *gin.Engine {
 
 func CheckJWT() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		// fetch authorization header from context
-		providedToken := c.Request.Header.Get("Authorization")
+		if os.Getenv("ALLOWED_ORIGIN") == "http://localhost:3000" {
+			c.Next()
+		} else {
+			// fetch authorization header from context
+			providedToken := c.Request.Header.Get("Authorization")
 
-		if providedToken == "" {
-			c.AbortWithStatusJSON(401, gin.H{"error": "No Authorization header provided"})
-			return
+			if providedToken == "" {
+				c.AbortWithStatusJSON(401, gin.H{"error": "No Authorization header provided"})
+				return
+			}
+
+			// remove Bearer prefix from token
+			providedToken = strings.Replace(providedToken, "Bearer ", "", 1)
+
+			_, err := jwt.Parse(providedToken, getKey)
+			if err != nil {
+				c.AbortWithStatusJSON(401, gin.H{"error": "Invalid authorization header"})
+				return
+			}
+
+			c.Next()
 		}
 
-		// remove Bearer prefix from token
-		providedToken = strings.Replace(providedToken, "Bearer ", "", 1)
-
-		_, err := jwt.Parse(providedToken, getKey)
-		if err != nil {
-			c.AbortWithStatusJSON(401, gin.H{"error": "Invalid authorization header"})
-			return
-		}
-
-		c.Next()
 	}
 }
 

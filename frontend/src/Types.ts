@@ -36,5 +36,6 @@ export interface Ammo {
     grain: string,
     user_id: string,
     average_price: Number,
-    last_price: BigInteger,
+    last_price: Number,
+    caliber: string,
 }

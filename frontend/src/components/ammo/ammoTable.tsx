@@ -1,3 +1,7 @@
+import {
+    Link,
+} from "react-router-dom";
+
 const AmmoTable = (props) => {
     if (props.guns?.length === 0) {
         return (
@@ -17,7 +21,9 @@ const AmmoTable = (props) => {
                 <tbody>
                 {props.ammo.map((item) => (
                     <tr>
-                        <td>{item.name}</td>
+                        <td>
+                            <Link to={`/ammo/view/`+item.ID}>{item.name}</Link>
+                        </td>
                         <td className="text-right">{item.amount}</td>
                     </tr>
                 ))}

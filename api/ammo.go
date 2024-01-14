@@ -13,6 +13,14 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
+func RemoveAmmo(c *gin.Context) {
+	ammoId := c.Query("ammo_id")
+
+	db.RemoveAmmo(ammoId)
+
+	c.JSON(http.StatusOK, "{success: true}")
+}
+
 func AddAmmoPurchase(c *gin.Context) {
 	var ammoPurchase models.AmmoPurchase
 

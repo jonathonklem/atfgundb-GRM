@@ -20,6 +20,7 @@ import Accessory from "./guns/accessory";
 import RangeTrip from "./rangetrips/index";
 import Reports from "./reports";
 import ViewGun from "./guns/view";
+import ViewAmmo from "./ammo/view";
 
 
 const getenv = require('getenv');
@@ -102,6 +103,16 @@ const Dashboard = (props) => {
         })
             .then(response => response.json()) 
             .then(data => setAmmo(data));
+    }
+    function removeAmmo(id) {
+        fetch(url+ '/ammo/remove?ammo_id='+id, {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization' : 'Bearer ' + props.authToken
+            }
+        }).then(() => fetchAmmo());
     }
 
     function disposeAmmo(ammoId, quantity, callback) {
@@ -246,6 +257,7 @@ const Dashboard = (props) => {
                         <Route path="add" element={<AddAmmo AddAmmo={addAmmo} authToken={props.authToken} Url={url} UserId={userId}/>} />
                         <Route path="purchase" element={<PurchaseAmmo Ammo={ammo} PurchaseAmmo={purchaseAmmo} authToken={props.authToken} Url={url} UserId={userId}/>} />
                         <Route path="dispose" element={<Dispose DisposeAmmo={disposeAmmo} Ammo={ammo} authToken={props.authToken} Url={url} UserId={userId}/>} />
+                        <Route path="view/:id" element={<ViewAmmo Ammo={ammo} RemoveAmmo={removeAmmo} />} />
                     </Route>
                     <Route path="trips">
                         <Route index element={<RangeTrip AddRangeTrip={addRangeTrip} Guns={guns} Ammo={ammo} authToken={props.authToken} Url={url} UserId={userId}/>} />
