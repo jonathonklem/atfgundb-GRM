@@ -8,7 +8,7 @@ import {
     Link,
     Navigate 
 } from "react-router-dom";
-import {Gun, Ammo} from "../Types";
+import {Gun, Ammo, RangeTripType} from "../Types";
 import Guns from "./guns/index";
 import AddGun from "./guns/add";
 import AmmoIndex from "./ammo/index";
@@ -32,6 +32,7 @@ const Dashboard = (props) => {
     var [profileSaved, setProfileSaved] = useState(false);
     const [guns, setGuns] = useState<Gun[]>([]);
     const [ammo, setAmmo] = useState<Ammo[]>([]);
+    const [rangeTrips, setRangeTrips] = useState<RangeTripType[]>([]); 
     const [userId, setUserId] = useState(defaultUserId);
 
     const {user, isAuthenticated, isLoading  } = useAuth0();
@@ -159,17 +160,31 @@ const Dashboard = (props) => {
             .then(data => console.log(data)).then(() => callback());
     }
 
+    function fetchRangeTrips() {
+        fetch(url+'/range/getRangeTrips?user_id='+userId, {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization' : 'Bearer ' + props.authToken
+            }
+        })
+            .then(response => response.json())
+            .then(data => setRangeTrips(data));
+    }
 
     useEffect(() => {
         if (props.LocalDev) {
             console.log('here');
             setUserId('110522579750586824658');
             console.log("USerID: " + userId);
-            fetchGuns();
-            fetchAmmo();
         } else {
             setUserId(user?.sub?.split("|")[1] || '');
         }
+
+        fetchGuns();
+        fetchAmmo();
+        fetchRangeTrips();
     }, [user]);
 
     
@@ -205,7 +220,7 @@ const Dashboard = (props) => {
             body: JSON.stringify(clearObject)
         })
             .then(response => response.json())
-            .then(data => console.log(data)).then(() => callback()).then(() => fetchGuns()).then(() => fetchAmmo());
+            .then(data => console.log(data)).then(() => callback()).then(() => fetchGuns()).then(() => fetchAmmo()).then(() => fetchRangeTrips());
 
     }
 
@@ -247,20 +262,20 @@ const Dashboard = (props) => {
                     ></Route>
                     <Route path="guns">
                         <Route index  element={<Guns Guns={guns} authToken={props.authToken} Url={url} UserId={userId} />} />
-                        <Route path="add" element={<AddGun AddGun={addGun} authToken={props.authToken} Url={url} UserId={userId}/>} />
+                        <Route path="add" element={<AddGun AddGun={addGun} Guns={guns} authToken={props.authToken} Url={url} UserId={userId}/>} />
                         <Route path="maintenance" element={<Maintenance AddMaintenance={addMaintenance} Guns={guns} authToken={props.authToken} Url={url} UserId={userId}/>} />
                         <Route path="accessories" element={<Accessory AddAccessory={addAccessory} Guns={guns} authToken={props.authToken} Url={url} UserId={userId}/>} />
                         <Route path="view/:id" element={<ViewGun RemoveGun={removeGun} Guns={guns} authToken={props.authToken} Url={url} UserId={userId} />} />
                     </Route>
                     <Route path="ammo">
                         <Route index element={<AmmoIndex authToken={props.authToken} Ammo={ammo}/>} />
-                        <Route path="add" element={<AddAmmo AddAmmo={addAmmo} authToken={props.authToken} Url={url} UserId={userId}/>} />
+                        <Route path="add" element={<AddAmmo Guns={guns} AddAmmo={addAmmo} authToken={props.authToken} Url={url} UserId={userId}/>} />
                         <Route path="purchase" element={<PurchaseAmmo Ammo={ammo} PurchaseAmmo={purchaseAmmo} authToken={props.authToken} Url={url} UserId={userId}/>} />
                         <Route path="dispose" element={<Dispose DisposeAmmo={disposeAmmo} Ammo={ammo} authToken={props.authToken} Url={url} UserId={userId}/>} />
                         <Route path="view/:id" element={<ViewAmmo Ammo={ammo} RemoveAmmo={removeAmmo} />} />
                     </Route>
                     <Route path="trips">
-                        <Route index element={<RangeTrip AddRangeTrip={addRangeTrip} Guns={guns} Ammo={ammo} authToken={props.authToken} Url={url} UserId={userId}/>} />
+                        <Route index element={<RangeTrip RangeTrips={rangeTrips} AddRangeTrip={addRangeTrip} Guns={guns} Ammo={ammo} authToken={props.authToken} Url={url} UserId={userId}/>} />
                     </Route>
                     <Route path="reports">
                         <Route index element={<Reports authToken={props.authToken} Url={url} UserId={userId}/>} />

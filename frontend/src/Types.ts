@@ -39,3 +39,13 @@ export interface Ammo {
     last_price: Number,
     caliber: string,
 }
+
+export interface RangeTripType {
+    ID?: Number,
+    date: string,
+    location: string,
+    gun_id: string,
+    ammo_id: string,
+    round_count: Number,
+    user_id: string,
+}

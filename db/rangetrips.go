@@ -11,6 +11,51 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
+func GetRangeTrips(userId string) []models.RangeTrip {
+	client := getClient()
+
+	defer func() {
+		if err := client.Disconnect(context.Background()); err != nil {
+			panic(err)
+		}
+	}()
+	rangeTripsCollection := client.Database("ATFGunDB").Collection("rangetrips")
+
+	filter := bson.D{{"user_id", userId}}
+
+	// Pass these options to the Find method
+	findOptions := options.Find()
+	findOptions.SetLimit(100)
+
+	// Here's an array in which you can store the decoded documents
+	var results []models.RangeTrip = make([]models.RangeTrip, 0)
+
+	// Passing bson.D{{}} as the filter matches all documents in the collection
+	cur, err := rangeTripsCollection.Find(context.Background(), filter, findOptions)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	for cur.Next(context.Background()) {
+		// create a value into which the single document can be decoded
+		var elem models.RangeTrip
+		err := cur.Decode(&elem)
+		if err != nil {
+			log.Fatal(err)
+		}
+		results = append(results, elem)
+	}
+
+	if err := cur.Err(); err != nil {
+		log.Fatal(err)
+	}
+
+	// Close the cursor once finished
+	cur.Close(context.Background())
+	return results
+
+}
+
 func GetDateAndAmmoReport(userId string, date_from string, date_to string) []models.DateAndAmmoReport {
 	client := getClient()
 
@@ -23,29 +68,29 @@ func GetDateAndAmmoReport(userId string, date_from string, date_to string) []mod
 
 	// example query
 	/* [{
-			$match: {user_id: "110522579750586824658", date_done: {$gte:  ISODate("2024-01-07"), $lt: ISODate("2024-01-10")} }
-		},{
-			$group: {
-				"_id": {
-					date_done: {$dateToString: { format: "%Y-%m-%dT00:53:00.48Z", date: "$date_done"}},
-					ammo_id: "$ammo_id"
-				},
-				count: {$sum: "$quantity_used"}
+		$match: {user_id: "110522579750586824658", date_done: {$gte:  ISODate("2024-01-07"), $lt: ISODate("2024-01-10")} }
+	},{
+		$group: {
+			"_id": {
+				date_done: {$dateToString: { format: "%Y-%m-%dT00:53:00.48Z", date: "$date_done"}},
+				ammo_id: "$ammo_id"
+			},
+			count: {$sum: "$quantity_used"}
+		}
+	},{
+			$lookup: {
+				from: "ammo",
+				localField: "_id.ammo_id",
+				foreignField: "_id",
+				as: "ammo"
 			}
-		},{
-				$lookup: {
-					from: "ammo",
-					localField: "_id.ammo_id",
-					foreignField: "_id",
-					as: "ammo"
-				}
-		}, {
-			$project: {
-				ammo_name: "$ammo.name",
-				date: {$dateFromString: {dateString: "$_id.date_done"}},
-				count: "$count"
-			}
-		}]
+	}, {
+		$project: {
+			ammo_name: "$ammo.name",
+			date: {$dateFromString: {dateString: "$_id.date_done"}},
+			count: "$count"
+		}
+	}]
 	*/
 	// convert date_done to time
 	//convert date_done string to time object
@@ -54,7 +99,7 @@ func GetDateAndAmmoReport(userId string, date_from string, date_to string) []mod
 	// doing the date conversion piecemeal because having one long bson.D entry was causing problems
 	// TODO WHY IS TIME.PARSE NOT WORKING
 	date_from_time, err := time.Parse("2006-01-02 15:04:05.000000", date_from+" 00:00:00.000000")
-	
+
 	if err != nil {
 		log.Fatal(err)
 	}

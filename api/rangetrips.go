@@ -9,6 +9,14 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+func GetRangeTrips(c *gin.Context) {
+	userId := c.Query("user_id")
+
+	rangeTrips := db.GetRangeTrips(userId)
+
+	c.JSON(http.StatusOK, rangeTrips)
+}
+
 func GetDateAndAmmoReport(c *gin.Context) {
 	userId := c.Query("user_id")
 	dateFrom := c.Query("date_from")

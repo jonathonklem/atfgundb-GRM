@@ -1,9 +1,36 @@
 import React from "react";
 import {Gun, Ammo} from "../../Types";
+import CreatableSelect from 'react-select/creatable';
+import OptionsType from "react-select";
+import ValueType from "react-select";
 
 const RangeTrip = (props) => {
     const [successMessage, setSuccessMessage] = React.useState('');
+    const [rangeOptions, setRangeOptions] = React.useState<Array<{ label: string; value: string }>>([]);
+    const [ranges, setRanges] = React.useState<string[]>([]);
+    const [filteredGuns, setFilteredGuns] = React.useState<Gun[]>(props.Guns);
+    const [filteredAmmo, setFilteredAmmo] = React.useState<Ammo[]>(props.Ammo);
 
+    React.useEffect(() => {
+        props.RangeTrips.map((rangeTrip) => {
+            if (ranges.indexOf(rangeTrip.location) === -1) {
+                rangeOptions.push({ label: rangeTrip.location, value: rangeTrip.location });
+                // remove duplicates from calibers
+                setRangeOptions(rangeOptions);
+                
+                ranges.push(rangeTrip.location);
+                setRanges(ranges)
+            }
+                
+        });
+    }, []);
+
+    function filterAmmo(e) {
+        const gunId = e.target.value;
+        const gun = props.Guns.find((gun) => gun.ID === gunId);
+        const filteredAmmo = props.Ammo.filter((ammo) => ammo.caliber === gun.caliber);
+        setFilteredAmmo(filteredAmmo);
+    }
     function handleSubmit(e)  {
         e.preventDefault();
 
@@ -27,7 +54,7 @@ const RangeTrip = (props) => {
             <em className="text-center green-600 block my-2">{successMessage}</em>
             <form onSubmit={handleSubmit} className="text-center pb-16">
                 <label className="block my-2 mx-auto text-center"><div className="block w-1/3 mx-auto">Gun</div><div className="block w-full p-2 mx-auto">
-                    <select name="gun_id">
+                    <select onChange={filterAmmo} name="gun_id">
                         <option>Choose</option>
                         {props.Guns.map((gun) => (
                             <option value={gun.ID}>{gun.name}</option>
@@ -37,12 +64,14 @@ const RangeTrip = (props) => {
                 <label className="block my-2 mx-auto text-center"><div className="block w-1/3 mx-auto">Ammo</div><div className="block w-full p-2 mx-auto">
                         <select name="ammo_id">
                             <option>Choose</option>
-                            {props.Ammo.map((item: Ammo) => (
+                            {filteredAmmo.map((item: Ammo) => (
                                 <option value={item?.ID?.toString()}>{item.name}</option>
                             ))}
                         </select>
                     </div></label> 
-                <label className="block my-2 mx-auto text-center"><div className="block w-1/3 mx-auto">Location</div><div className="block w-full p-2 mx-auto"><div className="block w-full p-2 w-1/2 mx-auto"><input type="text" name="location" /></div></div></label>
+                <label className="block my-2 mx-auto text-center"><div className="block w-1/3 mx-auto">Location</div><div className="block w-full p-2 mx-auto"><div className="block w-full p-2 w-1/2 mx-auto">
+                    <CreatableSelect className="text-neutral-700 p-1 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md;" name="location" options={rangeOptions} />    
+                </div></div></label>
                 <label className="block my-2 mx-auto text-center"><div className="block w-1/3 mx-auto">Quantity Used</div><div className="block w-full p-2 mx-auto"><div className="block w-full p-2 w-1/2 mx-auto"><input type="text" name="quantity_used" /></div></div></label>
                 <button className="rounded-md bg-red-800 text-slate-50 py-2 px-4 w-1/4 block my-2 text-center mx-auto">Submit</button>
             </form>

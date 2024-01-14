@@ -1,8 +1,30 @@
-import React from "react";
+import React, { useEffect } from "react";
+import CreatableSelect from 'react-select/creatable';
+import OptionsType from "react-select";
+import ValueType from "react-select";
+
 
 const AddGun = (props) => {
     const url = props.Url;
     const [successMessage, setSuccessMessage] = React.useState('');
+    const [caliberOptions, setCaliberOptions] = React.useState<Array<{ label: string; value: string }>>([]);
+    const [calibers, setCalibers] = React.useState<string[]>([]);
+
+    useEffect(() => {
+        console.log(props.Guns)
+        props.Guns.map((gun) => {
+            if (calibers.indexOf(gun.caliber) === -1) {
+                caliberOptions.push({ label: gun.caliber, value: gun.caliber });
+                // remove duplicates from calibers
+                setCaliberOptions(caliberOptions);
+                
+                calibers.push(gun.caliber);
+                setCalibers(calibers)
+            }
+                
+        });
+        console.log(calibers)
+    }, []);
 
     function handleSubmit(e) {
         e.preventDefault();
@@ -31,7 +53,9 @@ const AddGun = (props) => {
                 <label className="block my-2 mx-auto text-center"><div className="block w-1/3 mx-auto">Name</div><div className="block w-full p-2 mx-auto"><input type="text" name="name" /></div></label> 
                 <label className="block my-2 mx-auto text-center"><div className="block w-1/3 mx-auto">Manufacturer</div><div className="block w-full p-2 w-1/2 mx-auto"><input type="text" name="manufacturer" /></div></label>
                 <label className="block my-2 mx-auto text-center"><div className="block w-1/3 mx-auto">Model</div><div className="block w-full p-2 w-1/2 mx-auto"><input type="text" name="model" /></div></label>
-                <label className="block my-2 mx-auto text-center"><div className="block w-1/3 mx-auto">Caliber</div><div className="block w-full p-2 w-1/2 mx-auto"><input type="text" name="caliber" /></div></label>
+                <label className="block my-2 mx-auto text-center"><div className="block w-1/3 mx-auto">Caliber</div><div className="block w-full p-2 w-1/2 mx-auto">
+                    <CreatableSelect name="caliber" className="text-neutral-700 p-1 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md;" options={caliberOptions} />
+                </div></label>
                 <label className="block my-2 mx-auto text-center"><div className="block w-1/3 mx-auto">Round Count</div><div className="block w-full p-2 w-1/2 mx-auto"><input type="number" name="roundcountstring" /></div></label>
                 <button className="rounded-md bg-red-800 text-slate-50 py-2 px-4 w-1/4 block my-2 text-center mx-auto">Submit</button>
             </form>

@@ -28,6 +28,7 @@ func main() {
 	routing.AddRoute(engine, "/users/saveVisit", routing.POST, api.UserSaveVisit)
 	routing.AddRoute(engine, "/range/addTrip", routing.POST, api.AddRangeTrip)
 	routing.AddRoute(engine, "/range/getDateAndAmmoReport", routing.GET, api.GetDateAndAmmoReport)
+	routing.AddRoute(engine, "/range/getRangeTrips", routing.GET, api.GetRangeTrips)
 
 	proxy := func(req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 		adapter := ginadapter.New(engine)
