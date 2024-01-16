@@ -5,9 +5,7 @@ import {
     BrowserRouter as Router,
     Routes,
     Route,
-    Link,
-    Navigate,
-    useLocation
+    Link
 } from "react-router-dom";
 import {Gun, Ammo, RangeTripType} from "../Types";
 import Guns from "./guns/index";
@@ -22,7 +20,7 @@ import RangeTrip from "./rangetrips/index";
 import Reports from "./reports";
 import ViewGun from "./guns/view";
 import ViewAmmo from "./ammo/view";
-import ReactGA from 'react-ga';
+import ReactGA from 'react-ga4';
 
 // Initialize React Ga with your tracking ID
 ReactGA.initialize('G-51Z216F6XZ');
@@ -33,7 +31,6 @@ const url = getenv.string('REACT_APP_API');
 
 const Dashboard = (props) => {
     const defaultUserId = props.LocalDev ? '110522579750586824658' : '';
-    const location = useLocation();
 
     var [profileSaved, setProfileSaved] = useState(false);
     const [guns, setGuns] = useState<Gun[]>([]);
@@ -41,9 +38,18 @@ const Dashboard = (props) => {
     const [rangeTrips, setRangeTrips] = useState<RangeTripType[]>([]); 
     const [userId, setUserId] = useState(defaultUserId);
 
+    const [fetchingGuns, setFetchingGuns] = useState(false);
+    const [fetchingAmmo, setFetchingAmmo] = useState(false);
+    const [fetchingRangeTrips, setFetchingRangeTrips] = useState(false);
+
     const {user, isAuthenticated, isLoading  } = useAuth0();
 
     function fetchGuns() {
+        if (!userId) { return; }
+
+        if (fetchingGuns) { return }
+
+        setFetchingGuns(true);
         fetch(url+'/guns?user_id='+userId, {
             method: 'GET',
             headers: {
@@ -53,7 +59,7 @@ const Dashboard = (props) => {
             }
         })
             .then(response => response.json())
-            .then(data => setGuns(data));
+            .then(data => setGuns(data)).then(() => setFetchingGuns(false));
     }
     function addGun(clearObject, callback) {
         // post formJson to our env var url
@@ -100,6 +106,11 @@ const Dashboard = (props) => {
             .then(data => console.log(data)).then(() => {callback(); fetchAmmo();});
     }
     function fetchAmmo() {
+        if (!userId) { return; }
+
+        if (fetchingAmmo) { return }
+
+        setFetchingAmmo(true);
         fetch(url+'/ammo?user_id='+userId, {
             method: 'GET',
             headers: {
@@ -109,7 +120,7 @@ const Dashboard = (props) => {
             }
         })
             .then(response => response.json()) 
-            .then(data => setAmmo(data));
+            .then(data => setAmmo(data)).then(() => setFetchingAmmo(false));
     }
     function removeAmmo(id) {
         fetch(url+ '/ammo/remove?ammo_id='+id, {
@@ -167,6 +178,10 @@ const Dashboard = (props) => {
     }
 
     function fetchRangeTrips() {
+        if (!userId) { return; }
+        if (fetchingRangeTrips) { return }
+
+        setFetchingRangeTrips(true);
         fetch(url+'/range/getRangeTrips?user_id='+userId, {
             method: 'GET',
             headers: {
@@ -176,12 +191,8 @@ const Dashboard = (props) => {
             }
         })
             .then(response => response.json())
-            .then(data => setRangeTrips(data));
+            .then(data => setRangeTrips(data)).then(() => setFetchingRangeTrips(false));
     }
-
-    useEffect(() => {
-        ReactGA.pageview(location.pathname + location.search);
-    }, [location]);
 
     useEffect(() => {
         if (props.LocalDev) {
@@ -199,10 +210,8 @@ const Dashboard = (props) => {
 
     
     function saveProfile() {
-        if (props.authToken && !props.LocalDev) {
-            if (user) {
-                user.id = user.sub?.split("|")[1];
-            }
+        if (props.authToken && !props.LocalDev && user) {
+            user.id = user.sub?.split("|")[1];
             
             fetch(`${url}/users/saveVisit`, {
                 method: 'POST',
