@@ -30,7 +30,7 @@ var UserId string
 
 func CheckJWT() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		if os.Getenv("ALLOWED_ORIGIN") == "http://localhost:3000" {
+		if os.Getenv("ALLOWED_ORIGIN") == "http://localhost:3000" || os.Getenv("ALLOWED_ORIGIN") == "http://localhost:8100" {
 			c.Next()
 		} else {
 			// fetch authorization header from context
@@ -93,8 +93,9 @@ func getKey(token *jwt.Token) (interface{}, error) {
 
 func CORS() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		// TODO: make this configurable
-		allowedOrigin := os.Getenv("ALLOWED_ORIGIN")
+		
+		//allowedOrigin := os.Getenv("ALLOWED_ORIGIN")
+		allowedOrigin := "*" // test for now.  issue with app
 
 		c.Writer.Header().Set("Access-Control-Allow-Origin", allowedOrigin)
 		c.Writer.Header().Set("Access-Control-Allow-Credentials", "true")

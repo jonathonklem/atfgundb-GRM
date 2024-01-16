@@ -199,13 +199,12 @@ const Dashboard = (props) => {
             console.log('here');
             setUserId('110522579750586824658');
             console.log("USerID: " + userId);
+            fetchGuns();
+            fetchAmmo();
+            fetchRangeTrips();
         } else {
             setUserId(user?.sub?.split("|")[1] || '');
         }
-
-        fetchGuns();
-        fetchAmmo();
-        fetchRangeTrips();
     }, [user]);
 
     

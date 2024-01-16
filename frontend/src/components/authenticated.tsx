@@ -10,22 +10,22 @@ import {
 
 const refreshAccessToken = async (setAuthToken) => {
   try {
-    const auth0 = await createAuth0Client({
+    createAuth0Client({
       domain: 'auth.atfgundb.com',
       clientId: 'juK0uHzgNj7H5lpskbPx34CEzlqVYHvF'
-    });
-
-
-    const token = await auth0.getTokenSilently({
+    }).then((auth0) => {
+      auth0.getTokenSilently({
         authorizationParams: {
             audience: "https://txdcr1sizh.execute-api.us-east-1.amazonaws.com/",
             scope: 'access:general',
             prompt: 'none',
         }
+      }).then((token) => {
+        console.log("token");
+        console.log(token);
+        setAuthToken(token || '');
+      });
     });
-    console.log("token");
-    console.log(token);
-    setAuthToken(token || '');
   } catch (e) {
     console.log(e);
   }
@@ -39,7 +39,6 @@ const Authenticated = () => {
     const [authToken, setAuthToken] = React.useState('');
 
     React.useEffect(() => {
-        //refresh2();
         refreshAccessToken(setAuthToken);
     }, [isAuthenticated]);
   
