@@ -4,7 +4,7 @@ import {
 } from "react-router-dom";
 
 const GunTable = (props) => {
-    if (props.guns?.length === 0) {
+    if (props.guns?.length === 0 || props.guns instanceof Array === false) {
         return (
             <div>
                 <p>No guns yet.</p>
