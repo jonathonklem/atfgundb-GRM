@@ -113,6 +113,13 @@ functions:
           path: /guns/remove
           method: get
           cors: true # This allows OPTION requests to pass trough the AWS API Gateway
+  RemoveUser:
+    handler: bin/aws
+    events:
+      - http:
+          path: /users/delete
+          method: get
+          cors: true # This allows OPTION requests to pass trough the AWS API Gateway
   RemoveAmmo:
     handler: bin/aws
     events:
