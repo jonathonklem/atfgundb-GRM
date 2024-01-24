@@ -21,6 +21,7 @@ import Reports from "./reports";
 import ViewGun from "./guns/view";
 import ViewAmmo from "./ammo/view";
 import ReactGA from 'react-ga4';
+import DeleteScreen from "./delete";
 
 // Initialize React Ga with your tracking ID
 ReactGA.initialize('G-51Z216F6XZ');
@@ -42,8 +43,25 @@ const Dashboard = (props) => {
     const [fetchingAmmo, setFetchingAmmo] = useState(false);
     const [fetchingRangeTrips, setFetchingRangeTrips] = useState(false);
 
-    const {user, isAuthenticated, isLoading  } = useAuth0();
+    const {user, isAuthenticated, isLoading, logout  } = useAuth0();
 
+    function RemoveAccount() {
+        fetch(url+'/users/delete?user_id='+userId, {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization' : 'Bearer ' + props.authToken
+            }
+        }).then(() => {
+            if (props.LocalDev) {  
+                window.location.href="/"; // can't imagine there's not a more elegant solution...
+            } else {
+                logout({ logoutParams: { returnTo: window.location.origin }});
+            }
+            
+        }); 
+    }
     function fetchGuns() {
         if (!userId) { return; }
 
@@ -273,11 +291,14 @@ const Dashboard = (props) => {
                         element={
                             <div className="">
                                 <h1 className="mt-8 text-center text-3xl font-bold mb-4">Welcome to GunDB</h1>
-                                <p className="text-justify mx-auto mb-8 block max-w-md">With GunDB, you can effortlessly keep tabs on your ammo purchases, range trips, and gun collection, providing a streamlined approach to firearm management. Easily log details of each ammunition purchase, including quantity, caliber, and date, ensuring you always have an accurate inventory at your fingertips.  
-                                </p><p className="text-justify mx-auto block max-w-md">Track your range sessions, recording the firearms used, and rounds fired. Organize your gun collection with comprehensive profiles, featuring essential information about each firearm. Whether you're a seasoned gun enthusiast or a new firearm owner, GunDB simplifies the process of monitoring and maintaining your shooting supplies and equipment.</p>
+                                <p className="text-justify mx-auto mb-8 p-4 block max-w-md">With GunDB, you can effortlessly keep tabs on your ammo purchases, range trips, and gun collection, providing a streamlined approach to firearm management. Easily log details of each ammunition purchase, including quantity, caliber, and date, ensuring you always have an accurate inventory at your fingertips.  
+                                </p><p className="text-justify mx-auto p-4 block max-w-md">Track your range sessions, recording the firearms used, and rounds fired. Organize your gun collection with comprehensive profiles, featuring essential information about each firearm. Whether you're a seasoned gun enthusiast or a new firearm owner, GunDB simplifies the process of monitoring and maintaining your shooting supplies and equipment.</p>
+                                <p className="text-justify mx-auto mb-8 p-4 block max-w-md">If you would like to delete your account have have your information wiped from our database you can click the following button at any time:</p>
+                                <Link className="rounded-md bg-red-800 text-slate-50 py-2 px-4 w-1/4 block mb-24 text-center mx-auto" to="/delete">Account Deletion</Link>
                             </div>
                         }
                     ></Route>
+                    <Route path="/delete" element={<DeleteScreen RemoveAccount={RemoveAccount} authToken={props.authToken} Url={url} UserId={userId} />}/>
                     <Route path="guns">
                         <Route index  element={<Guns Guns={guns} authToken={props.authToken} Url={url} UserId={userId} />} />
                         <Route path="add" element={<AddGun AddGun={addGun} Guns={guns} authToken={props.authToken} Url={url} UserId={userId}/>} />
