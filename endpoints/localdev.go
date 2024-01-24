@@ -19,6 +19,7 @@ func main() {
 	routing.AddRoute(engine, "/ammo/remove", routing.GET, api.RemoveAmmo)
 	routing.AddRoute(engine, "/ammo/purchase", routing.POST, api.AddAmmoPurchase)
 	routing.AddRoute(engine, "/users/saveVisit", routing.POST, api.UserSaveVisit)
+	routing.AddRoute(engine, "/users/delete", routing.GET, api.UserDeleteTest)
 	routing.AddRoute(engine, "/range/addTrip", routing.POST, api.AddRangeTrip)
 	routing.AddRoute(engine, "/range/getDateAndAmmoReport", routing.GET, api.GetDateAndAmmoReport)
 	routing.AddRoute(engine, "/range/getRangeTrips", routing.GET, api.GetRangeTrips)

@@ -11,6 +11,66 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
+func DeleteUser(userId string) {
+	client := getClient()
+
+	defer func() {
+		if err := client.Disconnect(context.Background()); err != nil {
+			panic(err)
+		}
+	}()
+
+	// delete from users
+	usersCollection := client.Database("ATFGunDB").Collection("users")
+
+	filter := bson.D{{"id", userId}}
+
+	log.Println("Right before deleteone()")
+	_, err := usersCollection.DeleteOne(context.Background(), filter)
+
+	if err != nil {
+		log.Println("Error deleting user collection")
+		log.Fatal(err)
+	}
+
+	// delete from ammo collection
+	ammoCollection := client.Database("ATFGunDB").Collection("ammo")
+	filter = bson.D{{"user_id", userId}}
+
+	log.Println("Right before DeleteMany()")
+	// delete all ammo for this user
+	_, err = ammoCollection.DeleteMany(context.Background(), filter)
+
+	if err != nil {
+		log.Println("Error deleting ammo collection")
+		log.Fatal(err)
+	}
+
+	// delete from guns collection
+	gunsCollection := client.Database("ATFGunDB").Collection("guns")
+	filter = bson.D{{"user_id", userId}}
+	log.Println("Right before DeleteMany()")
+	// delete all guns for this user
+	_, err = gunsCollection.DeleteMany(context.Background(), filter)
+
+	if err != nil {
+		log.Println("Error deleting guns collection")
+		log.Fatal(err)
+	}
+
+	// delete all range trips for this user
+	rangeTripsCollection := client.Database("ATFGunDB").Collection("rangetrips")
+	filter = bson.D{{"user_id", userId}}
+	log.Println("Right before DeleteMany()")
+	_, err = rangeTripsCollection.DeleteMany(context.Background(), filter)
+
+
+	if err != nil {
+		log.Println("Error deleting range trips")
+		log.Fatal(err)
+	}
+}
+
 func InsertUpdateUser(user *models.User) {
 	client := getClient()
 
