@@ -51,7 +51,7 @@ const RangeTrip = (props) => {
             || clearObject.location === ""
             || clearObject.quantity_used === ""
         ) {
-            setSuccessMessage("*** All fields are required ***");
+            setSuccessMessage("*** All fields except note are required ***");
             return;
         }
 
@@ -91,6 +91,7 @@ const RangeTrip = (props) => {
                     <CreatableSelect className="text-neutral-700 p-1 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md;" name="location" options={rangeOptions} />    
                 </div></div></label>
                 <label className="block my-2 mx-auto text-center"><div className="block w-1/3 mx-auto">Quantity Used</div><div className="block w-full p-2 mx-auto"><div className="block w-full p-2 w-1/2 mx-auto"><input type="text" name="quantity_used" /></div></div></label>
+                <label className="block my-2 mx-auto text-center"><div className="block w-1/3 mx-auto">Note</div><div className="block w-full p-2 mx-auto"><div className="block w-full p-2 w-1/2 mx-auto"><textarea name="note"></textarea></div></div></label>                
                 <button className="rounded-md bg-red-800 text-slate-50 py-2 px-4 w-1/4 block my-2 text-center mx-auto">Submit</button>
             </form>
         </>
