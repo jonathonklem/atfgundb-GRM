@@ -3,7 +3,7 @@ package api
 import (
 	"log"
 	"net/http"
-
+	"os"
 	"atfgundb.com/app/routing"
 	"atfgundb.com/app/db"
 	"atfgundb.com/app/models"
@@ -36,21 +36,22 @@ func AddRangeTrip(c *gin.Context) {
 		log.Fatal("Unable to BindJSON RangeTrip")
 	}
 
-	if rangeTrip.UserId != routing.UserId {
-		c.JSON(http.StatusUnauthorized, "{error: 'Unauthorized'}")
-		return
-	}
+	if os.Getenv("ALLOWED_ORIGIN") != "http://localhost:3000" && os.Getenv("ALLOWED_ORIGIN") != "http://localhost:8100" {
+		if rangeTrip.UserId != routing.UserId {
+			c.JSON(http.StatusUnauthorized, "{error: 'Unauthorized'}")
+			return
+		}
 
-	if !db.UserOwnsGun(rangeTrip.GunId.Hex(), routing.UserId) {
-		c.JSON(http.StatusUnauthorized, "{error: 'Unauthorized'}")
-		return
-	}
+		if !db.UserOwnsGun(rangeTrip.GunId.Hex(), routing.UserId) {
+			c.JSON(http.StatusUnauthorized, "{error: 'Unauthorized'}")
+			return
+		}
 
-	if !db.UserOwnsAmmo(rangeTrip.AmmoId.Hex(), routing.UserId) {
-		c.JSON(http.StatusUnauthorized, "{error: 'Unauthorized'}")
-		return
+		if !db.UserOwnsAmmo(rangeTrip.AmmoId.Hex(), routing.UserId) {
+			c.JSON(http.StatusUnauthorized, "{error: 'Unauthorized'}")
+			return
+		}
 	}
-
 	db.InsertRangeTrip(&rangeTrip)
 
 	consumeAmmo(rangeTrip.AmmoId.Hex(), rangeTrip.QuantityUsed)

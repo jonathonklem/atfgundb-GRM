@@ -153,7 +153,7 @@ func InsertRangeTrip(rangeTrip *models.RangeTrip) {
 
 	rangeTrip.ID = primitive.NewObjectID()
 
-	filter := bson.D{{"user_id", rangeTrip.UserId}, {"location", rangeTrip.Location}, {"ammo_id", rangeTrip.AmmoId}, {"gun_id", rangeTrip.GunId}, {"quantity_used", rangeTrip.QuantityUsed}}
+	filter := bson.D{{"user_id", rangeTrip.UserId}, {"note", rangeTrip.Note}, {"location", rangeTrip.Location}, {"ammo_id", rangeTrip.AmmoId}, {"gun_id", rangeTrip.GunId}, {"quantity_used", rangeTrip.QuantityUsed}}
 
 	update := bson.D{
 		{"$set", bson.D{{"date_done", primitive.NewDateTimeFromTime(time.Now())}}},
