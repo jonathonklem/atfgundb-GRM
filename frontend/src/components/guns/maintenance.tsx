@@ -12,6 +12,10 @@ const Maintenance = (props) => {
         
         const formJson = Object.fromEntries(formData.entries());
 
+        if (formJson.maintenance_type === "" || formJson.gun_id === "") {
+            setSuccessMessage("*** All fields are required ***");
+            return;
+        }
         setSuccessMessage("Adding.....");
         props.AddMaintenance(gunId, formJson, () => {setSuccessMessage("Maintenance added successfully!"); form.reset();});
     }

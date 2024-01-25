@@ -27,6 +27,8 @@ const AddAmmo = (props) => {
     function handleSubmit(e) {
         e.preventDefault();
 
+        setSuccessMessage("");
+
         const form = e.target;
         const formData = new FormData(form);
         
@@ -37,6 +39,15 @@ const AddAmmo = (props) => {
         clearObject.user_id = props.UserId;
         clearObject.amount =  Number(formJson.count);
 
+        if (clearObject.name === "") {
+            setSuccessMessage("*** Name is required ***");
+            return;
+        }
+
+        if (clearObject.caliber === "") {
+            setSuccessMessage("*** Caliber is required ***");
+            return;
+        }
         setSuccessMessage("Adding.....");
         props.AddAmmo(clearObject, () => {setSuccessMessage("Added Ammo Successfully!");form.reset();});
     }

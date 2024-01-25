@@ -28,6 +28,11 @@ const RangeTrip = (props) => {
         const filteredAmmo = props.Ammo.filter((ammo) => ammo.caliber === gun.caliber);
         setFilteredAmmo(filteredAmmo);
     }
+
+    function showAllAmmo() {
+        setFilteredAmmo(props.Ammo);
+    }
+
     function handleSubmit(e)  {
         e.preventDefault();
 
@@ -41,6 +46,15 @@ const RangeTrip = (props) => {
         clearObject.user_id = props.UserId;
         clearObject.quantity_used =  Number(formJson.quantity_used);
 
+        if (clearObject.gun_id === ""
+            || clearObject.ammo_id === ""
+            || clearObject.location === ""
+            || clearObject.quantity_used === ""
+        ) {
+            setSuccessMessage("*** All fields are required ***");
+            return;
+        }
+
         setSuccessMessage("Saving.....");
         props.AddRangeTrip(clearObject, () => {setSuccessMessage("Range Trip added successfully!");form.reset();});
     }
@@ -51,7 +65,7 @@ const RangeTrip = (props) => {
             <em className="text-center green-600 block my-2">{successMessage}</em>
             <form onSubmit={handleSubmit} className="text-center pb-16">
                 <label className="block my-2 mx-auto text-center"><div className="block w-1/3 mx-auto">Gun</div><div className="block w-full p-2 mx-auto">
-                    <select onChange={filterAmmo} name="gun_id">
+                    <select onChange={filterAmmo} id="gun_id" name="gun_id">
                         <option>Choose</option>
                         {props.Guns.map((gun) => (
                             <option value={gun.ID}>{gun.name}</option>
@@ -65,6 +79,13 @@ const RangeTrip = (props) => {
                                 <option value={item?.ID?.toString()}>{item.name}</option>
                             ))}
                         </select>
+                        {
+                            filteredAmmo.length != props.Ammo.length && (
+                                <>
+                                    <button className="rounded-md bg-red-800 text-xs text-slate-50 py-1 px-4 w-1/8 block my-2 text-center mx-auto" onClick={(e) => {e.preventDefault(); showAllAmmo()}} > Show All </button>
+                                </>
+                            )
+                        }
                     </div></label> 
                 <label className="block my-2 mx-auto text-center"><div className="block w-1/3 mx-auto">Location</div><div className="block w-full p-2 mx-auto"><div className="block w-full p-2 w-1/2 mx-auto">
                     <CreatableSelect className="text-neutral-700 p-1 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md;" name="location" options={rangeOptions} />    

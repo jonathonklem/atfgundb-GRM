@@ -12,6 +12,16 @@ const Accessory = (props) => {
         
         const formJson = Object.fromEntries(formData.entries());
 
+        if (gunId === "") {
+            setSuccessMessage("*** Gun is required ***");
+            return;
+        }
+
+        if (formJson.name === "") {
+            setSuccessMessage("*** Name is required ***");
+            return;
+        }
+        
         setSuccessMessage("Adding.....")
         props.AddAccessory(gunId, formJson, () => {
             setSuccessMessage("Accessory added successfully!");

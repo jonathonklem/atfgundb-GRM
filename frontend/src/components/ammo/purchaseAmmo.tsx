@@ -40,7 +40,7 @@ const PurchaseAmmo = (props) => {
                             ))}
                         </select>
                     </div></label> 
-                <label className="block my-2 mx-auto text-center"><div className="block w-1/3 mx-auto">Price</div><div className="block w-full p-2 w-1/2 mx-auto"><input type="text" name="price" /></div></label>
+                <label className="block my-2 mx-auto text-center"><div className="block w-1/3 mx-auto">Cost Per Round</div><div className="block w-full p-2 w-1/2 mx-auto"><input type="text" name="price" /></div></label>
                 <label className="block my-2 mx-auto text-center"><div className="block w-1/3 mx-auto">Quantity</div><div className="block w-full p-2 w-1/2 mx-auto"><input type="text" name="quantity" /></div></label>
                 <button className="rounded-md bg-red-800 text-slate-50 py-2 px-4 w-1/4 block my-2 text-center mx-auto">Submit</button>
             </form>
