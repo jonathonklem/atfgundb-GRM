@@ -37,6 +37,16 @@ const AddGun = (props) => {
         clearObject.user_id = props.UserId;
         clearObject.roundcount =  Number(formJson.roundcountstring);
 
+        if (clearObject.name === "") {
+            setSuccessMessage("*** Name is required ***");
+            return;
+        }
+
+        if (clearObject.caliber === "") {
+            setSuccessMessage("*** Caliber is required ***");
+            return;
+        }
+
         setSuccessMessage("Adding.....");
         
         props.AddGun(clearObject, () => {setSuccessMessage("Added Gun Successfully!");form.reset();});

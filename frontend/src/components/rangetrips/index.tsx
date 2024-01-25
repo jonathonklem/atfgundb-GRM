@@ -41,6 +41,15 @@ const RangeTrip = (props) => {
         clearObject.user_id = props.UserId;
         clearObject.quantity_used =  Number(formJson.quantity_used);
 
+        if (clearObject.gun_id === ""
+            || clearObject.ammo_id === ""
+            || clearObject.location === ""
+            || clearObject.quantity_used === ""
+        ) {
+            setSuccessMessage("*** All fields are required ***");
+            return;
+        }
+
         setSuccessMessage("Saving.....");
         props.AddRangeTrip(clearObject, () => {setSuccessMessage("Range Trip added successfully!");form.reset();});
     }
