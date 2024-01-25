@@ -149,18 +149,12 @@ func InsertRangeTrip(rangeTrip *models.RangeTrip) {
 		}
 	}()
 	rangeTripsCollection := client.Database("ATFGunDB").Collection("rangetrips")
-	opts := options.Update().SetUpsert(true)
 
 	rangeTrip.ID = primitive.NewObjectID()
-
-	filter := bson.D{{"user_id", rangeTrip.UserId}, {"note", rangeTrip.Note}, {"location", rangeTrip.Location}, {"ammo_id", rangeTrip.AmmoId}, {"gun_id", rangeTrip.GunId}, {"quantity_used", rangeTrip.QuantityUsed}}
-
-	update := bson.D{
-		{"$set", bson.D{{"date_done", primitive.NewDateTimeFromTime(time.Now())}}},
-	}
+	rangeTrip.DateDone = primitive.NewDateTimeFromTime(time.Now())
 
 	log.Println("Right before updateone()")
-	_, err := rangeTripsCollection.UpdateOne(context.Background(), filter, update, opts)
+	_, err := rangeTripsCollection.InsertOne(context.Background(), rangeTrip)
 
 	if err != nil {
 		log.Println("Err wasnt nil")
