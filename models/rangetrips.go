@@ -10,4 +10,5 @@ type RangeTrip struct {
 	QuantityUsed int                `json:"quantity_used" bson:"quantity_used"`
 	UserId       string             `json:"user_id" bson:"user_id"`
 	ID           primitive.ObjectID `json:"id,omitempty" bson:"_id,omitempty"`
+	Note    	 string 			`json:"note,omitempty" bson:"note,omitempty""`
 }
