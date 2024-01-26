@@ -25,6 +25,7 @@ custom:
     bucketName: dashboard.atfgundb.com # Must be globally unique, if you're setting a custom domain, then use that. (ex: example.com)
     distributionFolder: frontend/build # If you named your frontend project something else, change this here.
     existing: true
+    errorDocument: index.html
 
 
 # Endpoint config
