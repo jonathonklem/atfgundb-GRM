@@ -31,6 +31,7 @@ var UserId string
 func CheckJWT() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		if os.Getenv("ALLOWED_ORIGIN") == "http://localhost:3000" || os.Getenv("ALLOWED_ORIGIN") == "http://localhost:8100" {
+			UserId = "659f2cdfc8528e10ee4dbecb" // our testing user
 			c.Next()
 		} else {
 			// fetch authorization header from context

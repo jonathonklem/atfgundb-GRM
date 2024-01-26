@@ -12,13 +12,7 @@ import (
 )
 
 func RemoveAmmo(ammoId string) {
-	client := getClient()
-
-	defer func() {
-		if err := client.Disconnect(context.Background()); err != nil {
-			panic(err)
-		}
-	}()
+	client := GetClient()
 
 	ammoCollection := client.Database("ATFGunDB").Collection("ammo")
 
@@ -32,13 +26,7 @@ func RemoveAmmo(ammoId string) {
 }
 
 func UpdateAmmoPurchase(ammoPurchase *models.AmmoPurchase) {
-	client := getClient()
-
-	defer func() {
-		if err := client.Disconnect(context.Background()); err != nil {
-			panic(err)
-		}
-	}()
+	client := GetClient()
 
 	ammoPurchaseCollection := client.Database("ATFGunDB").Collection("ammo_purchases")
 
@@ -53,13 +41,7 @@ func UpdateAmmoPurchase(ammoPurchase *models.AmmoPurchase) {
 
 // "active" ammo purchase are anything where quantityused < quantity
 func GetAmmoActivePurchases(ammoId string) []models.AmmoPurchase {
-	client := getClient()
-
-	defer func() {
-		if err := client.Disconnect(context.Background()); err != nil {
-			panic(err)
-		}
-	}()
+	client := GetClient()
 
 	ammoPurchaseCollection := client.Database("ATFGunDB").Collection("ammo_purchases")
 
@@ -101,13 +83,7 @@ func GetAmmoActivePurchases(ammoId string) []models.AmmoPurchase {
 }
 
 func UserOwnsAmmo(ammoId string, userId string) bool {
-	client := getClient()
-
-	defer func() {
-		if err := client.Disconnect(context.Background()); err != nil {
-			panic(err)
-		}
-	}()
+	client := GetClient()
 
 	ammoCollection := client.Database("ATFGunDB").Collection("ammo")
 
@@ -119,6 +95,8 @@ func UserOwnsAmmo(ammoId string, userId string) bool {
 	err := ammoCollection.FindOne(context.Background(), filter).Decode(&result)
 	if err != nil {
 		log.Fatal(err)
+		return false;
+		//log.Fatal(err)
 	}
 
 	fmt.Printf("Found a single document: %+v\n", result)
@@ -126,13 +104,7 @@ func UserOwnsAmmo(ammoId string, userId string) bool {
 }
 
 func InsertAmmoPurchase(ammoPurchase *models.AmmoPurchase) {
-	client := getClient()
-
-	defer func() {
-		if err := client.Disconnect(context.Background()); err != nil {
-			panic(err)
-		}
-	}()
+	client := GetClient()
 
 	ammoPurchaseCollection := client.Database("ATFGunDB").Collection("ammo_purchases")
 
@@ -245,13 +217,7 @@ func InsertAmmoPurchase(ammoPurchase *models.AmmoPurchase) {
 }
 
 func UpdateAmmoCount(ammo *models.Ammo) {
-	client := getClient()
-
-	defer func() {
-		if err := client.Disconnect(context.Background()); err != nil {
-			panic(err)
-		}
-	}()
+	client := GetClient()
 
 	ammoCollection := client.Database("ATFGunDB").Collection("ammo")
 
@@ -265,13 +231,8 @@ func UpdateAmmoCount(ammo *models.Ammo) {
 }
 
 func InsertUpdateAmmo(ammo *models.Ammo) {
-	client := getClient()
+	client := GetClient()
 
-	defer func() {
-		if err := client.Disconnect(context.Background()); err != nil {
-			panic(err)
-		}
-	}()
 	ammoCollection := client.Database("ATFGunDB").Collection("ammo")
 	opts := options.Update().SetUpsert(true)
 
@@ -295,13 +256,8 @@ func InsertUpdateAmmo(ammo *models.Ammo) {
 }
 
 func GetAmmoById(ammoId string) models.Ammo {
-	client := getClient()
+	client := GetClient()
 
-	defer func() {
-		if err := client.Disconnect(context.Background()); err != nil {
-			panic(err)
-		}
-	}()
 	ammoCollection := client.Database("ATFGunDB").Collection("ammo")
 
 	var result models.Ammo
@@ -319,13 +275,8 @@ func GetAmmoById(ammoId string) models.Ammo {
 }
 
 func GetAmmo(user *models.User) []models.Ammo {
-	client := getClient()
+	client := GetClient()
 
-	defer func() {
-		if err := client.Disconnect(context.Background()); err != nil {
-			panic(err)
-		}
-	}()
 	ammoCollection := client.Database("ATFGunDB").Collection("ammo")
 
 	// Pass these options to the Find method

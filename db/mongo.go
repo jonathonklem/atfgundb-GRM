@@ -10,7 +10,10 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-func getClient() *mongo.Client {
+var MasterClient *mongo.Client;
+
+func init() {
+	log.Println("db init()")
 	mongoString := os.Getenv("MONGO_URL")
 	log.Println("mongoString: " + mongoString)
 	// Use the SetServerAPIOptions() method to set the Stable API version to 1
@@ -18,10 +21,21 @@ func getClient() *mongo.Client {
 	opts := options.Client().ApplyURI(mongoString).SetServerAPIOptions(serverAPI)
 
 	// Create a new client and connect to the server
-	client, err := mongo.Connect(context.Background(), opts)
+	var err error
+	MasterClient, err = mongo.Connect(context.Background(), opts)
 	if err != nil {
+		log.Println("Mongo panic:")
 		panic(err)
 	}
-
-	return client
+	log.Println("Have client: %v", MasterClient);
 }
+
+func GetClient() *mongo.Client {
+	return MasterClient
+}
+
+func KillClient() {
+	if MasterClient != nil {
+		MasterClient.Disconnect(context.Background())
+	}
+}	
