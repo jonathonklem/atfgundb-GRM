@@ -31,7 +31,7 @@ const getenv = require('getenv');
 const url = getenv.string('REACT_APP_API');
 
 const Dashboard = (props) => {
-    const defaultUserId = props.LocalDev ? '110522579750586824658' : '';
+    const defaultUserId = props.LocalDev ? '659f2cdfc8528e10ee4dbecb' : '';
 
     var [profileSaved, setProfileSaved] = useState(false);
     const [guns, setGuns] = useState<Gun[]>([]);
@@ -215,7 +215,7 @@ const Dashboard = (props) => {
     useEffect(() => {
         if (props.LocalDev) {
             console.log('here');
-            setUserId('110522579750586824658');
+            setUserId(defaultUserId);
             console.log("USerID: " + userId);
             fetchGuns();
             fetchAmmo();
