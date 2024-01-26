@@ -12,13 +12,7 @@ import (
 )
 
 func DeleteUser(userId string) {
-	client := getClient()
-
-	defer func() {
-		if err := client.Disconnect(context.Background()); err != nil {
-			panic(err)
-		}
-	}()
+	client := GetClient()
 
 	// delete from users
 	usersCollection := client.Database("ATFGunDB").Collection("users")
@@ -72,13 +66,8 @@ func DeleteUser(userId string) {
 }
 
 func InsertUpdateUser(user *models.User) {
-	client := getClient()
+	client := GetClient()
 
-	defer func() {
-		if err := client.Disconnect(context.Background()); err != nil {
-			panic(err)
-		}
-	}()
 	usersCollection := client.Database("ATFGunDB").Collection("users")
 	opts := options.Update().SetUpsert(true)
 

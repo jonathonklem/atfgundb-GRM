@@ -1,13 +1,21 @@
 package main // Important: Packages with endpoints must be named 'main'
 import (
 	"log"
-
+	"atfgundb.com/app/db"
 	"atfgundb.com/app/api"
 	"atfgundb.com/app/routing"
 )
 
 func main() {
 	engine := routing.Build()
+
+	// prime our mongo connection
+	db.GetClient()
+	defer func() {
+		log.Printf("Killing mongo client")
+		db.KillClient()
+	} ()
+	
 	routing.AddRoute(engine, "/guns", routing.GET, api.ListGuns)
 	routing.AddRoute(engine, "/guns/add", routing.POST, api.AddGun)
 	routing.AddRoute(engine, "/guns/addMaintenance", routing.POST, api.AddMaintenanceToGun)

@@ -12,13 +12,7 @@ import (
 )
 
 func UpdateGun(gun models.Gun) {
-	client := getClient()
-
-	defer func() {
-		if err := client.Disconnect(context.Background()); err != nil {
-			panic(err)
-		}
-	}()
+	client := GetClient()
 
 	gunsCollection := client.Database("ATFGunDB").Collection("guns")
 
@@ -33,13 +27,8 @@ func UpdateGun(gun models.Gun) {
 }
 
 func UserOwnsGun(gunId string, userId string) bool {
-	client := getClient()
+	client := GetClient()
 
-	defer func() {
-		if err := client.Disconnect(context.Background()); err != nil {
-			panic(err)
-		}
-	}()
 	gunsCollection := client.Database("ATFGunDB").Collection("guns")
 
 	id, _ := primitive.ObjectIDFromHex(gunId)
@@ -56,13 +45,7 @@ func UserOwnsGun(gunId string, userId string) bool {
 }
 
 func GetGunById(gunId primitive.ObjectID) models.Gun {
-	client := getClient()
-
-	defer func() {
-		if err := client.Disconnect(context.Background()); err != nil {
-			panic(err)
-		}
-	}()
+	client := GetClient()
 
 	gunsCollection := client.Database("ATFGunDB").Collection("guns")
 
@@ -80,13 +63,7 @@ func GetGunById(gunId primitive.ObjectID) models.Gun {
 	return gun
 }
 func GetGun(gunId string) models.Gun {
-	client := getClient()
-
-	defer func() {
-		if err := client.Disconnect(context.Background()); err != nil {
-			panic(err)
-		}
-	}()
+	client := GetClient()
 
 	gunsCollection := client.Database("ATFGunDB").Collection("guns")
 
@@ -107,16 +84,11 @@ func GetGun(gunId string) models.Gun {
 }
 
 func InsertGun(gun *models.Gun) {
-	client := getClient()
+	client := GetClient()
 
 	// ensure it's new id
 	gun.ID = primitive.NewObjectID()
 
-	defer func() {
-		if err := client.Disconnect(context.Background()); err != nil {
-			panic(err)
-		}
-	}()
 	gunsCollection := client.Database("ATFGunDB").Collection("guns")
 	opts := options.Update().SetUpsert(true)
 
@@ -136,13 +108,8 @@ func InsertGun(gun *models.Gun) {
 }
 
 func RemoveGun(gunId string) {
-	client := getClient()
+	client := GetClient()
 
-	defer func() {
-		if err := client.Disconnect(context.Background()); err != nil {
-			panic(err)
-		}
-	}()
 	gunsCollection := client.Database("ATFGunDB").Collection("guns")
 
 	id, _ := primitive.ObjectIDFromHex(gunId)
@@ -155,13 +122,8 @@ func RemoveGun(gunId string) {
 }
 
 func GetGuns(user *models.User) []models.Gun {
-	client := getClient()
+	client := GetClient()
 
-	defer func() {
-		if err := client.Disconnect(context.Background()); err != nil {
-			panic(err)
-		}
-	}()
 	gunsCollection := client.Database("ATFGunDB").Collection("guns")
 
 	// Pass these options to the Find method

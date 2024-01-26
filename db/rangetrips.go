@@ -12,13 +12,8 @@ import (
 )
 
 func GetRangeTrips(userId string) []models.RangeTrip {
-	client := getClient()
+	client := GetClient()
 
-	defer func() {
-		if err := client.Disconnect(context.Background()); err != nil {
-			panic(err)
-		}
-	}()
 	rangeTripsCollection := client.Database("ATFGunDB").Collection("rangetrips")
 
 	filter := bson.D{{"user_id", userId}}
@@ -57,13 +52,8 @@ func GetRangeTrips(userId string) []models.RangeTrip {
 }
 
 func GetDateAndAmmoReport(userId string, date_from string, date_to string) []models.DateAndAmmoReport {
-	client := getClient()
+	client := GetClient()
 
-	defer func() {
-		if err := client.Disconnect(context.Background()); err != nil {
-			panic(err)
-		}
-	}()
 	rangeTripsCollection := client.Database("ATFGunDB").Collection("rangetrips")
 
 	// example query
@@ -141,13 +131,8 @@ func GetDateAndAmmoReport(userId string, date_from string, date_to string) []mod
 }
 
 func InsertRangeTrip(rangeTrip *models.RangeTrip) {
-	client := getClient()
+	client := GetClient()
 
-	defer func() {
-		if err := client.Disconnect(context.Background()); err != nil {
-			panic(err)
-		}
-	}()
 	rangeTripsCollection := client.Database("ATFGunDB").Collection("rangetrips")
 
 	rangeTrip.ID = primitive.NewObjectID()
