@@ -42,10 +42,12 @@ export interface Ammo {
 
 export interface RangeTripType {
     ID?: Number,
-    date: string,
+    date_done: Date,
     location: string,
     gun_id: string,
     ammo_id: string,
-    round_count: Number,
+    round_count?: Number,
+    quantity_used?: Number,
     user_id: string,
+    note?: string,
 }

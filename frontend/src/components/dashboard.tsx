@@ -177,7 +177,7 @@ const Dashboard = (props) => {
             body: JSON.stringify(formJson)
         })
             .then(response => response.json())
-            .then(data => console.log(data)).then(() => callback());
+            .then(data => console.log(data)).then(() => {callback(); fetchGuns();});
     }
 
     function addAccessory(gunId, formJson, callback) {
@@ -304,7 +304,7 @@ const Dashboard = (props) => {
                         <Route path="add" element={<AddGun AddGun={addGun} Guns={guns} authToken={props.authToken} Url={url} UserId={userId}/>} />
                         <Route path="maintenance" element={<Maintenance AddMaintenance={addMaintenance} Guns={guns} authToken={props.authToken} Url={url} UserId={userId}/>} />
                         <Route path="accessories" element={<Accessory AddAccessory={addAccessory} Guns={guns} authToken={props.authToken} Url={url} UserId={userId}/>} />
-                        <Route path="view/:id" element={<ViewGun RemoveGun={removeGun} Guns={guns} authToken={props.authToken} Url={url} UserId={userId} />} />
+                        <Route path="view/:id" element={<ViewGun RemoveGun={removeGun} Guns={guns} RangeTrips={rangeTrips} authToken={props.authToken} Url={url} UserId={userId} />} />
                     </Route>
                     <Route path="ammo">
                         <Route index element={<AmmoIndex authToken={props.authToken} Ammo={ammo}/>} />

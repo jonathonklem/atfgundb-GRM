@@ -21,7 +21,7 @@ const GunTable = (props) => {
                 </thead>
                 <tbody>
                 {props.guns.map((gun) => (
-                    <tr>
+                    <tr key={String(gun.ID)}>
                         <td>
                             <Link to={`/guns/view/`+gun.ID}>{gun.name}</Link>
                         </td>
