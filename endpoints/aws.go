@@ -3,6 +3,7 @@ package main
 import (
 	"atfgundb.com/app/api"
 	"atfgundb.com/app/routing"
+	"atfgundb.com/app/db"
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
 	ginadapter "github.com/awslabs/aws-lambda-go-api-proxy/gin"
@@ -14,8 +15,8 @@ func main() {
 	engine := routing.Build()
 
 	// prime our mongo connection
-	_ := db.GetClient()
-	defer db.killClient()
+	_ = db.GetClient()
+	defer db.KillClient()
 
 	// You may notice that this is identical to our localdev setup.
 	// As you add more endpoints, you may wish to store the endpoints in a separate list, used by both localdev and aws.
