@@ -1,15 +1,25 @@
 import React from "react";
 import {Ammo} from "../../Types";
 import CreatableSelect from 'react-select/creatable';
+import { RangeTripContext } from "../contexts/rangeTripContext";
+import { GunContext } from "../contexts/gunContext";
+import { AmmoContext } from "../contexts/ammoContext";
+import { RangeTripContextType, GunContextType, AmmoContextType } from "../../Types";
 
 const RangeTrip = (props) => {
     const [successMessage, setSuccessMessage] = React.useState('');
     const [rangeOptions, setRangeOptions] = React.useState<Array<{ label: string; value: string }>>([]);
     const [ranges, setRanges] = React.useState<string[]>([]);
-    const [filteredAmmo, setFilteredAmmo] = React.useState<Ammo[]>(props.Ammo);
 
+    const { rangeTrips, addRangeTrip } = React.useContext(RangeTripContext) as RangeTripContextType;
+    const { guns } = React.useContext(GunContext) as GunContextType;
+    const { ammo } = React.useContext(AmmoContext) as AmmoContextType;
+
+    
+    const [filteredAmmo, setFilteredAmmo] = React.useState<Ammo[]>(ammo);
+    
     React.useEffect(() => {
-        props.RangeTrips.map((rangeTrip) => {
+        rangeTrips.map((rangeTrip) => {
             if (ranges.indexOf(rangeTrip.location) === -1) {
                 rangeOptions.push({ label: rangeTrip.location, value: rangeTrip.location });
                 // remove duplicates from calibers
@@ -18,19 +28,18 @@ const RangeTrip = (props) => {
                 ranges.push(rangeTrip.location);
                 setRanges(ranges)
             }
-                
         });
     }, []);
 
     function filterAmmo(e) {
         const gunId = e.target.value;
-        const gun = props.Guns.find((gun) => gun.ID === gunId);
-        const filteredAmmo = props.Ammo.filter((ammo) => ammo.caliber === gun.caliber);
+        const gun = guns.find((gun) => gun.ID === gunId);
+        const filteredAmmo = ammo.filter((ammoItem) => ammoItem.caliber === gun?.caliber);
         setFilteredAmmo(filteredAmmo);
     }
 
     function showAllAmmo() {
-        setFilteredAmmo(props.Ammo);
+        setFilteredAmmo(ammo);
     }
 
     function handleSubmit(e)  {
@@ -56,7 +65,7 @@ const RangeTrip = (props) => {
         }
 
         setSuccessMessage("Saving.....");
-        props.AddRangeTrip(clearObject, () => {setSuccessMessage("Range Trip added successfully!");form.reset();});
+        addRangeTrip(clearObject, () => {setSuccessMessage("Range Trip added successfully!");form.reset();});
     }
 
     return (
@@ -67,7 +76,7 @@ const RangeTrip = (props) => {
                 <label className="block my-2 mx-auto text-center"><div className="block w-1/3 mx-auto">Gun</div><div className="block w-full p-2 mx-auto">
                     <select onChange={filterAmmo} id="gun_id" name="gun_id">
                         <option>Choose</option>
-                        {props.Guns.map((gun) => (
+                        {guns.map((gun) => (
                             <option value={gun.ID}>{gun.name}</option>
                         ))}
                     </select>
@@ -80,7 +89,7 @@ const RangeTrip = (props) => {
                             ))}
                         </select>
                         {
-                            filteredAmmo.length != props.Ammo.length && (
+                            filteredAmmo.length != ammo.length && (
                                 <>
                                     <button className="rounded-md bg-red-800 text-xs text-slate-50 py-1 px-4 w-1/8 block my-2 text-center mx-auto" onClick={(e) => {e.preventDefault(); showAllAmmo()}} > Show All </button>
                                 </>

@@ -1,8 +1,32 @@
 import React from "react";
+import { UserDataContext } from "../contexts/userDataContext";
+import { UserDataContextType } from "../../Types";
+import { GunContext } from "../contexts/gunContext";
+import { GunContextType } from "../../Types";
+
+const getenv = require('getenv');
+const url = getenv.string('REACT_APP_API');
 
 const Maintenance = (props) => {
     const [successMessage, setSuccessMessage] = React.useState('');
     const [gunId, setGunId] = React.useState('');
+    const { authToken } = React.useContext(UserDataContext) as UserDataContextType;
+    const { guns, fetchGuns } = React.useContext(GunContext) as GunContextType;
+
+    function addMaintenance(gunId, formJson, callback) {
+        // post formJson to our env var url
+        fetch(url + '/guns/addMaintenance?gun_id='+gunId, {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization' : 'Bearer ' + authToken
+            }, 
+            body: JSON.stringify(formJson)
+        })
+            .then(response => response.json())
+            .then(data => console.log(data)).then(() => callback());
+    }
 
     function handleSubmit(e)  {
         e.preventDefault();
@@ -17,7 +41,7 @@ const Maintenance = (props) => {
             return;
         }
         setSuccessMessage("Adding.....");
-        props.AddMaintenance(gunId, formJson, () => {setSuccessMessage("Maintenance added successfully!"); form.reset();});
+        addMaintenance(gunId, formJson, () => {fetchGuns(); setSuccessMessage("Maintenance added successfully!"); form.reset();});
     }
 
     return (
@@ -28,7 +52,7 @@ const Maintenance = (props) => {
                 <label className="block my-2 mx-auto text-center"><div className="block w-1/3 mx-auto">Gun</div><div className="block w-full p-2 mx-auto">
                     <select name="gun_id" onChange={e => {setGunId(e.target.value)}}>
                         <option>Choose</option>
-                        {props.Guns.map((gun) => (
+                        {guns.map((gun) => (
                             <option value={gun.ID}>{gun.name}</option>
                         ))}
                     </select>

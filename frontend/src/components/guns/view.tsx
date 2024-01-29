@@ -1,20 +1,22 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import { GunContext } from "../contexts/gunContext";
 
-import {Gun} from "../../Types";
+import {Gun, GunContextType} from "../../Types";
 
 
 const ViewGun = (props) => {
     const [gun, setGun] = useState<Gun>({} as Gun);
     const [clickDelete, setClickDelete] = useState<boolean>(false);
     const [confirmText, setConfirmText] = useState<string>('');
+    const { guns, removeGun } = React.useContext(GunContext) as GunContextType;
 
     const navigate = useNavigate();
 
     let { id } = useParams();
 
     useEffect(() => {
-        props.Guns.map((gun) => {
+        guns.map((gun) => {
             if (gun.ID === id) {
                 setGun(gun);
             }
@@ -27,7 +29,7 @@ const ViewGun = (props) => {
         }
 
         if (confirmText === "Delete") {
-            props.RemoveGun(id);
+            removeGun(String(id));
             navigate("/")
         }
     }

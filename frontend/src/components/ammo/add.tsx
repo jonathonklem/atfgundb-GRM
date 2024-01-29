@@ -3,15 +3,24 @@ import CreatableSelect from 'react-select/creatable';
 import OptionsType from "react-select";
 import ValueType from "react-select";
 
-const AddAmmo = (props) => {
-    const url = props.Url;
+import { GunContext } from "../contexts/gunContext";
+import { GunContextType } from "../../Types";
+import { UserDataContext } from "../contexts/userDataContext";
+import { UserDataContextType } from "../../Types";
+import { AmmoContext } from "../contexts/ammoContext";
+import { AmmoContextType } from "../../Types";
 
+const AddAmmo = (props) => {
     const [successMessage, setSuccessMessage] = React.useState('');
     const [caliberOptions, setCaliberOptions] = React.useState<Array<{ label: string; value: string }>>([]);
     const [calibers, setCalibers] = React.useState<string[]>([]);
 
+    const { guns } = React.useContext(GunContext) as GunContextType;
+    const { userId } = React.useContext(UserDataContext) as UserDataContextType;
+    const { addAmmo } = React.useContext(AmmoContext) as AmmoContextType;
+
     React.useEffect(() => {
-        props.Guns.map((gun) => {
+        guns.map((gun) => {
             if (calibers.indexOf(gun.caliber) === -1) {
                 caliberOptions.push({ label: gun.caliber, value: gun.caliber });
                 // remove duplicates from calibers
@@ -36,7 +45,7 @@ const AddAmmo = (props) => {
 
         // hate this, but there doesn't seem to be a good way to force INT type on roundcount
         const clearObject = JSON.parse(JSON.stringify(formJson));
-        clearObject.user_id = props.UserId;
+        clearObject.user_id = userId;
         clearObject.amount =  Number(formJson.count);
 
         if (clearObject.name === "") {
@@ -49,7 +58,7 @@ const AddAmmo = (props) => {
             return;
         }
         setSuccessMessage("Adding.....");
-        props.AddAmmo(clearObject, () => {setSuccessMessage("Added Ammo Successfully!");form.reset();});
+        addAmmo(clearObject, () => {setSuccessMessage("Added Ammo Successfully!");form.reset();});
     }
     return (
         <>

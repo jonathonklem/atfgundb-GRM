@@ -1,5 +1,7 @@
 import React, { useEffect } from "react";
 import CreatableSelect from 'react-select/creatable';
+import { GunContextType } from "../../Types";
+import { GunContext } from "../contexts/gunContext";
 
 
 const AddGun = (props) => {
@@ -7,10 +9,10 @@ const AddGun = (props) => {
     const [successMessage, setSuccessMessage] = React.useState('');
     const [caliberOptions, setCaliberOptions] = React.useState<Array<{ label: string; value: string }>>([]);
     const [calibers, setCalibers] = React.useState<string[]>([]);
+    const { guns, addGun } = React.useContext(GunContext) as GunContextType;
 
     useEffect(() => {
-        console.log(props.Guns)
-        props.Guns.map((gun) => {
+        guns.map((gun) => {
             if (calibers.indexOf(gun.caliber) === -1) {
                 caliberOptions.push({ label: gun.caliber, value: gun.caliber });
                 // remove duplicates from calibers
@@ -34,7 +36,6 @@ const AddGun = (props) => {
 
         // hate this, but there doesn't seem to be a good way to force INT type on roundcount
         const clearObject = JSON.parse(JSON.stringify(formJson));
-        clearObject.user_id = props.UserId;
         clearObject.roundcount =  Number(formJson.roundcountstring);
 
         if (clearObject.name === "") {
@@ -49,7 +50,7 @@ const AddGun = (props) => {
 
         setSuccessMessage("Adding.....");
         
-        props.AddGun(clearObject, () => {setSuccessMessage("Added Gun Successfully!");form.reset();});
+        addGun(clearObject, () => {setSuccessMessage("Added Gun Successfully!");form.reset();});
         // clear form
         
     }

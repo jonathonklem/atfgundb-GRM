@@ -3,6 +3,8 @@ import { useAuth0 } from "@auth0/auth0-react";
 import LoginButton from "./login";
 import Dashboard from "./dashboard";
 import { createAuth0Client } from '@auth0/auth0-spa-js';
+import { UserDataContext } from "./contexts/userDataContext";
+import { UserDataContextType } from "../Types";
 import {
   BrowserRouter as Router,
 } from "react-router-dom";
@@ -28,22 +30,19 @@ const refreshAccessToken = async (setAuthToken) => {
     });
   } catch (e) {
     console.log(e);
-  }
-  
-
-  
+  }  
 }
 
 const Authenticated = () => {
     const {isAuthenticated} = useAuth0();
-    const [authToken, setAuthToken] = React.useState('');
+    const {setAuthToken} = React.useContext(UserDataContext) as UserDataContextType;
 
     React.useEffect(() => {
         refreshAccessToken(setAuthToken);
     }, [isAuthenticated]);
   
     if (isAuthenticated) {
-      return <Dashboard authToken={authToken} />;
+      return <Dashboard />;
     } else {
       return <LoginButton/>;
     }

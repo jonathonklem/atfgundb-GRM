@@ -3,6 +3,8 @@ import React, { useState } from "react";
 import { Chart as ChartJS, registerables } from 'chart.js';
 import { Chart } from 'react-chartjs-2'
 
+import { UserDataContextType } from "../Types";
+import { UserDataContext } from "./contexts/userDataContext";
 
 import { Bar } from "react-chartjs-2";
 ChartJS.register(...registerables);
@@ -15,7 +17,12 @@ const Data = [
     },
   ];
 
+const getenv = require('getenv');
+const url = getenv.string('REACT_APP_API');
+  
 const Reports = (props) => {
+
+    const { authToken, userId } = React.useContext(UserDataContext) as UserDataContextType;
     const colorArr = [
       "#5e738b", // Slate Blue
       "#8d8676", // Taupe Gray
@@ -47,12 +54,12 @@ const Reports = (props) => {
             setTo(from);
             setFrom(oldTo);
         }
-        fetch(props.Url + '/range/getDateAndAmmoReport?user_id='+props.UserId+'&date_done=2024-01-01&date_from=' + from +'&date_to=' + to, {
+        fetch(url + '/range/getDateAndAmmoReport?user_id='+userId+'&date_done=2024-01-01&date_from=' + from +'&date_to=' + to, {
             method: 'GET',
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
-                'Authorization' : 'Bearer ' + props.authToken
+                'Authorization' : 'Bearer ' + authToken
             }})
         .then((response) => response.json())
         .then((data) => {

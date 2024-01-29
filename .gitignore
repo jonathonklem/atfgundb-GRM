@@ -5,3 +5,4 @@ bin
 node_modules
 package-lock.json
 localgo.sh
+windowsrun.ps1
