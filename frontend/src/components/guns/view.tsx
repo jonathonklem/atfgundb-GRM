@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, Link } from "react-router-dom";
 import { GunContext } from "../contexts/gunContext";
-
+import { RangeTripContext } from "../contexts/rangeTripContext";
+import { RangeTripType, RangeTripContextType } from "../../Types";
 import {Gun, GunContextType} from "../../Types";
 
 
@@ -9,16 +10,39 @@ const ViewGun = (props) => {
     const [gun, setGun] = useState<Gun>({} as Gun);
     const [clickDelete, setClickDelete] = useState<boolean>(false);
     const [confirmText, setConfirmText] = useState<string>('');
+    const [gunRangeTrips, setGunRangeTrips] = useState<RangeTripType[]>([]);
+    const [currentFilter, setCurrentFilter] = useState<number>(5);
     const { guns, removeGun } = React.useContext(GunContext) as GunContextType;
+    const { rangeTrips } = React.useContext(RangeTripContext) as RangeTripContextType;
 
     const navigate = useNavigate();
 
     let { id } = useParams();
 
+    function dateFormat(date: Date) {
+        date.getMonth()
+        var month = date.getMonth();
+        var day   = date.getDate().toString().padStart(2,'0');
+        var year  = date.getFullYear().toString().substr(-2);
+
+
+        return month + "/" + day + "/" + year;
+    }
+
+    function showAllTrips() {
+        setCurrentFilter(gunRangeTrips.length);
+    }
+
     useEffect(() => {
         guns.map((gun) => {
             if (gun.ID === id) {
                 setGun(gun);
+            }
+        });
+
+        rangeTrips.filter((rangeTrip) => {
+            if (rangeTrip.gun_id === id) {
+                setGunRangeTrips(gunRangeTrips => [rangeTrip, ...gunRangeTrips]);
             }
         });
     }, []);
@@ -37,7 +61,7 @@ const ViewGun = (props) => {
     return (
         <>
             <h1 className="text-center font-bold text-xl py-2 bg-red-800 text-slate-50">{gun.name}</h1>
-            <table className="mx-auto mb-16">
+            <table className="mx-auto mb-4">
                 <tbody>
                     <tr>
                         <td>Manufacturer</td><td>{gun.manufacturer}</td>
@@ -53,7 +77,39 @@ const ViewGun = (props) => {
                     </tr>
                 </tbody>
             </table>
+            <Link to={`/guns/edit/`+gun.ID} className="block rounded-md bg-red-800 text-xs text-slate-50 py-1 px-4 w-20 block mb-8 text-center mx-auto">Edit</Link>
 
+            {gunRangeTrips.length > 0 && (
+                <>
+                    <h1 className="text-center block mx-auto ps-4 w-1/2 font-bold text-xl py-2 bg-red-800 text-slate-50">Recent Range Trips</h1>
+                    <table className="mx-auto mb-4">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Loc.</th>
+                                <th>Rnds</th>
+                                <th>Notes</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {gunRangeTrips.filter((element, index) => index < currentFilter).map((rangeTrip) => (
+                                <tr key={String(rangeTrip.ID)}>
+                                    <td>{dateFormat(new Date(rangeTrip.date_done))}</td>
+                                    <td>{rangeTrip.location}</td>
+                                    <td className="text-right">{String(rangeTrip.quantity_used)}</td>
+                                    <td>{rangeTrip.note}</td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                    {currentFilter < gunRangeTrips.length && (
+                        <>
+                            <button className="rounded-md bg-red-800 text-xs text-slate-50 py-1 px-4 w-1/8 block mb-8 text-center mx-auto" onClick={(e) => {e.preventDefault(); showAllTrips()}} > Show All </button>
+                        </>
+                    )}
+                        
+                </>
+            )}
             {gun.accessories?.length > 0 &&     
                 <>
                     <h1 className="text-center block mx-auto ps-4 w-1/2 font-bold text-xl py-2 bg-red-800 text-slate-50">Accessories</h1>

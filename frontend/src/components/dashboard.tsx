@@ -22,6 +22,8 @@ import ViewGun from "./guns/view";
 import ViewAmmo from "./ammo/view";
 import ReactGA from 'react-ga4';
 import DeleteScreen from "./delete";
+import EditGun from "./guns/edit";
+import EditAmmo from "./ammo/edit";
 
 import { GunContext } from "./contexts/gunContext";
 import { UserDataContext } from "./contexts/userDataContext";
@@ -120,6 +122,7 @@ const Dashboard = (props) => {
                         <Route path="maintenance" element={<Maintenance/>} />
                         <Route path="accessories" element={<Accessory />} />
                         <Route path="view/:id" element={<ViewGun />} />
+                        <Route path="edit/:id" element={<EditGun />} />
                     </Route>
                     <Route path="ammo">
                         <Route index element={<AmmoIndex/>} />
@@ -127,6 +130,7 @@ const Dashboard = (props) => {
                         <Route path="purchase" element={<PurchaseAmmo />} />
                         <Route path="dispose" element={<Dispose />} />
                         <Route path="view/:id" element={<ViewAmmo  />} />
+                        <Route path="edit/:id" element={<EditAmmo  />} />
                     </Route>
                     <Route path="trips">
                         <Route index element={<RangeTrip/>} />

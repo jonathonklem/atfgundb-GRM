@@ -83,6 +83,22 @@ func GetGun(gunId string) models.Gun {
 	return gun
 }
 
+// slightly different from update gun, no accessories or maintenance
+func EditGun(gun *models.Gun) {
+	client := GetClient()
+
+	gunsCollection := client.Database("ATFGunDB").Collection("guns")
+
+	filter := bson.D{{"_id", gun.ID}}
+	// pass all fields to be updated
+	update := bson.D{{"$set", bson.D{{"name", gun.Name}, {"manufacturer", gun.Manufacturer}, {"model", gun.Model}, {"caliber", gun.Caliber}, {"roundcount", gun.RoundCount}}}}
+
+	_, err := gunsCollection.UpdateOne(context.Background(), filter, update)
+	if err != nil {
+		log.Fatal(err)
+	}
+}
+
 func InsertGun(gun *models.Gun) {
 	client := GetClient()
 

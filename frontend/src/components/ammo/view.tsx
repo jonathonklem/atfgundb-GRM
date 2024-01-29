@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, Link } from "react-router-dom";
 
 import {Ammo} from "../../Types";
 import { AmmoContext } from "../contexts/ammoContext";
@@ -55,6 +55,8 @@ const ViewAmmo = (props) => {
                     </tr>
                 </tbody>
             </table>
+            <Link to={`/ammo/edit/`+subjectAmmo.ID} className="block rounded-md bg-red-800 text-xs text-slate-50 py-1 px-4 w-20 block mb-8 text-center mx-auto">Edit</Link>
+
             { clickDelete ? <label className="block my-2 mx-auto text-center"><div className="block w-1/3 mx-auto">Type Delete to Confirm And Click Again</div><div className="block w-full p-2 mx-auto"><input type="text" name="confirm" onChange={(e) => setConfirmText(e.target.value)} /></div></label> 
  : null}
             <button className="rounded-md bg-red-800 text-slate-50 py-2 px-4 w-1/4 block my-2 mb-20 text-center mx-auto" onClick={handleRemove}>Delete</button>

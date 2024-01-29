@@ -17,6 +17,23 @@ export const GunProvider = ({ children }) => {
         fetchGuns();
     }, [authToken]);
 
+    function editGun(id: string, clearObject:any, callback:any) {
+        clearObject.user_id = userId;
+        clearObject.id = id;
+        
+        fetch(`${url}/guns/edit`, {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization' : 'Bearer ' + authToken
+            }, 
+            body: JSON.stringify(clearObject)
+        })
+            .then(response => response.json())
+            .then(data => console.log(data)).then(() => fetchGuns()).then(() => callback());
+    }
+
     function fetchGuns() {
         console.log("Fetch guns auth token: " + authToken);
         if (!authToken) { return; }
@@ -65,7 +82,7 @@ export const GunProvider = ({ children }) => {
 
 
     return (
-        <GunContext.Provider value={{guns, setGuns, addGun, fetchGuns, removeGun}}>
+        <GunContext.Provider value={{guns, setGuns, addGun, fetchGuns, removeGun, editGun}}>
             {children}
         </GunContext.Provider>
     );

@@ -42,12 +42,14 @@ export interface Ammo {
 
 export interface RangeTripType {
     ID?: Number,
-    date: string,
+    date_done: Date,
     location: string,
     gun_id: string,
     ammo_id: string,
-    round_count: Number,
+    round_count?: Number,
+    quantity_used?: Number,
     user_id: string,
+    note?: string,
 }
 
 export type UserDataContextType = {
@@ -63,6 +65,7 @@ export type GunContextType = {
     addGun: (clearObject:any, callback:any) => void;
     fetchGuns: () => void;
     removeGun: (id: String) => void;
+    editGun: (id: string, clearObject:any, callback:any) => void;
 };
 
 export type AmmoContextType = {
@@ -72,6 +75,7 @@ export type AmmoContextType = {
     fetchAmmo: () => void;
     removeAmmo: (id: String) => void;
     disposeAmmo: (id: String, quantity: Number, callback:any) => void;
+    editAmmo: (id: string, clearObject:any, callback:any) => void;
 };
 
 export type AmmoPurchaseContextType = {
