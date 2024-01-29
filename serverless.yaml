@@ -44,6 +44,13 @@ functions:
           path: /guns/add
           method: post
           cors: true # This allows OPTION requests to pass trough the AWS API Gateway
+  EditGun:
+    handler: bin/aws
+    events:
+      - http:
+          path: /guns/edit
+          method: post
+          cors: true # This allows OPTION requests to pass trough the AWS API Gateway
   AddMaintenanceToGun:
     handler: bin/aws
     events:
@@ -70,6 +77,13 @@ functions:
     events:
       - http:
           path: /ammo/add
+          method: post
+          cors: true # This allows OPTION requests to pass trough the AWS API Gateway
+  EditAmmo:
+    handler: bin/aws
+    events:
+      - http:
+          path: /ammo/edit
           method: post
           cors: true # This allows OPTION requests to pass trough the AWS API Gateway
   DisposeAmmo: 
