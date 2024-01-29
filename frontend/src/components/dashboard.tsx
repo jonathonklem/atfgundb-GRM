@@ -37,7 +37,6 @@ const url = getenv.string('REACT_APP_API');
 const Dashboard = (props) => {
     const defaultUserId = props.LocalDev ? '659f2cdfc8528e10ee4dbecb' : '';
 
-    const {guns, fetchGuns, addGun} = useContext(GunContext) as GunContextType;
     const {userId, setUserId, setAuthToken} = useContext(UserDataContext) as UserDataContextType;
 
     var [profileSaved, setProfileSaved] = useState(false);
