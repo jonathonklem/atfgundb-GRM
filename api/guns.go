@@ -51,6 +51,20 @@ func AddAccessoryToGun(c *gin.Context) {
 
 	
 }
+func EditGun(c *gin.Context) {
+	var gun models.Gun
+
+	if err := c.BindJSON(&gun); err != nil {
+		log.Fatal("Unable to BindJSON")
+	}
+
+	if (gun.UserID != routing.UserId) {
+		c.JSON(http.StatusUnauthorized, "{error: 'Unauthorized'}")
+	} else {
+		db.EditGun(&gun)
+		c.JSON(http.StatusOK, "{success: true}")
+	}
+}
 
 func AddMaintenanceToGun(c *gin.Context) {
 	var maintenance models.Maintenance

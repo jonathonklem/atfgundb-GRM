@@ -11,6 +11,21 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
+func EditAmmo(ammo *models.Ammo) {
+	client := GetClient()
+
+	ammoCollection := client.Database("ATFGunDB").Collection("ammo")
+
+	filter := bson.D{{"_id", ammo.ID}}
+	// pass all fields to be updated
+	update := bson.D{{"$set", bson.D{{"name", ammo.Name}, {"caliber", ammo.Caliber}, {"grain", ammo.Grain}}}}
+
+	_, err := ammoCollection.UpdateOne(context.Background(), filter, update)
+	if err != nil {
+		log.Fatal(err)
+	}
+}
+
 func RemoveAmmo(ammoId string) {
 	client := GetClient()
 

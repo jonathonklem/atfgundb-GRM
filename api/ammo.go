@@ -24,6 +24,21 @@ func RemoveAmmo(c *gin.Context) {
 	}
 }
 
+func EditAmmo(c *gin.Context) {
+	var ammo models.Ammo
+
+	if err := c.BindJSON(&ammo); err != nil {
+		log.Fatal("Unable to BindJSON")
+	}
+
+	if (ammo.UserID != routing.UserId) {
+		c.JSON(http.StatusUnauthorized, "{error: 'Unauthorized'}")
+	} else {
+		db.EditAmmo(&ammo)
+		c.JSON(http.StatusOK, "{success: true}")
+	}
+}
+
 func AddAmmoPurchase(c *gin.Context) {
 	var ammoPurchase models.AmmoPurchase
 
