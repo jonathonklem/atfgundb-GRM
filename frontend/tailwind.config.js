@@ -5,6 +5,9 @@ module.exports = {
     "./public/index.html"
   ],
   theme: {
+    fontFamily: {
+      'sans': ['Urbanist', 'sans-serif']
+    },
     extend: {
       colors: {
         'redbg': '#EC202C',
