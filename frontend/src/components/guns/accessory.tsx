@@ -31,7 +31,7 @@ const Accessory = (props) => {
 
     return (
         <>
-            <h1 className="text-center font-bold text-xl py-2 bg-red-800 text-slate-50">Accessories</h1>
+            <h1 className="text-center font-bold text-xl py-2 bg-gradient-to-r drop-shadow-lg to-red-700 from-red-800 text-slate-50">Accessories</h1>
             <em className="text-center green-600 block my-2">{successMessage}</em>
             <form onSubmit={handleSubmit} className="text-center pb-16">
                 <label className="block my-2 mx-auto text-center"><div className="block w-1/3 mx-auto">Gun</div><div className="block w-full p-2 mx-auto">
@@ -42,10 +42,10 @@ const Accessory = (props) => {
                         ))}
                     </select>
                 </div></label> 
-                <label className="block my-2 mx-auto text-center"><div className="block w-1/3 mx-auto">Name</div><div className="block w-full p-2 w-1/2 mx-auto"><input type="text" name="name" /></div></label>
-                <label className="block my-2 mx-auto text-center"><div className="block w-1/3 mx-auto">Manufacturer</div><div className="block w-full p-2 w-1/2 mx-auto"><input type="text" name="manufacturer" /></div></label>
-                <label className="block my-2 mx-auto text-center"><div className="block w-1/3 mx-auto">Model</div><div className="block w-full p-2 w-1/2 mx-auto"><input type="text" name="model" /></div></label>
-                <button className="rounded-md bg-red-800 text-slate-50 py-2 px-4 w-1/4 block my-2 text-center mx-auto">Submit</button>
+                <label className="block my-2 mx-auto text-center"><div className="block w-1/3 mx-auto">Name</div><div className="block w-full p-2 w-1/2 mx-auto"><input type="text" className="drop-shadow-lg" name="name" /></div></label>
+                <label className="block my-2 mx-auto text-center"><div className="block w-1/3 mx-auto">Manufacturer</div><div className="block w-full p-2 w-1/2 mx-auto"><input type="text" className="drop-shadow-lg" name="manufacturer" /></div></label>
+                <label className="block my-2 mx-auto text-center"><div className="block w-1/3 mx-auto">Model</div><div className="block w-full p-2 w-1/2 mx-auto"><input type="text" className="drop-shadow-lg" name="model" /></div></label>
+                <button className="rounded-md bg-gradient-to-r drop-shadow-lg to-red-700 from-red-800 text-slate-50 py-2 px-4 w-1/4 block my-2 text-center mx-auto">Submit</button>
             </form>
         </>
     )

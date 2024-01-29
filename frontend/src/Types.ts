@@ -49,3 +49,31 @@ export interface RangeTripType {
     round_count: Number,
     user_id: string,
 }
+
+export type UserDataContextType = {
+    authToken: string | null;
+    setAuthToken: (authToken: string) => void;
+    userId: string | null;
+    setUserId: (userId: string) => void;
+    
+    ammo: Ammo[];
+    setAmmo: (ammo: Ammo[]) => void;
+    ammoPurchases: AmmoPurchase[];
+    setAmmoPurchases: (ammoPurchases: AmmoPurchase[]) => void;
+    rangeTrips: RangeTripType[];
+    setRangeTrips: (rangeTrips: RangeTripType[]) => void;
+
+    /*
+    interest, can we have diff methods later?
+    todos: ITodo[];
+    saveTodo: (todo: ITodo) => void;
+    updateTodo: (id: number) => void;
+    */
+  };
+
+  export type GunContextType = {
+    guns: Gun[];
+    setGuns: (guns: Gun[]) => void;
+    addGun: (clearObject:any, callback:any) => void;
+    fetchGuns: () => void;
+  };

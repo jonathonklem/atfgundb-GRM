@@ -1,4 +1,4 @@
-import { useEffect, useState  } from 'react';
+import { useEffect, useState, useContext  } from 'react';
 import { useAuth0 } from "@auth0/auth0-react";
 import LogoutButton from "./logout";
 import {
@@ -7,7 +7,7 @@ import {
     Route,
     Link
 } from "react-router-dom";
-import {Gun, Ammo, RangeTripType} from "../Types";
+import {Gun, GunContextType, UserDataContextType, Ammo, RangeTripType} from "../Types";
 import Guns from "./guns/index";
 import AddGun from "./guns/add";
 import AmmoIndex from "./ammo/index";
@@ -23,6 +23,10 @@ import ViewAmmo from "./ammo/view";
 import ReactGA from 'react-ga4';
 import DeleteScreen from "./delete";
 
+import { GunContext } from "./contexts/gunContext";
+import { UserDataContext } from "./contexts/userDataContext";
+
+
 // Initialize React Ga with your tracking ID
 ReactGA.initialize('G-51Z216F6XZ');
 
@@ -33,13 +37,13 @@ const url = getenv.string('REACT_APP_API');
 const Dashboard = (props) => {
     const defaultUserId = props.LocalDev ? '659f2cdfc8528e10ee4dbecb' : '';
 
+    const {guns, fetchGuns, addGun} = useContext(GunContext) as GunContextType;
+    const {userId, setUserId, setAuthToken} = useContext(UserDataContext) as UserDataContextType;
+
     var [profileSaved, setProfileSaved] = useState(false);
-    const [guns, setGuns] = useState<Gun[]>([]);
     const [ammo, setAmmo] = useState<Ammo[]>([]);
     const [rangeTrips, setRangeTrips] = useState<RangeTripType[]>([]); 
-    const [userId, setUserId] = useState(defaultUserId);
 
-    const [fetchingGuns, setFetchingGuns] = useState(false);
     const [fetchingAmmo, setFetchingAmmo] = useState(false);
     const [fetchingRangeTrips, setFetchingRangeTrips] = useState(false);
 
@@ -62,37 +66,8 @@ const Dashboard = (props) => {
             
         }); 
     }
-    function fetchGuns() {
-        if (!userId) { return; }
-
-        if (fetchingGuns) { return }
-
-        setFetchingGuns(true);
-        fetch(url+'/guns?user_id='+userId, {
-            method: 'GET',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-                'Authorization' : 'Bearer ' + props.authToken
-            }
-        })
-            .then(response => response.json())
-            .then(data => setGuns(data)).then(() => setFetchingGuns(false));
-    }
-    function addGun(clearObject, callback) {
-        // post formJson to our env var url
-        fetch(`${url}/guns/add`, {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-                'Authorization' : 'Bearer ' + props.authToken
-            }, 
-            body: JSON.stringify(clearObject)
-        })
-            .then(response => response.json())
-            .then(data => console.log(data)).then(() => fetchGuns()).then(() => callback());
-    }
+    
+   
 
     function purchaseAmmo(clearObject, callback) {
         // post formJson to our env var url
@@ -214,10 +189,9 @@ const Dashboard = (props) => {
 
     useEffect(() => {
         if (props.LocalDev) {
-            console.log('here');
+            setAuthToken(props.authToken);
             setUserId(defaultUserId);
-            console.log("USerID: " + userId);
-            fetchGuns();
+
             fetchAmmo();
             fetchRangeTrips();
         } else {
@@ -300,8 +274,8 @@ const Dashboard = (props) => {
                     ></Route>
                     <Route path="/delete" element={<DeleteScreen RemoveAccount={RemoveAccount} authToken={props.authToken} Url={url} UserId={userId} />}/>
                     <Route path="guns">
-                        <Route index  element={<Guns Guns={guns} authToken={props.authToken} Url={url} UserId={userId} />} />
-                        <Route path="add" element={<AddGun AddGun={addGun} Guns={guns} authToken={props.authToken} Url={url} UserId={userId}/>} />
+                        <Route index  element={<Guns authToken={props.authToken} Url={url} UserId={userId} />} />
+                        <Route path="add" element={<AddGun/>} />
                         <Route path="maintenance" element={<Maintenance AddMaintenance={addMaintenance} Guns={guns} authToken={props.authToken} Url={url} UserId={userId}/>} />
                         <Route path="accessories" element={<Accessory AddAccessory={addAccessory} Guns={guns} authToken={props.authToken} Url={url} UserId={userId}/>} />
                         <Route path="view/:id" element={<ViewGun RemoveGun={removeGun} Guns={guns} authToken={props.authToken} Url={url} UserId={userId} />} />
