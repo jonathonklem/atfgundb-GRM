@@ -15,6 +15,12 @@ const EditGun = (props) => {
 
     const { guns, editGun } = React.useContext(GunContext) as GunContextType;
 
+    // breaking out gun components because state not updating properly
+    const [gunName, setGunName] = React.useState<string>('');
+    const [gunManufacturer, setGunManufacturer] = React.useState<string>('');
+    const [gunModel, setGunModel] = React.useState<string>('');
+    const [roundCountString, setRoundCountString] = React.useState<string>('');
+
     useEffect(() => {
         guns.map((gun) => {
             if (calibers.indexOf(gun.caliber) === -1) {
@@ -31,6 +37,10 @@ const EditGun = (props) => {
             if (gun.ID === id) {
                 setGun(gun);
                 setCurrentCaliber(gun.caliber);
+                setGunName(gun.name);
+                setGunManufacturer(gun.manufacturer);
+                setGunModel(gun.model);
+                setRoundCountString(String(gun.roundcount));
             }
         });
     }, []);
@@ -42,6 +52,13 @@ const EditGun = (props) => {
         setGun(newGun);
         setCurrentCaliber(value.value);
     }
+
+    function changeName(value) {
+        let newGun = gun;
+        newGun.name = value;
+        setGun(newGun);
+    }
+    
     function handleSubmit(e) {
         e.preventDefault();
 
@@ -74,16 +91,16 @@ const EditGun = (props) => {
     }
     return (
         <>
-            <h1 className="text-center font-bold text-xl py-2 bg-red-800 text-slate-50">Add Gun</h1>
+            <h1 className="text-center font-bold text-xl py-2 bg-red-800 text-slate-50">Edit Gun</h1>
             <em className="text-center green-600 block my-2">{successMessage}</em>
             <form onSubmit={handleSubmit} className="text-center pb-16">
-                <label className="block my-2 mx-auto text-center"><div className="block w-1/3 mx-auto">Name</div><div className="block w-full p-2 mx-auto"><input type="text" name="name" value={gun.name}/></div></label> 
-                <label className="block my-2 mx-auto text-center"><div className="block w-1/3 mx-auto">Manufacturer</div><div className="block w-full p-2 w-1/2 mx-auto"><input type="text" name="manufacturer" value={gun.manufacturer} /></div></label>
-                <label className="block my-2 mx-auto text-center"><div className="block w-1/3 mx-auto">Model</div><div className="block w-full p-2 w-1/2 mx-auto"><input type="text" name="model" value={gun.model} /></div></label>
+                <label className="block my-2 mx-auto text-center"><div className="block w-1/3 mx-auto">Name</div><div className="block w-full p-2 mx-auto"><input type="text" name="name" onChange={(e) => setGunName(e.target.value)} value={gunName}/></div></label> 
+                <label className="block my-2 mx-auto text-center"><div className="block w-1/3 mx-auto">Manufacturer</div><div className="block w-full p-2 w-1/2 mx-auto"><input type="text" name="manufacturer" onChange={(e) => setGunManufacturer(e.target.value)} value={gunManufacturer} /></div></label>
+                <label className="block my-2 mx-auto text-center"><div className="block w-1/3 mx-auto">Model</div><div className="block w-full p-2 w-1/2 mx-auto"><input type="text" name="model" onChange={(e) => setGunModel(e.target.value) } value={gunModel} /></div></label>
                 <label className="block my-2 mx-auto text-center"><div className="block w-1/3 mx-auto">Caliber</div><div className="block w-full p-2 w-1/2 mx-auto">
                     <CreatableSelect name="caliber" className="text-neutral-700 p-1 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md;" value={{label: currentCaliber, value: currentCaliber}} onChange={(e) => changeCaliber(e)}  options={caliberOptions} />
                 </div></label>
-                <label className="block my-2 mx-auto text-center"><div className="block w-1/3 mx-auto">Round Count</div><div className="block w-full p-2 w-1/2 mx-auto"><input type="number" name="roundcountstring"  value={String(gun.roundcount)}/></div></label>
+                <label className="block my-2 mx-auto text-center"><div className="block w-1/3 mx-auto">Round Count</div><div className="block w-full p-2 w-1/2 mx-auto"><input type="number" name="roundcountstring" onChange={(e) => setRoundCountString(e.target.value) } value={roundCountString}/></div></label>
                 <button className="rounded-md bg-red-800 text-slate-50 py-2 px-4 w-1/4 block my-2 text-center mx-auto">Submit</button>
             </form>
         </>

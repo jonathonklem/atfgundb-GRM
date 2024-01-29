@@ -75,6 +75,7 @@ export type AmmoContextType = {
     fetchAmmo: () => void;
     removeAmmo: (id: String) => void;
     disposeAmmo: (id: String, quantity: Number, callback:any) => void;
+    editAmmo: (id: string, clearObject:any, callback:any) => void;
 };
 
 export type AmmoPurchaseContextType = {

@@ -17,10 +17,21 @@ export const GunProvider = ({ children }) => {
         fetchGuns();
     }, [authToken]);
 
-    function editGun(id: String, clearObject:any, callback:any) {
-        console.log(id);
-        console.log(clearObject);
-        callback();
+    function editGun(id: string, clearObject:any, callback:any) {
+        clearObject.user_id = userId;
+        clearObject.id = id;
+        
+        fetch(`${url}/guns/edit`, {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization' : 'Bearer ' + authToken
+            }, 
+            body: JSON.stringify(clearObject)
+        })
+            .then(response => response.json())
+            .then(data => console.log(data)).then(() => fetchGuns()).then(() => callback());
     }
 
     function fetchGuns() {

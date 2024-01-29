@@ -16,6 +16,24 @@ export const AmmoProvider = ({ children }) => {
         fetchAmmo();
     }, [authToken]);
 
+    function editAmmo(id: string, clearObject:any, callback:any) {
+        clearObject.user_id = userId;
+        clearObject.id = id;
+        
+        // post formJson to our env var url
+        fetch(`${url}/ammo/edit`, {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization' : 'Bearer ' + authToken
+            }, 
+            body: JSON.stringify(clearObject)
+        })
+            .then(response => response.json())
+            .then(data => console.log(data)).then(() => {callback(); fetchAmmo();});
+    }
+
     function addAmmo (clearObject, callback) {
         // post formJson to our env var url
         fetch(`${url}/ammo/add`, {
@@ -73,7 +91,7 @@ export const AmmoProvider = ({ children }) => {
     }
 
     return (
-        <AmmoContext.Provider value={{ammo, setAmmo, disposeAmmo, removeAmmo, fetchAmmo, addAmmo}}>
+        <AmmoContext.Provider value={{ammo, setAmmo, disposeAmmo, removeAmmo, fetchAmmo, addAmmo, editAmmo}}>
             {children}
         </AmmoContext.Provider>
     );
