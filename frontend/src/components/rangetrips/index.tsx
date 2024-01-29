@@ -76,7 +76,7 @@ const RangeTrip = (props) => {
                 <label className="block my-2 mx-auto text-center"><div className="block w-1/3 mx-auto">Gun</div><div className="block w-full p-2 mx-auto">
                     <select onChange={filterAmmo} id="gun_id" name="gun_id">
                         <option>Choose</option>
-                        {props.Guns.map((gun) => (
+                        {guns.map((gun) => (
                             <option value={gun.ID}>{gun.name}</option>
                         ))}
                     </select>
@@ -89,7 +89,7 @@ const RangeTrip = (props) => {
                             ))}
                         </select>
                         {
-                            filteredAmmo.length != props.Ammo.length && (
+                            filteredAmmo.length != ammo.length && (
                                 <>
                                     <button className="rounded-md bg-red-800 text-xs text-slate-50 py-1 px-4 w-1/8 block my-2 text-center mx-auto" onClick={(e) => {e.preventDefault(); showAllAmmo()}} > Show All </button>
                                 </>

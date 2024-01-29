@@ -11,7 +11,7 @@ const Maintenance = (props) => {
     const [successMessage, setSuccessMessage] = React.useState('');
     const [gunId, setGunId] = React.useState('');
     const { authToken } = React.useContext(UserDataContext) as UserDataContextType;
-    const { guns } = React.useContext(GunContext) as GunContextType;
+    const { guns, fetchGuns } = React.useContext(GunContext) as GunContextType;
 
     function addMaintenance(gunId, formJson, callback) {
         // post formJson to our env var url
@@ -41,7 +41,7 @@ const Maintenance = (props) => {
             return;
         }
         setSuccessMessage("Adding.....");
-        addMaintenance(gunId, formJson, () => {setSuccessMessage("Maintenance added successfully!"); form.reset();});
+        addMaintenance(gunId, formJson, () => {fetchGuns(); setSuccessMessage("Maintenance added successfully!"); form.reset();});
     }
 
     return (

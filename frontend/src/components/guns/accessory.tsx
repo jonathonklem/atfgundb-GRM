@@ -11,7 +11,7 @@ const Accessory = (props) => {
     const [successMessage, setSuccessMessage] = React.useState('');
     const [gunId, setGunId] = React.useState('');
     const { authToken } = React.useContext(UserDataContext) as UserDataContextType;
-    const { guns } = React.useContext(GunContext) as GunContextType;
+    const { guns, fetchGuns } = React.useContext(GunContext) as GunContextType;
 
     function addAccessory(gunId, formJson, callback) {
         // post formJson to our env var url
@@ -48,6 +48,7 @@ const Accessory = (props) => {
         setSuccessMessage("Adding.....")
         addAccessory(gunId, formJson, () => {
             setSuccessMessage("Accessory added successfully!");
+            fetchGuns();
             form.reset();
         });
     }
