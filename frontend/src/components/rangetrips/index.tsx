@@ -1,15 +1,25 @@
 import React from "react";
 import {Ammo} from "../../Types";
 import CreatableSelect from 'react-select/creatable';
+import { RangeTripContext } from "../contexts/rangeTripContext";
+import { GunContext } from "../contexts/gunContext";
+import { AmmoContext } from "../contexts/ammoContext";
+import { RangeTripContextType, GunContextType, AmmoContextType } from "../../Types";
 
 const RangeTrip = (props) => {
     const [successMessage, setSuccessMessage] = React.useState('');
     const [rangeOptions, setRangeOptions] = React.useState<Array<{ label: string; value: string }>>([]);
     const [ranges, setRanges] = React.useState<string[]>([]);
-    const [filteredAmmo, setFilteredAmmo] = React.useState<Ammo[]>(props.Ammo);
 
+    const { rangeTrips, addRangeTrip } = React.useContext(RangeTripContext) as RangeTripContextType;
+    const { guns } = React.useContext(GunContext) as GunContextType;
+    const { ammo } = React.useContext(AmmoContext) as AmmoContextType;
+
+    
+    const [filteredAmmo, setFilteredAmmo] = React.useState<Ammo[]>(ammo);
+    
     React.useEffect(() => {
-        props.RangeTrips.map((rangeTrip) => {
+        rangeTrips.map((rangeTrip) => {
             if (ranges.indexOf(rangeTrip.location) === -1) {
                 rangeOptions.push({ label: rangeTrip.location, value: rangeTrip.location });
                 // remove duplicates from calibers
@@ -18,19 +28,18 @@ const RangeTrip = (props) => {
                 ranges.push(rangeTrip.location);
                 setRanges(ranges)
             }
-                
         });
     }, []);
 
     function filterAmmo(e) {
         const gunId = e.target.value;
-        const gun = props.Guns.find((gun) => gun.ID === gunId);
-        const filteredAmmo = props.Ammo.filter((ammo) => ammo.caliber === gun.caliber);
+        const gun = guns.find((gun) => gun.ID === gunId);
+        const filteredAmmo = ammo.filter((ammoItem) => ammoItem.caliber === gun?.caliber);
         setFilteredAmmo(filteredAmmo);
     }
 
     function showAllAmmo() {
-        setFilteredAmmo(props.Ammo);
+        setFilteredAmmo(ammo);
     }
 
     function handleSubmit(e)  {
@@ -56,7 +65,7 @@ const RangeTrip = (props) => {
         }
 
         setSuccessMessage("Saving.....");
-        props.AddRangeTrip(clearObject, () => {setSuccessMessage("Range Trip added successfully!");form.reset();});
+        addRangeTrip(clearObject, () => {setSuccessMessage("Range Trip added successfully!");form.reset();});
     }
 
     return (

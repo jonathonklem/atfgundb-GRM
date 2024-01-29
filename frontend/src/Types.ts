@@ -55,25 +55,31 @@ export type UserDataContextType = {
     setAuthToken: (authToken: string) => void;
     userId: string | null;
     setUserId: (userId: string) => void;
-    
-    ammo: Ammo[];
-    setAmmo: (ammo: Ammo[]) => void;
-    ammoPurchases: AmmoPurchase[];
-    setAmmoPurchases: (ammoPurchases: AmmoPurchase[]) => void;
-    rangeTrips: RangeTripType[];
-    setRangeTrips: (rangeTrips: RangeTripType[]) => void;
+};
 
-    /*
-    interest, can we have diff methods later?
-    todos: ITodo[];
-    saveTodo: (todo: ITodo) => void;
-    updateTodo: (id: number) => void;
-    */
-  };
-
-  export type GunContextType = {
+export type GunContextType = {
     guns: Gun[];
     setGuns: (guns: Gun[]) => void;
     addGun: (clearObject:any, callback:any) => void;
     fetchGuns: () => void;
-  };
+    removeGun: (id: String) => void;
+};
+
+export type AmmoContextType = {
+    ammo: Ammo[];
+    setAmmo: (ammo: Ammo[]) => void;
+    addAmmo: (clearObject:any, callback:any) => void;
+    fetchAmmo: () => void;
+    removeAmmo: (id: String) => void;
+    disposeAmmo: (id: String, quantity: Number, callback:any) => void;
+};
+
+export type AmmoPurchaseContextType = {
+   purchaseAmmo: (clearObject:any, callback:any) => void;
+};
+
+export type RangeTripContextType = {
+    rangeTrips: RangeTripType[];
+    addRangeTrip: (clearObject:any, callback:any) => void;
+    fetchRangeTrips: () => void;
+};

@@ -1,20 +1,26 @@
 // Context.js
 import React, { useState } from "react";
 import {GunProvider} from "./gunContext";
-import { UserDataContextType, Ammo, AmmoPurchase, RangeTripType } from "../../Types";
+import {AmmoProvider} from "./ammoContext";
+import {AmmoPurchaseProvider} from "./ammoPurchaseContext";
+import { UserDataContextType } from "../../Types";
+import { RangeTripProvider } from "./rangeTripContext";
  
 export const UserDataContext = React.createContext<UserDataContextType | null>(null)
 export const UserDataProvider = ({ children }) => {
-    const [ammo, setAmmo] = useState<Ammo[]>([]);
-    const [ammoPurchases, setAmmoPurchases] = useState<AmmoPurchase[]>([]);
-    const [rangeTrips, setRangeTrips] = useState<RangeTripType[]>([]);
     const [authToken, setAuthToken] = useState<string>("");
     const [userId, setUserId] = useState<string>("");
  
     return (
-        <UserDataContext.Provider value={{authToken, setAuthToken, userId, setUserId, ammo, setAmmo, ammoPurchases, setAmmoPurchases, rangeTrips, setRangeTrips}}>
+        <UserDataContext.Provider value={{authToken, setAuthToken, userId, setUserId}}>
             <GunProvider>
-                {children}
+                <AmmoProvider>
+                    <AmmoPurchaseProvider>
+                        <RangeTripProvider>
+                            {children}
+                        </RangeTripProvider>
+                    </AmmoPurchaseProvider>
+                </AmmoProvider>
             </GunProvider>
         </UserDataContext.Provider>
     );

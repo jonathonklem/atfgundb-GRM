@@ -41,12 +41,6 @@ const Dashboard = (props) => {
     const {userId, setUserId, setAuthToken} = useContext(UserDataContext) as UserDataContextType;
 
     var [profileSaved, setProfileSaved] = useState(false);
-    const [ammo, setAmmo] = useState<Ammo[]>([]);
-    const [rangeTrips, setRangeTrips] = useState<RangeTripType[]>([]); 
-
-    const [fetchingAmmo, setFetchingAmmo] = useState(false);
-    const [fetchingRangeTrips, setFetchingRangeTrips] = useState(false);
-
     const {user, isAuthenticated, isLoading, logout  } = useAuth0();
 
     function RemoveAccount() {
@@ -66,134 +60,11 @@ const Dashboard = (props) => {
             
         }); 
     }
-    
-   
-
-    function purchaseAmmo(clearObject, callback) {
-        // post formJson to our env var url
-        fetch(`${url}/ammo/purchase`, {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-                'Authorization' : 'Bearer ' + props.authToken
-            }, 
-            body: JSON.stringify(clearObject)
-        })
-            .then(response => response.json())
-            .then(data => console.log(data)).then(() => {callback()}).then(() => fetchAmmo());
-
-    }
-    function addAmmo (clearObject, callback) {
-        // post formJson to our env var url
-        fetch(`${url}/ammo/add`, {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-                'Authorization' : 'Bearer ' + props.authToken
-            }, 
-            body: JSON.stringify(clearObject)
-        })
-            .then(response => response.json())
-            .then(data => console.log(data)).then(() => {callback(); fetchAmmo();});
-    }
-    function fetchAmmo() {
-        if (!userId) { return; }
-
-        if (fetchingAmmo) { return }
-
-        setFetchingAmmo(true);
-        fetch(url+'/ammo?user_id='+userId, {
-            method: 'GET',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-                'Authorization' : 'Bearer ' + props.authToken
-            }
-        })
-            .then(response => response.json()) 
-            .then(data => setAmmo(data)).then(() => setFetchingAmmo(false));
-    }
-    function removeAmmo(id) {
-        fetch(url+ '/ammo/remove?ammo_id='+id, {
-            method: 'GET',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-                'Authorization' : 'Bearer ' + props.authToken
-            }
-        }).then(() => fetchAmmo());
-    }
-
-    function disposeAmmo(ammoId, quantity, callback) {
-        fetch(`${url}/ammo/dispose?ammo_id=`+ammoId+`&quantity=`+quantity, {
-            method: 'GET',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-                'Authorization' : 'Bearer ' + props.authToken
-            }
-        })
-            .then(response => response.json())
-            .then(data => console.log(data)).then(() => {callback(); fetchAmmo()});
-
-    }
-
-    function addMaintenance(gunId, formJson, callback) {
-        // post formJson to our env var url
-        fetch(url + '/guns/addMaintenance?gun_id='+gunId, {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-                'Authorization' : 'Bearer ' + props.authToken
-            }, 
-            body: JSON.stringify(formJson)
-        })
-            .then(response => response.json())
-            .then(data => console.log(data)).then(() => callback());
-    }
-
-    function addAccessory(gunId, formJson, callback) {
-        // post formJson to our env var url
-        fetch(url+ '/guns/addAccessory?gun_id='+gunId, {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-                'Authorization' : 'Bearer ' + props.authToken
-            }, 
-            body: JSON.stringify(formJson)
-        })
-            .then(response => response.json())
-            .then(data => console.log(data)).then(() => callback());
-    }
-
-    function fetchRangeTrips() {
-        if (!userId) { return; }
-        if (fetchingRangeTrips) { return }
-
-        setFetchingRangeTrips(true);
-        fetch(url+'/range/getRangeTrips?user_id='+userId, {
-            method: 'GET',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-                'Authorization' : 'Bearer ' + props.authToken
-            }
-        })
-            .then(response => response.json())
-            .then(data => setRangeTrips(data)).then(() => setFetchingRangeTrips(false));
-    }
 
     useEffect(() => {
         if (props.LocalDev) {
             setAuthToken(props.authToken);
             setUserId(defaultUserId);
-
-            fetchAmmo();
-            fetchRangeTrips();
         } else {
             setUserId(user?.sub?.split("|")[1] || '');
         }
@@ -214,38 +85,9 @@ const Dashboard = (props) => {
                 body: JSON.stringify(user)
             })
                 .then(response => response.json())
-                .then(data => setProfileSaved(true)).then(() => fetchGuns()).then(() => fetchAmmo()).then(() => fetchRangeTrips());   // avoid weird race type condition
+                .then(data => setProfileSaved(true));   // avoid weird race type condition
         }
     }
-
-    function addRangeTrip(clearObject, callback) {
-         // post formJson to our env var url
-         fetch(url+ '/range/addTrip', {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-                'Authorization' : 'Bearer ' + props.authToken
-            }, 
-            body: JSON.stringify(clearObject)
-        })
-            .then(response => response.json())
-            .then(data => console.log(data)).then(() => callback()).then(() => fetchGuns()).then(() => fetchAmmo()).then(() => fetchRangeTrips());
-
-    }
-
-    function removeGun(gunId) {
-        fetch(url+ '/guns/remove?gun_id='+gunId, {
-            method: 'GET',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-                'Authorization' : 'Bearer ' + props.authToken
-            }
-        }).then(() => fetchGuns());
-       // window.location.href="/"; // can't imagine there's not a more elegant solution...
-    }
-
 
     if (isLoading && !props.LocalDev) {
         return <div>Loading...</div>;
@@ -272,26 +114,26 @@ const Dashboard = (props) => {
                             </div>
                         }
                     ></Route>
-                    <Route path="/delete" element={<DeleteScreen RemoveAccount={RemoveAccount} authToken={props.authToken} Url={url} UserId={userId} />}/>
+                    <Route path="/delete" element={<DeleteScreen RemoveAccount={RemoveAccount} />}/>
                     <Route path="guns">
-                        <Route index  element={<Guns authToken={props.authToken} Url={url} UserId={userId} />} />
+                        <Route index  element={<Guns />} />
                         <Route path="add" element={<AddGun/>} />
-                        <Route path="maintenance" element={<Maintenance AddMaintenance={addMaintenance} Guns={guns} authToken={props.authToken} Url={url} UserId={userId}/>} />
-                        <Route path="accessories" element={<Accessory AddAccessory={addAccessory} Guns={guns} authToken={props.authToken} Url={url} UserId={userId}/>} />
-                        <Route path="view/:id" element={<ViewGun RemoveGun={removeGun} Guns={guns} authToken={props.authToken} Url={url} UserId={userId} />} />
+                        <Route path="maintenance" element={<Maintenance/>} />
+                        <Route path="accessories" element={<Accessory />} />
+                        <Route path="view/:id" element={<ViewGun />} />
                     </Route>
                     <Route path="ammo">
-                        <Route index element={<AmmoIndex authToken={props.authToken} Ammo={ammo}/>} />
-                        <Route path="add" element={<AddAmmo Guns={guns} AddAmmo={addAmmo} authToken={props.authToken} Url={url} UserId={userId}/>} />
-                        <Route path="purchase" element={<PurchaseAmmo Ammo={ammo} PurchaseAmmo={purchaseAmmo} authToken={props.authToken} Url={url} UserId={userId}/>} />
-                        <Route path="dispose" element={<Dispose DisposeAmmo={disposeAmmo} Ammo={ammo} authToken={props.authToken} Url={url} UserId={userId}/>} />
-                        <Route path="view/:id" element={<ViewAmmo Ammo={ammo} RemoveAmmo={removeAmmo} />} />
+                        <Route index element={<AmmoIndex/>} />
+                        <Route path="add" element={<AddAmmo />} />
+                        <Route path="purchase" element={<PurchaseAmmo />} />
+                        <Route path="dispose" element={<Dispose />} />
+                        <Route path="view/:id" element={<ViewAmmo  />} />
                     </Route>
                     <Route path="trips">
-                        <Route index element={<RangeTrip RangeTrips={rangeTrips} AddRangeTrip={addRangeTrip} Guns={guns} Ammo={ammo} authToken={props.authToken} Url={url} UserId={userId}/>} />
+                        <Route index element={<RangeTrip/>} />
                     </Route>
                     <Route path="reports">
-                        <Route index element={<Reports authToken={props.authToken} Url={url} UserId={userId}/>} />
+                        <Route index element={<Reports/>} />
                     </Route>
                 </Routes>
                 <ul className="mt-4 fixed -bottom-6 w-full left-0 text-center bg-red-800">

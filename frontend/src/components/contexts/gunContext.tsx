@@ -52,9 +52,20 @@ export const GunProvider = ({ children }) => {
             .then(data => console.log(data)).then(() => fetchGuns()).then(() => callback());
     }
 
+    function removeGun(gunId) {
+        fetch(url+ '/guns/remove?gun_id='+gunId, {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization' : 'Bearer ' + authToken
+            }
+        }).then(() => fetchGuns());
+    }
+
 
     return (
-        <GunContext.Provider value={{guns, setGuns, addGun, fetchGuns}}>
+        <GunContext.Provider value={{guns, setGuns, addGun, fetchGuns, removeGun}}>
             {children}
         </GunContext.Provider>
     );

@@ -1,9 +1,15 @@
 import React from "react";
 import {Ammo} from "../../Types";
+import {AmmoPurchaseContext} from "../contexts/ammoPurchaseContext";
+import {AmmoPurchaseContextType} from "../../Types";
+import {AmmoContext} from "../contexts/ammoContext";
+import {AmmoContextType} from "../../Types";
 
 const PurchaseAmmo = (props) => {
-    const url = props.Url;
     const [successMessage, setSuccessMessage] = React.useState('');
+
+    const { purchaseAmmo } = React.useContext(AmmoPurchaseContext) as AmmoPurchaseContextType;
+    const { ammo } = React.useContext(AmmoContext) as AmmoContextType;
 
     function handleSubmit(e) {
         e.preventDefault();
@@ -20,10 +26,10 @@ const PurchaseAmmo = (props) => {
         clearObject.price =  Number(formJson.price);
 
         setSuccessMessage("Saving.....");
-        props.PurchaseAmmo(clearObject, () => {setSuccessMessage("Purchased Ammo Successfully!");form.reset();});
+        purchaseAmmo(clearObject, () => {setSuccessMessage("Purchased Ammo Successfully!");form.reset();});
     }
 
-    if (props.Ammo.length === 0) {
+    if (ammo.length === 0) {
         return (<div>No ammo types to purchase yet.  Add ammo first.</div>)
     }
 
@@ -35,7 +41,7 @@ const PurchaseAmmo = (props) => {
                 <label className="block my-2 mx-auto text-center"><div className="block w-1/3 mx-auto">Ammo</div><div className="block w-full p-2 mx-auto">
                         <select name="ammo_id">
                             <option>Choose</option>
-                            {props.Ammo.map((item: Ammo) => (
+                            {ammo.map((item: Ammo) => (
                                 <option value={item?.ID?.toString()}>{item.name}</option>
                             ))}
                         </select>

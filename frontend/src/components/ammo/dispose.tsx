@@ -1,19 +1,22 @@
 import React from "react";
 import {Ammo} from "../../Types";
 
-const Dispose = (props) => {
-    const url = props.Url;
+import { AmmoContext } from "../contexts/ammoContext";
+import { AmmoContextType } from "../../Types";
 
+const Dispose = (props) => {
     const [successMessage, setSuccessMessage] = React.useState('');
     const [ammoId, setAmmoId] = React.useState('');
     const [quantity, setQuantity] = React.useState(0);
+
+    const { disposeAmmo } = React.useContext(AmmoContext) as AmmoContextType;
 
     function handleSubmit(e) {
         e.preventDefault();
         const form = e.target;
 
         setSuccessMessage("Disposing.....")
-        props.DisposeAmmo(ammoId, quantity, () => {setSuccessMessage("Ammo Disposed Successfully!"); form.reset();})
+        disposeAmmo(ammoId, quantity, () => {setSuccessMessage("Ammo Disposed Successfully!"); form.reset();})
     }
     
     return (
