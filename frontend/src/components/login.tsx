@@ -4,7 +4,14 @@ import { useAuth0 } from "@auth0/auth0-react";
 const LoginButton = () => {
   const { loginWithRedirect } = useAuth0();
 
-  return <button className="bg-red-800 text-slate-50 py-2 px-4 w-1/4 block my-2 text-center mx-auto" onClick={() => loginWithRedirect()}>Log In / SignUp</button>;
+  return (
+    <>
+      <img className="mt-28 center m-auto" src="/biglogo.png" />
+      <button className="rounded-3xl bg-redbg mt-28 drop-shadow-lg text-white py-2 px-4 w-1/4 block my-2 text-center mx-auto" onClick={() => loginWithRedirect()}>Log In</button>
+      <p className="mt-14 text-center">Don't have an account? <span className="cursor-pointer text-redbg" onClick={() => loginWithRedirect()}>Sign up</span></p>
+    </>
+    
+  );
 };
 
 export default LoginButton;

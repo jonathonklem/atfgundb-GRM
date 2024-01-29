@@ -1,5 +1,9 @@
 # ATFGunDB
 
+# latest redesign notes:
+    buttons get:
+    rounded-3xl bg-redbg drop-shadow-lg
+
 ## Scripts
 1. `npm run build` inside root will automatically run make and `npm build` inside frontend
 2. `npm run deploy` inside root will automatically run the 2 sls scripts to deploy to lambda and s3
