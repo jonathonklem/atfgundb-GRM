@@ -12,19 +12,21 @@ const GunTable = (props) => {
     if (guns?.length === 0 || guns instanceof Array === false) {
         return (
             <div>
-                <p>No guns yet.</p>
+                <p className="font-light text-base tracking-wider">No guns yet.</p>
             </div>
         )
     } else { 
         return (
-            <table className="mx-auto mb-16">
-                <thead>
+            <table className="mx-auto mb-16 mt-4">
+                <thead className="border-b border-gray-600">
                 <tr>
-                    <th>Name</th>
-                    <th>Round Count</th>
+                    <th className="font-light text-base tracking-wider text-left">Name</th>
+                    <th className="font-light text-base tracking-wider text-right">
+                        <span className="h-4 border-gray-600 border-l inline-block float-left"></span>Round Count
+                    </th>
                 </tr>
                 </thead>
-                <tbody>
+                <tbody className="font-light text-sm tracking-wider">
                 {guns.map((gun) => (
                     <tr>
                         <td>

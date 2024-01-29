@@ -4,9 +4,11 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Urbanist');
 
-select, input[type="text"], textarea, input[type="number"] {
-  @apply p-1;
-  @apply block w-full sm:text-sm rounded-md;
+select, input[type="text"], select, textarea, input[type="number"] {
+  @apply p-4;
+  @apply block w-full tracking-wider text-sm rounded-md;
+  @apply bg-inputbg;
+  @apply text-inputfg;
 }
 
 td {
@@ -17,8 +19,8 @@ table {
   @apply w-9/12;
 }
 
-thead {
-  @apply border-b-8;
+tr:nth-of-type(2n) {
+  @apply bg-altrow;
 }
 
 th {
