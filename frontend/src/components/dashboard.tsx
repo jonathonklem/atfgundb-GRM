@@ -22,6 +22,7 @@ import ViewGun from "./guns/view";
 import ViewAmmo from "./ammo/view";
 import ReactGA from 'react-ga4';
 import DeleteScreen from "./delete";
+import EditGun from "./guns/edit";
 
 // Initialize React Ga with your tracking ID
 ReactGA.initialize('G-51Z216F6XZ');
@@ -79,6 +80,12 @@ const Dashboard = (props) => {
             .then(response => response.json())
             .then(data => setGuns(data)).then(() => setFetchingGuns(false));
     }
+    function editGun(gunId, formJson, callback) {
+        console.log(gunId);
+        console.log(formJson);
+        callback();
+    }
+
     function addGun(clearObject, callback) {
         // post formJson to our env var url
         fetch(`${url}/guns/add`, {
@@ -301,6 +308,7 @@ const Dashboard = (props) => {
                     <Route path="/delete" element={<DeleteScreen RemoveAccount={RemoveAccount} authToken={props.authToken} Url={url} UserId={userId} />}/>
                     <Route path="guns">
                         <Route index  element={<Guns Guns={guns} authToken={props.authToken} Url={url} UserId={userId} />} />
+                        <Route path="edit/:id" element={<EditGun EditGun={editGun} Guns={guns} authToken={props.authToken} Url={url} UserId={userId}/>} />
                         <Route path="add" element={<AddGun AddGun={addGun} Guns={guns} authToken={props.authToken} Url={url} UserId={userId}/>} />
                         <Route path="maintenance" element={<Maintenance AddMaintenance={addMaintenance} Guns={guns} authToken={props.authToken} Url={url} UserId={userId}/>} />
                         <Route path="accessories" element={<Accessory AddAccessory={addAccessory} Guns={guns} authToken={props.authToken} Url={url} UserId={userId}/>} />
