@@ -1,22 +1,26 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 
 import {Ammo} from "../../Types";
+import { AmmoContext } from "../contexts/ammoContext";
+import { AmmoContextType } from "../../Types";
 
 const ViewAmmo = (props) => {
-    const [ammo, setAmmo] = useState<Ammo>({} as Ammo);
+    const [subjectAmmo, setSubjectAmmo] = useState<Ammo>({} as Ammo);
     const [clickDelete, setClickDelete] = useState<boolean>(false);
     const [confirmText, setConfirmText] = useState<string>('');
+
+    const { ammo, removeAmmo } = React.useContext(AmmoContext) as AmmoContextType;
 
     const navigate = useNavigate();
 
     let { id } = useParams();
 
     useEffect(() => {
-        props.Ammo.map((ammo) => {
+        ammo.map((ammo) => {
             if (ammo.ID === id) {
                 console.log(ammo)
-                setAmmo(ammo);
+                setSubjectAmmo(ammo);
             }
         });
     }, []);
@@ -27,27 +31,27 @@ const ViewAmmo = (props) => {
         }
 
         if (confirmText === "Delete") {
-            props.RemoveAmmo(id);
+            removeAmmo(String(id));
             navigate("/")
         }
     }
 
     return (
         <>
-            <h1 className="text-center font-bold text-xl py-2 bg-red-800 text-slate-50">{ammo.name}</h1>
+            <h1 className="text-center font-bold text-xl py-2 bg-red-800 text-slate-50">{subjectAmmo.name}</h1>
             <table className="mx-auto mb-16">
                 <tbody>
                     <tr>
-                        <td>Amount On Hand</td><td>{String(ammo.amount)}</td>
+                        <td>Amount On Hand</td><td>{String(subjectAmmo.amount)}</td>
                     </tr>
                     <tr>
-                        <td>Grain</td><td>{ammo.grain}</td>
+                        <td>Grain</td><td>{subjectAmmo.grain}</td>
                     </tr>
                     <tr>
-                        <td>Average Price</td><td>{ammo.average_price?.toFixed(2)}</td>
+                        <td>Average Price</td><td>{subjectAmmo.average_price?.toFixed(2)}</td>
                     </tr>
                     <tr>
-                        <td>Last Price</td><td>{ammo.last_price?.toFixed(2)}</td>
+                        <td>Last Price</td><td>{subjectAmmo.last_price?.toFixed(2)}</td>
                     </tr>
                 </tbody>
             </table>

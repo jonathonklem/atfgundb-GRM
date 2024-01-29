@@ -12,7 +12,7 @@ const AmmoIndex = (props) => {
                 <li className="inline-block mx-2"><Link className="bg-red-800 text-slate-50 py-2 px-4 block my-2 text-center mx-auto" to="/ammo/purchase">Purchase</Link></li>
                 <li className="inline-block mx-2"><Link className="bg-red-800 text-slate-50 py-2 px-4 block my-2 text-center mx-auto" to="/ammo/dispose">Dispose</Link></li>
             </ul>
-            <AmmoTable ammo={props.Ammo} />
+            <AmmoTable />
         </div>
     );
 }

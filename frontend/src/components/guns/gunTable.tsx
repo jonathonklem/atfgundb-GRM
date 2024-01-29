@@ -2,9 +2,14 @@ import React from "react";
 import {
     Link,
 } from "react-router-dom";
+import {Gun, GunContextType} from "../../Types";
+
+import { GunContext } from "../contexts/gunContext";
+
 
 const GunTable = (props) => {
-    if (props.guns?.length === 0 || props.guns instanceof Array === false) {
+    const { guns } = React.useContext(GunContext) as GunContextType;
+    if (guns?.length === 0 || guns instanceof Array === false) {
         return (
             <div>
                 <p>No guns yet.</p>
@@ -20,12 +25,12 @@ const GunTable = (props) => {
                 </tr>
                 </thead>
                 <tbody>
-                {props.guns.map((gun) => (
-                    <tr key={String(gun.ID)}>
+                {guns.map((gun) => (
+                    <tr>
                         <td>
                             <Link to={`/guns/view/`+gun.ID}>{gun.name}</Link>
                         </td>
-                        <td className="text-right">{gun.roundcount}</td>
+                        <td className="text-right">{String(gun.roundcount)}</td>
                     </tr>
                 ))}
                 </tbody>

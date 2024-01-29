@@ -1,19 +1,22 @@
 import React from "react";
 import {Ammo} from "../../Types";
 
-const Dispose = (props) => {
-    const url = props.Url;
+import { AmmoContext } from "../contexts/ammoContext";
+import { AmmoContextType } from "../../Types";
 
+const Dispose = (props) => {
     const [successMessage, setSuccessMessage] = React.useState('');
     const [ammoId, setAmmoId] = React.useState('');
     const [quantity, setQuantity] = React.useState(0);
+
+    const { disposeAmmo, ammo } = React.useContext(AmmoContext) as AmmoContextType;
 
     function handleSubmit(e) {
         e.preventDefault();
         const form = e.target;
 
         setSuccessMessage("Disposing.....")
-        props.DisposeAmmo(ammoId, quantity, () => {setSuccessMessage("Ammo Disposed Successfully!"); form.reset();})
+        disposeAmmo(ammoId, quantity, () => {setSuccessMessage("Ammo Disposed Successfully!"); form.reset();})
     }
     
     return (
@@ -24,7 +27,7 @@ const Dispose = (props) => {
                 <label className="block my-2 mx-auto text-center"><div className="block w-1/3 mx-auto">Ammo</div><div className="block w-full p-2 mx-auto">
                         <select name="ammo_id" onChange={e => setAmmoId(e.target.value)}>
                             <option>Choose</option>
-                            {props.Ammo.map((item: Ammo) => (
+                            {ammo.map((item: Ammo) => (
                                 <option value={item?.ID?.toString()} >{item.name}</option>
                             ))}
                         </select>

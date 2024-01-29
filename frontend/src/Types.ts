@@ -51,3 +51,38 @@ export interface RangeTripType {
     user_id: string,
     note?: string,
 }
+
+export type UserDataContextType = {
+    authToken: string | null;
+    setAuthToken: (authToken: string) => void;
+    userId: string | null;
+    setUserId: (userId: string) => void;
+};
+
+export type GunContextType = {
+    guns: Gun[];
+    setGuns: (guns: Gun[]) => void;
+    addGun: (clearObject:any, callback:any) => void;
+    fetchGuns: () => void;
+    removeGun: (id: String) => void;
+    editGun: (id: string, clearObject:any, callback:any) => void;
+};
+
+export type AmmoContextType = {
+    ammo: Ammo[];
+    setAmmo: (ammo: Ammo[]) => void;
+    addAmmo: (clearObject:any, callback:any) => void;
+    fetchAmmo: () => void;
+    removeAmmo: (id: String) => void;
+    disposeAmmo: (id: String, quantity: Number, callback:any) => void;
+};
+
+export type AmmoPurchaseContextType = {
+   purchaseAmmo: (clearObject:any, callback:any) => void;
+};
+
+export type RangeTripContextType = {
+    rangeTrips: RangeTripType[];
+    addRangeTrip: (clearObject:any, callback:any) => void;
+    fetchRangeTrips: () => void;
+};

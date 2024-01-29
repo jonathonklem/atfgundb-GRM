@@ -1,8 +1,9 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
-
-import {Gun} from "../../Types";
-import { RangeTripType } from "../../Types";
+import { GunContext } from "../contexts/gunContext";
+import { RangeTripContext } from "../contexts/rangeTripContext";
+import { RangeTripType, RangeTripContextType } from "../../Types";
+import {Gun, GunContextType} from "../../Types";
 
 
 const ViewGun = (props) => {
@@ -11,6 +12,9 @@ const ViewGun = (props) => {
     const [confirmText, setConfirmText] = useState<string>('');
     const [gunRangeTrips, setGunRangeTrips] = useState<RangeTripType[]>([]);
     const [currentFilter, setCurrentFilter] = useState<number>(5);
+    const { guns, removeGun } = React.useContext(GunContext) as GunContextType;
+    const { rangeTrips } = React.useContext(RangeTripContext) as RangeTripContextType;
+
     const navigate = useNavigate();
 
     let { id } = useParams();
@@ -30,15 +34,14 @@ const ViewGun = (props) => {
     }
 
     useEffect(() => {
-        props.Guns.map((gun) => {
+        guns.map((gun) => {
             if (gun.ID === id) {
                 setGun(gun);
             }
         });
 
-        props.RangeTrips.filter((rangeTrip) => {
+        rangeTrips.filter((rangeTrip) => {
             if (rangeTrip.gun_id === id) {
-                console.log(rangeTrip)
                 setGunRangeTrips(gunRangeTrips => [rangeTrip, ...gunRangeTrips]);
             }
         });
@@ -50,7 +53,7 @@ const ViewGun = (props) => {
         }
 
         if (confirmText === "Delete") {
-            props.RemoveGun(id);
+            removeGun(String(id));
             navigate("/")
         }
     }

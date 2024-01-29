@@ -1,9 +1,32 @@
 import React from "react";
-import {Gun} from "../../Types";
+import { UserDataContext } from "../contexts/userDataContext";
+import { UserDataContextType } from "../../Types";
+import { GunContext } from "../contexts/gunContext";
+import { GunContextType } from "../../Types";
+
+const getenv = require('getenv');
+const url = getenv.string('REACT_APP_API');
 
 const Accessory = (props) => {
     const [successMessage, setSuccessMessage] = React.useState('');
     const [gunId, setGunId] = React.useState('');
+    const { authToken } = React.useContext(UserDataContext) as UserDataContextType;
+    const { guns, fetchGuns } = React.useContext(GunContext) as GunContextType;
+
+    function addAccessory(gunId, formJson, callback) {
+        // post formJson to our env var url
+        fetch(url+ '/guns/addAccessory?gun_id='+gunId, {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization' : 'Bearer ' + authToken
+            }, 
+            body: JSON.stringify(formJson)
+        })
+            .then(response => response.json())
+            .then(data => console.log(data)).then(() => callback());
+    }
 
     function handleSubmit(e) {
         e.preventDefault();
@@ -23,8 +46,9 @@ const Accessory = (props) => {
         }
         
         setSuccessMessage("Adding.....")
-        props.AddAccessory(gunId, formJson, () => {
+        addAccessory(gunId, formJson, () => {
             setSuccessMessage("Accessory added successfully!");
+            fetchGuns();
             form.reset();
         });
     }
@@ -37,14 +61,14 @@ const Accessory = (props) => {
                 <label className="block my-2 mx-auto text-center"><div className="block w-1/3 mx-auto">Gun</div><div className="block w-full p-2 mx-auto">
                     <select name="gun_id" onChange={e => {setGunId(e.target.value)}}>
                         <option>Choose</option>
-                        {props.Guns.map((gun) => (
+                        {guns.map((gun) => (
                             <option value={gun.ID}>{gun.name}</option>
                         ))}
                     </select>
                 </div></label> 
-                <label className="block my-2 mx-auto text-center"><div className="block w-1/3 mx-auto">Name</div><div className="block w-full p-2 w-1/2 mx-auto"><input type="text" name="name" /></div></label>
-                <label className="block my-2 mx-auto text-center"><div className="block w-1/3 mx-auto">Manufacturer</div><div className="block w-full p-2 w-1/2 mx-auto"><input type="text" name="manufacturer" /></div></label>
-                <label className="block my-2 mx-auto text-center"><div className="block w-1/3 mx-auto">Model</div><div className="block w-full p-2 w-1/2 mx-auto"><input type="text" name="model" /></div></label>
+                <label className="block my-2 mx-auto text-center"><div className="block w-1/3 mx-auto">Name</div><div className="block w-full p-2 w-1/2 mx-auto"><input type="text" className="drop-shadow-lg" name="name" /></div></label>
+                <label className="block my-2 mx-auto text-center"><div className="block w-1/3 mx-auto">Manufacturer</div><div className="block w-full p-2 w-1/2 mx-auto"><input type="text" className="drop-shadow-lg" name="manufacturer" /></div></label>
+                <label className="block my-2 mx-auto text-center"><div className="block w-1/3 mx-auto">Model</div><div className="block w-full p-2 w-1/2 mx-auto"><input type="text" className="drop-shadow-lg" name="model" /></div></label>
                 <button className="rounded-md bg-red-800 text-slate-50 py-2 px-4 w-1/4 block my-2 text-center mx-auto">Submit</button>
             </form>
         </>

@@ -2,8 +2,8 @@ import React, { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import CreatableSelect from 'react-select/creatable'; // Import GroupBase from react-select
 import ValueType from "react-select";
-import { Gun } from "../../Types";
-
+import { Gun, GunContextType } from "../../Types";
+import { GunContext } from "../contexts/gunContext";
 
 const EditGun = (props) => {
     const [successMessage, setSuccessMessage] = React.useState('');
@@ -13,8 +13,10 @@ const EditGun = (props) => {
     const [currentCaliber, setCurrentCaliber] = React.useState<any>('');
     let { id } = useParams();
 
+    const { guns, editGun } = React.useContext(GunContext) as GunContextType;
+
     useEffect(() => {
-        props.Guns.map((gun) => {
+        guns.map((gun) => {
             if (calibers.indexOf(gun.caliber) === -1) {
                 caliberOptions.push({ label: gun.caliber, value: gun.caliber });
                 // remove duplicates from calibers
@@ -25,7 +27,7 @@ const EditGun = (props) => {
             }    
         });
 
-        props.Guns.filter((gun) => {
+        guns.filter((gun) => {
             if (gun.ID === id) {
                 setGun(gun);
                 setCurrentCaliber(gun.caliber);
@@ -66,7 +68,7 @@ const EditGun = (props) => {
 
         setSuccessMessage("Saving.....");
         
-        props.EditGun(id, clearObject, () => {setSuccessMessage("Saved Gun Successfully!");form.reset();});
+        editGun(id as string, clearObject, () => {setSuccessMessage("Saved Gun Successfully!");form.reset();});
         // clear form
         
     }
