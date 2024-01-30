@@ -46,10 +46,10 @@ const Maintenance = (props) => {
 
     return (
         <>
-            <h1 className="text-center font-bold text-xl py-2 bg-red-800 text-slate-50">Maintenance</h1>
+            <h1 className="tracking-widest text-xl px-4 py-2"><img className="float-left" src="/tool-red.png" />Maintenance</h1>
             <em className="text-center green-600 block my-2">{successMessage}</em>
-            <form onSubmit={handleSubmit} className="text-center pb-16">
-                <label className="block my-2 mx-auto text-center"><div className="block w-1/3 mx-auto">Gun</div><div className="block w-full p-2 mx-auto">
+            <form onSubmit={handleSubmit} className="px-4 pb-16">
+                <label className="block my-2 mx-auto"><div className="block text-sm font-extralight tracking-wider">Gun</div><div className="block w-full p-2 mx-auto">
                     <select name="gun_id" onChange={e => {setGunId(e.target.value)}}>
                         <option>Choose</option>
                         {guns.map((gun) => (
@@ -57,8 +57,10 @@ const Maintenance = (props) => {
                         ))}
                     </select>
                 </div></label> 
-                <label className="block my-2 mx-auto text-center"><div className="block w-1/3 mx-auto">Maintenance Type</div><div className="block w-full p-2 w-1/2 mx-auto"><input type="text" name="maintenance_type" /></div></label>
-                <button className="rounded-md bg-red-800 text-slate-50 py-2 px-4 w-1/4 block my-2 text-center mx-auto">Submit</button>
+                <label className="block my-2 mx-auto text-center"><div className="block text-sm font-extralight tracking-wider">Maintenance Type</div><div className="block w-full p-2 w-1/2 mx-auto"><input type="text" name="maintenance_type" /></div></label>
+                <div className="bg-darkbg mt-4 flex justify-between pt-2 fixed bottom-[53px] w-full left-0 text-center">
+                    <button className="rounded-3xl tracking-wider text-lg bg-redbg drop-shadow-lg text-white py-2 px-4 w-1/4 block text-center mx-auto">Submit</button>
+                </div>
             </form>
         </>
     );
