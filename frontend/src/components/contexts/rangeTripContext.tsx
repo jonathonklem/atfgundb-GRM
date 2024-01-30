@@ -6,6 +6,7 @@ import { GunContextType } from "../../Types";
 import { GunContext } from "./gunContext";
 import { AmmoContext } from "./ammoContext";
 import { AmmoContextType } from "../../Types";
+import { clear } from "console";
 
 const getenv = require('getenv');
 const url = getenv.string('REACT_APP_API');
@@ -25,6 +26,7 @@ export const RangeTripProvider = ({ children }) => {
     }, [authToken]);
 
     function addRangeTrip(clearObject, callback) {
+        clearObject.user_id = userId;
         // post formJson to our env var url
         fetch(url+ '/range/addTrip', {
            method: 'POST',
