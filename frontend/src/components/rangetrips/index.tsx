@@ -6,6 +6,53 @@ import { GunContext } from "../contexts/gunContext";
 import { AmmoContext } from "../contexts/ammoContext";
 import { RangeTripContextType, GunContextType, AmmoContextType } from "../../Types";
 
+const customStyles = {
+    control: (base, state) => ({
+      ...base,
+      background: "rgb(31 34 42 / var(--tw-bg-opacity))",
+      color: "rgba(255,255,255,.6)",
+      padding: ".5rem",
+      // match with the menu
+      borderRadius:  "0.375rem",
+      border: "0px",
+      // Overwrittes the different states of border
+      borderColor: state.isFocused ? "yellow" : "green",
+      // Removes weird border around container
+      boxShadow: state.isFocused ? null : null,
+      "&:hover": {
+        // Overwrittes the different states of border
+        borderColor: state.isFocused ? "red" : "blue"
+      }
+    }),
+    menu: base => ({
+      ...base,
+      // override border radius to match the box
+      borderRadius: 0,
+      // kill the gap
+      marginTop: 0,
+      color: "white"
+    }),
+    menuList: base => ({
+      ...base,
+      // kill the white space on first and last option
+      padding: 0,
+      color: "rgba(255,255,255,.6)",
+    }),
+    placeholder: (base, state) => ({
+      ...base,
+      color: "rgba(255,255,255,.6)",
+    }),
+    option: (base, state) => ({
+      ...base,
+      color: "rgba(255,255,255,.6)",
+      background: "rgb(31 34 42 / var(--tw-bg-opacity))",
+      "&:hover": {
+        // Overwrittes the different states of border
+        background: "rgb(31 34 42 / var(--tw-bg-opacity))"
+      }
+    }),
+  };
+  
 const RangeTrip = (props) => {
     const [successMessage, setSuccessMessage] = React.useState('');
     const [rangeOptions, setRangeOptions] = React.useState<Array<{ label: string; value: string }>>([]);
@@ -70,7 +117,7 @@ const RangeTrip = (props) => {
 
     return (
         <>
-            <h1 className="tracking-widest text-xl px-4 py-2">Range Trip</h1>
+            <h1 className="tracking-widest text-xl px-4 py-2"><img className="float-left" src="range-red.png" />Range Trip</h1>
             <em className="text-center green-600 block my-2">{successMessage}</em>
             <form onSubmit={handleSubmit} className="px-4 pb-16">
                 <label className=" my-2">
@@ -82,7 +129,7 @@ const RangeTrip = (props) => {
                         ))}
                     </select>
                 </div></label>
-                <label className="my-2 mx-auto"><div className="block text-sm font-extralight tracking-wider">Ammo</div><div className="block w-full p-2 mx-auto">
+                <label className="block my-4 mx-auto"><div className="block text-sm font-extralight tracking-wider">Ammo</div><div className="block w-full p-2 mx-auto">
                         <select name="ammo_id">
                             <option>Choose</option>
                             {filteredAmmo.map((item: Ammo) => (
@@ -92,17 +139,20 @@ const RangeTrip = (props) => {
                         {
                             filteredAmmo.length != ammo.length && (
                                 <>
-                                    <button className="rounded-md bg-red-800 text-xs text-slate-50 py-1 px-4 w-1/8 block my-2 text-center mx-auto" onClick={(e) => {e.preventDefault(); showAllAmmo()}} > Show All </button>
+                                    <button className="rounded-3xl tracking-wider text-xs mt-4 bg-redbg drop-shadow-lg text-white py-1 px-2 w-1/8 block text-center mx-auto" onClick={(e) => {e.preventDefault(); showAllAmmo()}} > Show All </button>
                                 </>
                             )
                         }
                     </div></label> 
-                <label className="block my-2 mx-auto"><div className="block text-sm block font-extralight tracking-wider">Location</div><div className="block w-full p-2 mx-auto"><div className="block w-full p-2 w-1/2 mx-auto">
-                    <CreatableSelect classNamePrefix="react-select " className="p-4 block w-full tracking-wider text-sm rounded-md bg-inputbg text-inputfg;" name="location" options={rangeOptions} />    
+                <label className="block my-2 mx-auto"><div className="block text-sm block font-extralight tracking-wider">Location</div><div className="block w-full p-2 mx-auto"><div className="block w-full w-1/2 mx-auto">
+                    <CreatableSelect styles={customStyles} className="block w-full tracking-wider text-sm rounded-md" name="location" options={rangeOptions} />    
                 </div></div></label>
-                <label className="block my-2 mx-auto"><div className="block text-sm block font-extralight tracking-wider">Quantity Used</div><div className="block w-full p-2 mx-auto"><div className="block w-full p-2 w-1/2 mx-auto"><input type="text" name="quantity_used" /></div></div></label>
-                <label className="block my-2 mx-auto"><div className="block text-sm block font-extralight tracking-wider">Note</div><div className="block w-full p-2 mx-auto"><div className="block w-full p-2 w-1/2 mx-auto"><textarea name="note"></textarea></div></div></label>                
-                <button className="rounded-md bg-red-800 text-slate-50 py-2 px-4 w-1/4 block my-2 text-center mx-auto">Submit</button>
+                <label className="block my-4 mx-auto"><div className="block text-sm block font-extralight tracking-wider">Quantity Used</div><div className="block w-full mx-auto"><div className="block w-full p-2 w-1/2 mx-auto"><input type="text" name="quantity_used" /></div></div></label>
+                <label className="block my-2 mb-24 mx-auto"><div className="block text-sm block font-extralight tracking-wider">Note</div><div className="block w-full mx-auto"><div className="block w-full p-2 w-1/2 mx-auto"><textarea name="note"></textarea></div></div></label>                
+                
+                <div className="bg-darkbg mt-4 flex justify-between pt-2 fixed bottom-[53px] w-full left-0 text-center">
+                    <button className="rounded-3xl tracking-wider text-lg bg-redbg drop-shadow-lg text-white py-2 px-4 w-1/4 block text-center mx-auto">Submit</button>
+                </div>
             </form>
         </>
     );

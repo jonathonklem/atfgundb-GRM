@@ -5,7 +5,8 @@ import {
     BrowserRouter as Router,
     Routes,
     Route,
-    Link
+    Link,
+    useLocation
 } from "react-router-dom";
 import {Gun, GunContextType, UserDataContextType, Ammo, RangeTripType} from "../Types";
 import Guns from "./guns/index";
@@ -43,6 +44,51 @@ const Dashboard = (props) => {
 
     var [profileSaved, setProfileSaved] = useState(false);
     const {user, isAuthenticated, isLoading, logout  } = useAuth0();
+
+    const location = useLocation();
+    const { pathname } = location;
+
+    useEffect(() => {
+        const tripElement = document.getElementById('trip') as HTMLImageElement;
+        tripElement.src = '/range.png';
+
+        const gunElement = document.getElementById('gun') as HTMLImageElement;
+        gunElement.src = '/pistol.png';
+
+        const ammoElement = document.getElementById('ammo') as HTMLImageElement;
+        ammoElement.src = '/bullet.png';
+
+        const accessElement = document.getElementById('access') as HTMLImageElement;
+        accessElement.src = '/scope.png';
+
+        const toolElement = document.getElementById('tool') as HTMLImageElement;
+        toolElement.src = '/tool.png';
+
+        const pieElement = document.getElementById('piechart') as HTMLImageElement;
+        pieElement.src = '/pie-chart.png';
+
+        console.log(pathname);
+        switch (pathname.split('/')[1]) {
+            case 'trips':
+                tripElement.src = '/range-red.png';
+            break;
+            case 'guns':
+                gunElement.src = '/pistol-red.png';
+            break;
+            case 'ammo':
+                ammoElement.src = '/bullet-red.png';
+            break;
+            case 'accessories':
+                accessElement.src = '/scope-red.png';
+            break;
+            case 'maintenance':
+                toolElement.src = '/tool-red.png';
+            break;
+            case 'reports':
+                pieElement.src = '/pie-chart-red.png';
+            break;
+        }
+    }, [pathname]); 
 
     function RemoveAccount() {
         fetch(url+'/users/delete?user_id='+userId, {
@@ -123,10 +169,14 @@ const Dashboard = (props) => {
                     <Route path="guns">
                         <Route index  element={<Guns />} />
                         <Route path="add" element={<AddGun/>} />
-                        <Route path="maintenance" element={<Maintenance/>} />
-                        <Route path="accessories" element={<Accessory />} />
                         <Route path="view/:id" element={<ViewGun />} />
                         <Route path="edit/:id" element={<EditGun />} />
+                    </Route>
+                    <Route path="accessories">
+                        <Route index element={<Accessory />} />
+                    </Route>
+                    <Route path="maintenance">
+                        <Route index element={<Maintenance />} />
                     </Route>
                     <Route path="ammo">
                         <Route index element={<AmmoIndex/>} />
@@ -144,12 +194,12 @@ const Dashboard = (props) => {
                     </Route>
                 </Routes>
                 <ul className="bg-darkbg mt-4 flex justify-between fixed -bottom-2 w-full left-0 text-center">
-                    <li className="inline-block grow"><Link className="py-2 w-full inline-block my-2 text-center mx-auto" to="/guns"><img alt="Guns" className="w-11 m-auto" src="/pistol.png" /></Link></li>
-                    <li className="inline-block grow"><Link className="py-2 w-full inline-block my-2 text-center mx-auto" to="/ammo"><img alt="Ammo" className="w-11 m-auto" src="/bullet.png" /></Link></li>
-                    <li className="inline-block grow"><Link className="py-2 w-full inline-block my-2 text-center mx-auto" to="/trips"><img alt="Range Trips" className="w-11 m-auto" src="/range.png" /></Link></li>
-                    <li className="inline-block grow"><Link className="py-2 w-full inline-block my-2 text-center mx-auto" to="/guns/accessories"><img alt="Accessories" className="w-11 m-auto" src="/scope.png" /></Link></li>
-                    <li className="inline-block grow"><Link className="py-2 w-full inline-block my-2 text-center mx-auto" to="/guns/maintenance"><img alt="Maintenance" className="w-11 m-auto" src="/tool.png" /></Link></li>
-                    <li className="inline-block grow"><Link className="py-2 w-full inline-block my-2 text-center mx-auto" to="/reports"><img alt="Reports" className="w-11 m-auto" src="/pie-chart.png" /></Link></li>
+                    <li className="inline-block grow"><Link className="py-2 w-full inline-block my-2 text-center mx-auto" to="/guns"><img alt="Guns" id="gun" className="w-11 m-auto" src="/pistol.png" /></Link></li>
+                    <li className="inline-block grow"><Link className="py-2 w-full inline-block my-2 text-center mx-auto" to="/ammo"><img alt="Ammo" id="ammo" className="w-11 m-auto" src="/bullet.png" /></Link></li>
+                    <li className="inline-block grow"><Link className="py-2 w-full inline-block my-2 text-center mx-auto" to="/trips"><img alt="Range Trips" id="trip" className="w-11 m-auto" src="/range.png" /></Link></li>
+                    <li className="inline-block grow"><Link className="py-2 w-full inline-block my-2 text-center mx-auto" to="/accessories"><img id="access" alt="Accessories" className="w-11 m-auto" src="/scope.png" /></Link></li>
+                    <li className="inline-block grow"><Link className="py-2 w-full inline-block my-2 text-center mx-auto" to="/maintenance"><img alt="Maintenance" id="tool" className="w-11 m-auto" src="/tool.png" /></Link></li>
+                    <li className="inline-block grow"><Link className="py-2 w-full inline-block my-2 text-center mx-auto" to="/reports"><img alt="Reports" id="piechart" className="w-11 m-auto" src="/pie-chart.png" /></Link></li>
                     <li className="inline-block grow"><LogoutButton /></li>
                 </ul>
             </>

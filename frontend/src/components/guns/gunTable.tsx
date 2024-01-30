@@ -20,8 +20,8 @@ const GunTable = (props) => {
             <table className="mx-auto mb-16 mt-4">
                 <thead className="border-b border-gray-600">
                 <tr>
-                    <th className="font-light text-base tracking-wider text-left">Name</th>
-                    <th className="font-light text-base tracking-wider text-right">
+                    <th className="w-1/2 font-light text-base tracking-wider text-left">Name</th>
+                    <th className="w-1/2 font-light text-base tracking-wider text-right">
                         <span className="h-4 border-gray-600 border-l inline-block float-left"></span>Round Count
                     </th>
                 </tr>

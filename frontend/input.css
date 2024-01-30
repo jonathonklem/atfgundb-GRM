@@ -14,9 +14,15 @@ select, input[type="text"], select, textarea, input[type="number"] {
 td {
   @apply p-2;
 }
+div[class*="-singleValue"] {
+  color: rgba(255,255,255,.6);
+}
+div[class*="-Input"] input {
+  color: rgba(255,255,255,.6) !important;
+}
 
 table {
-  @apply w-9/12;
+  @apply w-11/12;
 }
 
 tr:nth-of-type(2n) {
