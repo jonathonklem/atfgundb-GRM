@@ -25,6 +25,7 @@ export const RangeTripProvider = ({ children }) => {
     }, [authToken]);
 
     function addRangeTrip(clearObject, callback) {
+        clearObject.user_id = userId;
         // post formJson to our env var url
         fetch(url+ '/range/addTrip', {
            method: 'POST',

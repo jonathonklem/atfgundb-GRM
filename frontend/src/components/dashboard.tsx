@@ -40,9 +40,8 @@ const url = getenv.string('REACT_APP_API');
 const Dashboard = (props) => {
     const defaultUserId = props.LocalDev ? '659f2cdfc8528e10ee4dbecb' : '';
 
-    const {userId, setUserId, setAuthToken} = useContext(UserDataContext) as UserDataContextType;
+    const {userId, saveProfile, setUserId, setAuthToken, authToken} = useContext(UserDataContext) as UserDataContextType;
 
-    var [profileSaved, setProfileSaved] = useState(false);
     const {user, isAuthenticated, isLoading, logout  } = useAuth0();
 
     const location = useLocation();
@@ -117,35 +116,20 @@ const Dashboard = (props) => {
         }
     }, [user]);
 
-    
-    function saveProfile() {
-        if (props.authToken && !props.LocalDev && user) {
-            user.id = user.sub?.split("|")[1];
-            
-            fetch(`${url}/users/saveVisit`, {
-                method: 'POST',
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json',
-                    'Authorization' : 'Bearer ' + props.authToken
-                },
-                body: JSON.stringify(user)
-            })
-                .then(response => response.json())
-                .then(data => setProfileSaved(true));   // avoid weird race type condition
+    useEffect(() => {
+        if (userId && authToken) { 
+            saveProfile(userId, user);
         }
-    }
+    }, [authToken, userId]);
+
+    
+    
 
     if (isLoading && !props.LocalDev) {
         return <div>Loading...</div>;
     }
 
     if (isAuthenticated || props.LocalDev) {
-        if (!profileSaved && !props.LocalDev) {
-            saveProfile();
-            const userId = user?.sub?.split("|")[1];
-        }
-
         return (
             <>
                 <header className="mx-auto w-9/12 font-extralight text-lg tracking-wider text-center mt-4 pt-8 pb-8">

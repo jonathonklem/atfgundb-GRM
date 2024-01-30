@@ -54,7 +54,6 @@ const RangeTrip = (props) => {
 
         // hate this, but there doesn't seem to be a good way to force INT type on roundcount
         const clearObject = JSON.parse(JSON.stringify(formJson));
-        clearObject.user_id = props.UserId;
         clearObject.quantity_used =  Number(formJson.quantity_used);
 
         if (clearObject.gun_id === ""

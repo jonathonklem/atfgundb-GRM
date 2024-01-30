@@ -21,7 +21,7 @@ const ViewGun = (props) => {
 
     function dateFormat(date: Date) {
         date.getMonth()
-        var month = date.getMonth();
+        var month = date.getMonth()+1;
         var day   = date.getDate().toString().padStart(2,'0');
         var year  = date.getFullYear().toString().substr(-2);
 
@@ -61,7 +61,7 @@ const ViewGun = (props) => {
     return (
         <>
             <h1 className="tracking-widest text-xl px-4 py-2"><img className="float-left" src="/pistol-red.png" />{gun.name}</h1>
-            <table className="mx-auto mb-4 font-light text-sm tracking-wider">
+            <table className="mx-auto mb-8 font-light text-sm tracking-wider">
                 <tbody>
                     <tr>
                         <td>Manufacturer</td><td>{gun.manufacturer}</td>
@@ -77,12 +77,12 @@ const ViewGun = (props) => {
                     </tr>
                 </tbody>
             </table>
-            <Link to={`/guns/edit/`+gun.ID} className="rounded-3xl tracking-wider text-xs mt-4 bg-redbg drop-shadow-lg text-white py-1 px-2 w-16 block text-center mx-auto">Edit</Link>
+            <Link to={`/guns/edit/`+gun.ID} className="mb-4 rounded-3xl tracking-wider text-xs mt-4 bg-redbg drop-shadow-lg text-white py-1 px-2 w-16 block text-center mx-auto">Edit</Link>
 
             {gunRangeTrips.length > 0 && (
                 <>
                     <h1 className="tracking-widest text-xl px-4 py-2"><img className="float-left" src="/range-red.png" />Recent Range Trips</h1>
-                    <table className="mx-auto mb-4 font-light text-sm tracking-wider">
+                    <table className="mx-auto mb-8 font-light text-sm tracking-wider">
                         <thead>
                             <tr>
                                 <th className="text-left">Date</th>
@@ -115,7 +115,7 @@ const ViewGun = (props) => {
             {gun.accessories?.length > 0 &&     
                 <>
                     <h1 className="tracking-widest text-xl px-4 py-2"><img className="float-left" src="/scope-red.png" />Accessories</h1>
-                    <table className="mx-auto mb-16 font-light text-sm tracking-wider">
+                    <table className="mx-auto mb-8 font-light text-sm tracking-wider">
                         <thead>
                             <tr>
                                 <th className="text-left">Name</th>
@@ -159,7 +159,7 @@ const ViewGun = (props) => {
             { clickDelete ? <label className="block my-2 mx-auto text-center"><div className="block w-1/3 mx-auto">Type Delete to Confirm And Click Again</div><div className="block w-full p-2 mx-auto"><input type="text" name="confirm" onChange={(e) => setConfirmText(e.target.value)} /></div></label> 
  : null}
   
-            <button className="rounded-3xl mb-24 tracking-wider text-lg bg-redbg drop-shadow-lg text-white py-2 px-4 w-1/4 block text-center mx-auto" onClick={handleRemove}>Delete</button>
+            <button className="rounded-3xl mb-24 tracking-wider text-lg bg-redbg drop-shadow-lg text-white py-2 px-4 w-1/4 block text-center mx-auto" onClick={handleRemove}>Delete Gun</button>
 
         </>
     )
