@@ -148,7 +148,7 @@ const Dashboard = (props) => {
 
         return (
             <>
-                <header className="mx-auto w-9/12 font-extralight text-lg tracking-wider text-center mt-8 pt-8 pb-8">
+                <header className="mx-auto w-9/12 font-extralight text-lg tracking-wider text-center mt-4 pt-8 pb-8">
                     <img className="float-left" src="/small-logo.png" />
                     Atlas Technology
                 </header>
