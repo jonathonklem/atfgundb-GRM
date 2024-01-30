@@ -6,6 +6,8 @@ import { GunContext } from "../contexts/gunContext";
 import { AmmoContext } from "../contexts/ammoContext";
 import { RangeTripContextType, GunContextType, AmmoContextType } from "../../Types";
 
+import customStyles from "../../customStyles";
+  
 const RangeTrip = (props) => {
     const [successMessage, setSuccessMessage] = React.useState('');
     const [rangeOptions, setRangeOptions] = React.useState<Array<{ label: string; value: string }>>([]);
@@ -69,10 +71,11 @@ const RangeTrip = (props) => {
 
     return (
         <>
-            <h1 className="text-center font-bold text-xl py-2 bg-red-800 text-slate-50">Range Trip</h1>
+            <h1 className="tracking-widest text-xl px-4 py-2"><img className="float-left" src="range-red.png" />Range Trip</h1>
             <em className="text-center green-600 block my-2">{successMessage}</em>
-            <form onSubmit={handleSubmit} className="text-center pb-16">
-                <label className="block my-2 mx-auto text-center"><div className="block w-1/3 mx-auto">Gun</div><div className="block w-full p-2 mx-auto">
+            <form onSubmit={handleSubmit} className="px-4 pb-16">
+                <label className=" my-2">
+                    <div className="block font-extralight text-sm tracking-wider">Gun</div><div className="block w-full p-2 mx-auto">
                     <select onChange={filterAmmo} id="gun_id" name="gun_id">
                         <option>Choose</option>
                         {guns.map((gun) => (
@@ -80,7 +83,7 @@ const RangeTrip = (props) => {
                         ))}
                     </select>
                 </div></label>
-                <label className="block my-2 mx-auto text-center"><div className="block w-1/3 mx-auto">Ammo</div><div className="block w-full p-2 mx-auto">
+                <label className="block my-4 mx-auto"><div className="block text-sm font-extralight tracking-wider">Ammo</div><div className="block w-full p-2 mx-auto">
                         <select name="ammo_id">
                             <option>Choose</option>
                             {filteredAmmo.map((item: Ammo) => (
@@ -90,17 +93,20 @@ const RangeTrip = (props) => {
                         {
                             filteredAmmo.length != ammo.length && (
                                 <>
-                                    <button className="rounded-md bg-red-800 text-xs text-slate-50 py-1 px-4 w-1/8 block my-2 text-center mx-auto" onClick={(e) => {e.preventDefault(); showAllAmmo()}} > Show All </button>
+                                    <button className="rounded-3xl tracking-wider text-xs mt-4 bg-redbg drop-shadow-lg text-white py-1 px-2 w-1/8 block text-center mx-auto" onClick={(e) => {e.preventDefault(); showAllAmmo()}} > Show All </button>
                                 </>
                             )
                         }
                     </div></label> 
-                <label className="block my-2 mx-auto text-center"><div className="block w-1/3 mx-auto">Location</div><div className="block w-full p-2 mx-auto"><div className="block w-full p-2 w-1/2 mx-auto">
-                    <CreatableSelect className="text-neutral-700 p-1 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md;" name="location" options={rangeOptions} />    
+                <label className="block my-2 mx-auto"><div className="block text-sm block font-extralight tracking-wider">Location</div><div className="block w-full p-2 mx-auto"><div className="block w-full w-1/2 mx-auto">
+                    <CreatableSelect styles={customStyles} className="block w-full tracking-wider text-sm rounded-md" name="location" options={rangeOptions} />    
                 </div></div></label>
-                <label className="block my-2 mx-auto text-center"><div className="block w-1/3 mx-auto">Quantity Used</div><div className="block w-full p-2 mx-auto"><div className="block w-full p-2 w-1/2 mx-auto"><input type="text" name="quantity_used" /></div></div></label>
-                <label className="block my-2 mx-auto text-center"><div className="block w-1/3 mx-auto">Note</div><div className="block w-full p-2 mx-auto"><div className="block w-full p-2 w-1/2 mx-auto"><textarea name="note"></textarea></div></div></label>                
-                <button className="rounded-md bg-red-800 text-slate-50 py-2 px-4 w-1/4 block my-2 text-center mx-auto">Submit</button>
+                <label className="block my-4 mx-auto"><div className="block text-sm block font-extralight tracking-wider">Quantity Used</div><div className="block w-full mx-auto"><div className="block w-full p-2 w-1/2 mx-auto"><input type="text" name="quantity_used" /></div></div></label>
+                <label className="block my-2 mb-24 mx-auto"><div className="block text-sm block font-extralight tracking-wider">Note</div><div className="block w-full mx-auto"><div className="block w-full p-2 w-1/2 mx-auto"><textarea name="note"></textarea></div></div></label>                
+                
+                <div className="bg-darkbg mt-4 flex justify-between pt-2 fixed bottom-[53px] w-full left-0 text-center">
+                    <button className="rounded-3xl tracking-wider text-lg bg-redbg drop-shadow-lg text-white py-2 px-4 w-1/4 block text-center mx-auto">Submit</button>
+                </div>
             </form>
         </>
     );

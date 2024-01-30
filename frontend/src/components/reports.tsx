@@ -152,10 +152,10 @@ const Reports = (props) => {
 
     return (
         <>
-            <h1 className="text-center font-bold text-xl py-2 mb-2 bg-red-800 text-slate-50">View Reports</h1>
-            <label className="inline-block w-1/4 text-center">From</label>
+            <h1 className="tracking-widest text-xl px-4 py-2"><img className="float-left" src="/pie-chart-red.png" />Reports</h1>
+            <label className="inline-block mx-4 text-sm font-extralight tracking-wider">From</label>
             <input className="inline-block w-1/4 text-neutral-700" type="date" name="from" onChange={ (e) => {setFrom(e.target.value) }} value={from}/>
-            <label className="inline-block w-1/4 text-center">To</label>
+            <label className="inline-block mx-4 text-sm font-extralight tracking-widerr">To</label>
             <input className="inline-block w-1/4 text-neutral-700" type="date" name="to" onChange={ (e) =>  { setTo(e.target.value) }} value={to} />
             <div className="font-bold text-center mt-2">Total Rounds for Period: {totalRoundCount}</div>
             <Bar className="mt-2 bg-gray-500 mb-14 h-4/6" 

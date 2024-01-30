@@ -7,7 +7,7 @@ import GunsTable from "./gunTable";
 const Guns = (props) => {
   return (
     <div>
-        <ul> <li><Link className="bg-red-800 text-slate-50 py-2 px-4 w-1/4 block my-2 text-center mx-auto" to="/guns/add">Add Gun</Link></li></ul>
+        <ul> <li><Link className="font-extralight tracking-wider text-xs px-4 w-full block mb-2 text-center mx-auto" to="/guns/add"><img className="mx-auto mb-2" src="add-btn.png" />Add Gun</Link></li></ul>
         <GunsTable />
     </div>
   );

@@ -21,7 +21,7 @@ const ViewGun = (props) => {
 
     function dateFormat(date: Date) {
         date.getMonth()
-        var month = date.getMonth();
+        var month = date.getMonth()+1;
         var day   = date.getDate().toString().padStart(2,'0');
         var year  = date.getFullYear().toString().substr(-2);
 
@@ -60,8 +60,8 @@ const ViewGun = (props) => {
 
     return (
         <>
-            <h1 className="text-center font-bold text-xl py-2 bg-red-800 text-slate-50">{gun.name}</h1>
-            <table className="mx-auto mb-4">
+            <h1 className="tracking-widest text-xl px-4 py-2"><img className="float-left" src="/pistol-red.png" />{gun.name}</h1>
+            <table className="mx-auto mb-8 font-light text-sm tracking-wider">
                 <tbody>
                     <tr>
                         <td>Manufacturer</td><td>{gun.manufacturer}</td>
@@ -77,34 +77,36 @@ const ViewGun = (props) => {
                     </tr>
                 </tbody>
             </table>
-            <Link to={`/guns/edit/`+gun.ID} className="block rounded-md bg-red-800 text-xs text-slate-50 py-1 px-4 w-20 block mb-8 text-center mx-auto">Edit</Link>
+            <Link to={`/guns/edit/`+gun.ID} className="mb-4 rounded-3xl tracking-wider text-xs mt-4 bg-redbg drop-shadow-lg text-white py-1 px-2 w-16 block text-center mx-auto">Edit</Link>
 
             {gunRangeTrips.length > 0 && (
                 <>
-                    <h1 className="text-center block mx-auto ps-4 w-1/2 font-bold text-xl py-2 bg-red-800 text-slate-50">Recent Range Trips</h1>
-                    <table className="mx-auto mb-4">
+                    <h1 className="tracking-widest text-xl px-4 py-2"><img className="float-left" src="/range-red.png" />Recent Range Trips</h1>
+                    <table className="mx-auto mb-8 font-light text-sm tracking-wider">
                         <thead>
                             <tr>
-                                <th>Date</th>
-                                <th>Loc.</th>
-                                <th>Rnds</th>
-                                <th>Notes</th>
+                                <th className="text-left">Date</th>
+                                <th className="text-left">Loc.</th>
+                                <th className="text-right">Rnds</th>
+                                <th>&nbsp;</th>
+                                <th className="text-left">Notes</th>
                             </tr>
                         </thead>
                         <tbody>
                             {gunRangeTrips.filter((element, index) => index < currentFilter).map((rangeTrip) => (
                                 <tr key={String(rangeTrip.ID)}>
-                                    <td>{dateFormat(new Date(rangeTrip.date_done))}</td>
-                                    <td>{rangeTrip.location}</td>
+                                    <td className="text-left">{dateFormat(new Date(rangeTrip.date_done))}</td>
+                                    <td className="text-left">{rangeTrip.location}</td>
                                     <td className="text-right">{String(rangeTrip.quantity_used)}</td>
-                                    <td>{rangeTrip.note}</td>
+                                    <td>&nbsp;</td>
+                                    <td className="text-left">{rangeTrip.note}</td>
                                 </tr>
                             ))}
                         </tbody>
                     </table>
                     {currentFilter < gunRangeTrips.length && (
                         <>
-                            <button className="rounded-md bg-red-800 text-xs text-slate-50 py-1 px-4 w-1/8 block mb-8 text-center mx-auto" onClick={(e) => {e.preventDefault(); showAllTrips()}} > Show All </button>
+                            <button className="rounded-3xl tracking-wider text-xs mt-4 bg-redbg drop-shadow-lg text-white py-1 px-2 w-1/8 block text-center mx-auto" onClick={(e) => {e.preventDefault(); showAllTrips()}} > Show All </button>
                         </>
                     )}
                         
@@ -112,21 +114,21 @@ const ViewGun = (props) => {
             )}
             {gun.accessories?.length > 0 &&     
                 <>
-                    <h1 className="text-center block mx-auto ps-4 w-1/2 font-bold text-xl py-2 bg-red-800 text-slate-50">Accessories</h1>
-                    <table className="mx-auto mb-16">
+                    <h1 className="tracking-widest text-xl px-4 py-2"><img className="float-left" src="/scope-red.png" />Accessories</h1>
+                    <table className="mx-auto mb-8 font-light text-sm tracking-wider">
                         <thead>
                             <tr>
-                                <th>Name</th>
-                                <th>Manufacturer</th>
-                                <th>Model</th>
+                                <th className="text-left">Name</th>
+                                <th className="text-left">Manufacturer</th>
+                                <th className="text-left">Model</th>
                             </tr>
                         </thead>
                         <tbody>
                             {gun.accessories?.map((accessory) => (
                                 <tr>
-                                    <td>{accessory.name}</td>
-                                    <td>{accessory.manufacturer}</td>
-                                    <td>{accessory.model}</td>
+                                    <td className="text-left">{accessory.name}</td>
+                                    <td className="text-left">{accessory.manufacturer}</td>
+                                    <td className="text-left">{accessory.model}</td>
                                 </tr>
                             ))}
                         </tbody>
@@ -135,19 +137,19 @@ const ViewGun = (props) => {
             }
             {gun.maintenance?.length > 0 &&
                 <>
-                    <h1 className="text-center block mx-auto px-4 w-1/2 font-bold text-xl py-2 bg-red-800 text-slate-50">Maintenance</h1>
-                    <table className="mx-auto mb-16">
+                    <h1 className="tracking-widest text-xl px-4 py-2"><img className="float-left" src="/tool-red.png" />Maintenance</h1>
+                    <table className="mx-auto mb-16 font-light text-sm tracking-wider">
                         <thead>
                             <tr>
-                                <th>Date</th>
-                                <th>Type</th>
+                                <th className="text-left">Date</th>
+                                <th className="text-left">Type</th>
                             </tr>
                         </thead>
                         <tbody>
                             {gun.maintenance?.map((maintenance) => (
                                 <tr>
-                                    <td>{new Date(maintenance.date_done).toLocaleDateString("en-US")}</td>
-                                    <td>{maintenance.maintenance_type}</td>
+                                    <td className="text-left">{new Date(maintenance.date_done).toLocaleDateString("en-US")}</td>
+                                    <td className="text-left">{maintenance.maintenance_type}</td>
                                 </tr>
                             ))}
                         </tbody>
@@ -156,7 +158,8 @@ const ViewGun = (props) => {
             }
             { clickDelete ? <label className="block my-2 mx-auto text-center"><div className="block w-1/3 mx-auto">Type Delete to Confirm And Click Again</div><div className="block w-full p-2 mx-auto"><input type="text" name="confirm" onChange={(e) => setConfirmText(e.target.value)} /></div></label> 
  : null}
-            <button className="rounded-md bg-red-800 text-slate-50 py-2 px-4 w-1/4 block my-2 mb-20 text-center mx-auto" onClick={handleRemove}>Delete</button>
+  
+            <button className="rounded-3xl mb-24 tracking-wider text-lg bg-redbg drop-shadow-lg text-white py-2 px-4 w-1/4 block text-center mx-auto" onClick={handleRemove}>Delete Gun</button>
 
         </>
     )
