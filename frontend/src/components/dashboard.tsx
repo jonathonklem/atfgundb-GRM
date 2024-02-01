@@ -89,23 +89,7 @@ const Dashboard = (props) => {
         }
     }, [pathname]); 
 
-    function RemoveAccount() {
-        fetch(url+'/users/delete?user_id='+userId, {
-            method: 'GET',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-                'Authorization' : 'Bearer ' + props.authToken
-            }
-        }).then(() => {
-            if (props.LocalDev) {  
-                window.location.href="/"; // can't imagine there's not a more elegant solution...
-            } else {
-                logout({ logoutParams: { returnTo: window.location.origin }});
-            }
-            
-        }); 
-    }
+    
 
     useEffect(() => {
         if (props.LocalDev) {
@@ -122,8 +106,6 @@ const Dashboard = (props) => {
         }
     }, [authToken, userId]);
 
-    
-    
 
     if (isLoading && !props.LocalDev) {
         return <div>Loading...</div>;
@@ -149,7 +131,7 @@ const Dashboard = (props) => {
                             </div>
                         }
                     ></Route>
-                    <Route path="/delete" element={<DeleteScreen RemoveAccount={RemoveAccount} />}/>
+                    <Route path="/delete" element={<DeleteScreen />}/>
                     <Route path="guns">
                         <Route index  element={<Guns />} />
                         <Route path="add" element={<AddGun/>} />

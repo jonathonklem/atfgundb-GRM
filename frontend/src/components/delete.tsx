@@ -1,14 +1,17 @@
 import React, { useState } from 'react';
+import { UserDataContext } from "./contexts/userDataContext";
+import { UserDataContextType } from '../Types';
 
 const DeleteScreen = (props) => {
     const [confirmText, setConfirmText] = useState<string>('');
     const [successMessage, setSuccessMessage] = useState<string>('');
 
+    const { removeAccount } = React.useContext(UserDataContext) as UserDataContextType;
     function handleRemove() {
         console.log("In handle remove");
 
         if (confirmText === "PROCEED") {
-            props.RemoveAccount();
+            removeAccount();
             setSuccessMessage("Account Deleted");
         } else {
             setSuccessMessage("Please type PROCEED in all caps to confirm");

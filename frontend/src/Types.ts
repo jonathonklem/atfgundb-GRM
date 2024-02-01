@@ -53,6 +53,7 @@ export interface RangeTripType {
 }
 
 export type UserDataContextType = {
+    removeAccount: () => void;
     saveProfile: (freshUserId:string, user:any) => void;
     authToken: string | null;
     setAuthToken: (authToken: string) => void;
