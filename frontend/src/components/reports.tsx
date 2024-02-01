@@ -63,8 +63,6 @@ const Reports = (props) => {
             }})
         .then((response) => response.json())
         .then((data) => {
-          console.log(data);
-
           // this is ugly, but using data.map was causing duplicate ammo types to be added
           const label_map: { [key: string]: number } = {};
           for (var i = 0; i < data.length; i++) {
@@ -87,7 +85,7 @@ const Reports = (props) => {
             roundCount += data[i].count;
           }
 
-            setTotalRoundCount(roundCount);
+          setTotalRoundCount(roundCount);
 
           // we now have unique dates (labels) and unique ammo types
           // we need to create a dataset for each ammo type
@@ -117,6 +115,7 @@ const Reports = (props) => {
 
             datasetvals.push(dataset);
           }
+          console.log(datasetvals);
           setChartData({
             labels: labels,
             datasets: datasetvals,

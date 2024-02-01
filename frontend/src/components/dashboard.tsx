@@ -117,7 +117,7 @@ const Dashboard = (props) => {
     }, [user]);
 
     useEffect(() => {
-        if (userId && authToken) { 
+        if (userId && authToken && !props.LocalDev) { 
             saveProfile(userId, user);
         }
     }, [authToken, userId]);
