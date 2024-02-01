@@ -10,3 +10,7 @@ type User struct {
 	ID        string             `json:"id"`
 	Name      string             `json:"name"`
 }
+
+type Deletion struct {
+	DeletedDate primitive.DateTime `json:"deleteddate"`
+}

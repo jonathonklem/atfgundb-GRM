@@ -63,6 +63,11 @@ func DeleteUser(userId string) {
 		log.Println("Error deleting range trips")
 		log.Fatal(err)
 	}
+
+	// log the deletion
+	deletionsCollection := client.Database("ATFGunDB").Collection("deletions")
+	deletion := models.Deletion{DeletedDate: primitive.NewDateTimeFromTime(time.Now())}
+	_, err = deletionsCollection.InsertOne(context.Background(), deletion)
 }
 
 func InsertUpdateUser(user *models.User) {
