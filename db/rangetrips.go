@@ -87,7 +87,6 @@ func GetDateAndAmmoReport(userId string, date_from string, date_to string) []mod
 	// give me the code now
 
 	// doing the date conversion piecemeal because having one long bson.D entry was causing problems
-	// TODO WHY IS TIME.PARSE NOT WORKING
 	date_from_time, err := time.Parse("2006-01-02 15:04:05.000000", date_from+" 00:00:00.000000")
 
 	if err != nil {
@@ -107,6 +106,7 @@ func GetDateAndAmmoReport(userId string, date_from string, date_to string) []mod
 		bson.D{{"$group", bson.D{{"_id", bson.D{{"date_done", bson.D{{"$dateToString", bson.D{{"format", "%Y-%m-%dT00:00:00.00Z"}, {"date", "$date_done"}}}}}, {"ammo_id", "$ammo_id"}}}, {"count", bson.D{{"$sum", "$quantity_used"}}}}}},
 		bson.D{{"$lookup", bson.D{{"from", "ammo"}, {"localField", "_id.ammo_id"}, {"foreignField", "_id"}, {"as", "ammo"}}}},
 		bson.D{{"$project", bson.D{{"ammo_name", "$ammo.name"}, {"date", "$_id.date_done"}, {"count", "$count"}}}},
+		bson.D{{"$sort", bson.D{{"date", 1}}}},
 	})
 
 	if err != nil {
