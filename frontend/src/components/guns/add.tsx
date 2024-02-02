@@ -49,7 +49,14 @@ const AddGun = (props) => {
 
         setSuccessMessage("Adding.....");
         
-        addGun(clearObject, () => {setSuccessMessage("Added Gun Successfully!");form.reset();});
+        addGun(clearObject, (data) => {
+            if (data.success) {
+                setSuccessMessage("Added Gun Successfully!");
+                form.reset();
+            } else {
+                setSuccessMessage("Error adding gun");
+            }
+        });
         // clear form
         
     }

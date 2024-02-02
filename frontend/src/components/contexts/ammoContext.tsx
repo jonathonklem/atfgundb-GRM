@@ -31,7 +31,10 @@ export const AmmoProvider = ({ children }) => {
             body: JSON.stringify(clearObject)
         })
             .then(response => response.json())
-            .then(data => console.log(data)).then(() => {callback(); fetchAmmo();});
+            .then(data => {
+                fetchAmmo();
+                callback(data);
+            });
     }
 
     function addAmmo (clearObject, callback) {
@@ -45,8 +48,11 @@ export const AmmoProvider = ({ children }) => {
             }, 
             body: JSON.stringify(clearObject)
         })
-            .then(response => response.json())
-            .then(data => console.log(data)).then(() => {callback(); fetchAmmo();});
+        .then(response => response.json())
+        .then(data => {
+            fetchAmmo();
+            callback(data);
+        })
     }
     function fetchAmmo() {
         if (!userId) { return; }
@@ -65,7 +71,7 @@ export const AmmoProvider = ({ children }) => {
             .then(response => response.json()) 
             .then(data => setAmmo(data)).then(() => setFetchingAmmo(false));
     }
-    function removeAmmo(id) {
+    function removeAmmo(id, callback) {
         fetch(url+ '/ammo/remove?ammo_id='+id, {
             method: 'GET',
             headers: {
@@ -73,7 +79,12 @@ export const AmmoProvider = ({ children }) => {
                 'Content-Type': 'application/json',
                 'Authorization' : 'Bearer ' + authToken
             }
-        }).then(() => fetchAmmo());
+        })
+        .then(response => response.json())
+        .then(data => {
+            fetchAmmo();
+            callback(data);
+        });
     }
 
     function disposeAmmo(ammoId, quantity, callback) {
@@ -85,8 +96,11 @@ export const AmmoProvider = ({ children }) => {
                 'Authorization' : 'Bearer ' + authToken
             }
         })
-            .then(response => response.json())
-            .then(data => console.log(data)).then(() => {callback(); fetchAmmo()});
+        .then(response => response.json())
+        .then(data => {
+            fetchAmmo();
+            callback(data);
+        });
 
     }
 

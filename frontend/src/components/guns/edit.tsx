@@ -87,7 +87,14 @@ const EditGun = (props) => {
 
         setSuccessMessage("Saving.....");
         
-        editGun(id as string, clearObject, () => {setSuccessMessage("Saved Gun Successfully!");form.reset();});
+        editGun(id as string, clearObject, (data) => {
+            if (data.success) {
+                setSuccessMessage("Saved Gun Successfully!");
+                form.reset();
+            } else {
+                setSuccessMessage("Error saving gun");
+            }
+        });
         // clear form
         
     }

@@ -30,8 +30,11 @@ export const GunProvider = ({ children }) => {
             }, 
             body: JSON.stringify(clearObject)
         })
-            .then(response => response.json())
-            .then(data => console.log(data)).then(() => fetchGuns()).then(() => callback());
+        .then(response => response.json())
+        .then(data => {
+            fetchGuns();
+            callback(data);
+        });
     }
 
     function fetchGuns() {
@@ -65,11 +68,14 @@ export const GunProvider = ({ children }) => {
             }, 
             body: JSON.stringify(clearObject)
         })
-            .then(response => response.json())
-            .then(data => console.log(data)).then(() => fetchGuns()).then(() => callback());
+        .then(response => response.json())
+        .then(data => {
+            fetchGuns();
+            callback(data);
+        });
     }
 
-    function removeGun(gunId) {
+    function removeGun(gunId, callback) {
         fetch(url+ '/guns/remove?gun_id='+gunId, {
             method: 'GET',
             headers: {
@@ -77,7 +83,12 @@ export const GunProvider = ({ children }) => {
                 'Content-Type': 'application/json',
                 'Authorization' : 'Bearer ' + authToken
             }
-        }).then(() => fetchGuns());
+        })
+        .then(response => response.json())
+        .then((data) => {
+            fetchGuns();
+            callback(data);
+        });
     }
 
 

@@ -26,7 +26,14 @@ const PurchaseAmmo = (props) => {
         clearObject.price =  Number(formJson.price);
 
         setSuccessMessage("Saving.....");
-        purchaseAmmo(clearObject, () => {setSuccessMessage("Purchased Ammo Successfully!");form.reset();});
+        purchaseAmmo(clearObject, (data) => {
+            if (data.success) {
+                setSuccessMessage("Purchased Ammo Successfully!");
+                form.reset();
+            } else {
+                setSuccessMessage("Error purchasing ammo");
+            }
+        });
     }
 
     if (ammo.length === 0) {

@@ -66,7 +66,7 @@ export type GunContextType = {
     setGuns: (guns: Gun[]) => void;
     addGun: (clearObject:any, callback:any) => void;
     fetchGuns: () => void;
-    removeGun: (id: String) => void;
+    removeGun: (id: String, callback:any) => void;
     editGun: (id: string, clearObject:any, callback:any) => void;
 };
 
@@ -75,7 +75,7 @@ export type AmmoContextType = {
     setAmmo: (ammo: Ammo[]) => void;
     addAmmo: (clearObject:any, callback:any) => void;
     fetchAmmo: () => void;
-    removeAmmo: (id: String) => void;
+    removeAmmo: (id: String, callback:any) => void;
     disposeAmmo: (id: String, quantity: Number, callback:any) => void;
     editAmmo: (id: string, clearObject:any, callback:any) => void;
 };

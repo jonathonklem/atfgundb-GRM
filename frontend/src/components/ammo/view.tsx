@@ -31,8 +31,14 @@ const ViewAmmo = (props) => {
         }
 
         if (confirmText === "Delete") {
-            removeAmmo(String(id));
-            navigate("/")
+            removeAmmo(String(id), (data) => {
+                if (data.success) {
+                    navigate("/")
+                } else {
+                    alert('Error deleting ammo')
+                }
+            });
+            
         }
     }
 

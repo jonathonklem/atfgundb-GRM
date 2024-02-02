@@ -53,8 +53,13 @@ const ViewGun = (props) => {
         }
 
         if (confirmText === "Delete") {
-            removeGun(String(id));
-            navigate("/")
+            removeGun(String(id), (data) => {
+                if (data.success) {
+                    navigate("/");
+                } else {
+                    alert('Error deleting gun')
+                }
+            });
         }
     }
 

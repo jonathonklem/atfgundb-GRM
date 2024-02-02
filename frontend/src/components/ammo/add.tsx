@@ -60,7 +60,14 @@ const AddAmmo = (props) => {
             return;
         }
         setSuccessMessage("Adding.....");
-        addAmmo(clearObject, () => {setSuccessMessage("Added Ammo Successfully!");form.reset();});
+        addAmmo(clearObject, (response) => {
+            if (response.success) {
+                setSuccessMessage("Added Ammo Successfully!");
+                form.reset();
+            } else {
+                setSuccessMessage("Error adding ammo");
+            }
+        });
     }
     return (
         <>

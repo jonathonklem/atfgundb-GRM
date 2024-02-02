@@ -66,7 +66,18 @@ const RangeTrip = (props) => {
         }
 
         setSuccessMessage("Saving.....");
-        addRangeTrip(clearObject, () => {setSuccessMessage("Range Trip added successfully!");form.reset();});
+        addRangeTrip(clearObject, (data) => {
+            if (data.success) {
+                setSuccessMessage("Range Trip added successfully!");
+                form.reset();
+            } else {
+                if (data.error === "Not enough ammo") {
+                    setSuccessMessage("Not enough ammo");
+                } else {
+                    setSuccessMessage("Error adding range trip");                
+                }
+            }
+        });
     }
 
     return (

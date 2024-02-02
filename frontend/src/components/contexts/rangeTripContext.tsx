@@ -38,7 +38,12 @@ export const RangeTripProvider = ({ children }) => {
            body: JSON.stringify(clearObject)
        })
            .then(response => response.json())
-           .then(data => console.log(data)).then(() => callback()).then(() => fetchGuns()).then(() => fetchAmmo()).then(() => fetchRangeTrips());
+           .then(data => {
+                fetchGuns();
+                fetchAmmo();
+                fetchRangeTrips();
+                callback(data);
+           });
 
    }
 

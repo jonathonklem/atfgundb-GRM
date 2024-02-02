@@ -25,8 +25,11 @@ export const AmmoPurchaseProvider = ({ children }) => {
             }, 
             body: JSON.stringify(clearObject)
         })
-            .then(response => response.json())
-            .then(data => console.log(data)).then(() => {callback()}).then(() => fetchAmmo());
+        .then(response => response.json())
+        .then(data => {
+            fetchAmmo();
+            callback(data);
+        });
 
     }
 

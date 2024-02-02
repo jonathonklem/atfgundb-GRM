@@ -77,7 +77,14 @@ const EditAmmo = (props) => {
             return;
         }
         setSuccessMessage("Adding.....");
-        editAmmo(id as string, clearObject, () => {setSuccessMessage("Added Ammo Successfully!");form.reset();});
+        editAmmo(id as string, clearObject, (data) => {
+            if (data.success) {
+                setSuccessMessage("Added Ammo Successfully!");
+                form.reset();
+            } else {
+                setSuccessMessage("Error adding ammo");
+            }
+        });
     }
 
     return (
@@ -89,8 +96,10 @@ const EditAmmo = (props) => {
                 <label className="block my-2 mx-auto"><div className="block text-sm font-extralight tracking-wider">Caliber</div><div className="block w-full p-2 w-1/2 mx-auto">
                 <CreatableSelect styles={customStyles} className="block w-full tracking-wider text-sm rounded-md" name="caliber" value={{label: currentCaliber, value: currentCaliber}} onChange={(e) => changeCaliber(e)}  options={caliberOptions} />    
                 </div></label>
-                <label className="block my-2 mx-auto"><div className="block text-sm font-extralight tracking-wider">Grain</div><div className="block w-full p-2 w-1/2 mx-auto"><input type="text" name="grain" value={ammoGrain} onChange={(e) => setAmmoGrain(e.target.value) } /></div></label>
-                <button className="rounded-md bg-red-800 text-slate-50 py-2 px-4 w-1/4 block my-2 text-center mx-auto">Submit</button>
+                <label className="block my-2 mx-auto mb-24"><div className="block text-sm font-extralight tracking-wider">Grain</div><div className="block w-full p-2 w-1/2 mx-auto"><input type="text" name="grain" value={ammoGrain} onChange={(e) => setAmmoGrain(e.target.value) } /></div></label>
+                <div className="bg-darkbg mt-4 flex justify-between pt-2 fixed bottom-[53px] w-full left-0 text-center">
+                    <button className="rounded-3xl tracking-wider text-lg bg-redbg drop-shadow-lg text-white py-2 px-4 w-1/4 block text-center mx-auto">Submit</button>
+                </div>
             </form>
         </>
     )

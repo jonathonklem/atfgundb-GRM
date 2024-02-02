@@ -16,7 +16,13 @@ const Dispose = (props) => {
         const form = e.target;
 
         setSuccessMessage("Disposing.....")
-        disposeAmmo(ammoId, quantity, () => {setSuccessMessage("Ammo Disposed Successfully!"); form.reset();})
+        disposeAmmo(ammoId, quantity, (data) => {
+            if (data.success) {
+                setSuccessMessage("Ammo Disposed Successfully!"); form.reset();
+            } else {
+                setSuccessMessage("Error disposing ammo");
+            }
+        });
     }
     
     return (
