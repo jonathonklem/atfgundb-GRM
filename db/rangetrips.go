@@ -92,7 +92,7 @@ func GetDateAndAmmoReport(userId string, date_from string, date_to string) []mod
 	if err != nil {
 		log.Fatal(err)
 	}
-	date_to_time, err := time.Parse("2006-01-02 15:04:05.000000", date_to+" 00:00:00.000000")
+	date_to_time, err := time.Parse("2006-01-02 15:04:05.000000", date_to+" 23:59:59.000000")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -101,7 +101,7 @@ func GetDateAndAmmoReport(userId string, date_from string, date_to string) []mod
 	primitiveTo := primitive.NewDateTimeFromTime(date_to_time)
 
 	results, err := rangeTripsCollection.Aggregate(context.Background(), bson.A{
-		bson.D{{"$match", bson.D{{"user_id", userId}, {"date_done", bson.D{{"$gte", primitiveFrom}, {"$lt", primitiveTo}}}}}},
+		bson.D{{"$match", bson.D{{"user_id", userId}, {"date_done", bson.D{{"$gte", primitiveFrom}, {"$lte", primitiveTo}}}}}},
 		//bson.D{{"$group", bson.D{{"_id", bson.D{{"date_done", "$date_done"}, {"ammo_id", "$ammo_id"}}}, {"count", bson.D{{"$sum", "$quantity_used"}}}}}},
 		bson.D{{"$group", bson.D{{"_id", bson.D{{"date_done", bson.D{{"$dateToString", bson.D{{"format", "%Y-%m-%dT00:00:00.00Z"}, {"date", "$date_done"}}}}}, {"ammo_id", "$ammo_id"}}}, {"count", bson.D{{"$sum", "$quantity_used"}}}}}},
 		bson.D{{"$lookup", bson.D{{"from", "ammo"}, {"localField", "_id.ammo_id"}, {"foreignField", "_id"}, {"as", "ammo"}}}},
