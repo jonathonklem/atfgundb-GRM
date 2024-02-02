@@ -53,9 +53,18 @@ func AddRangeTrip(c *gin.Context) {
 			return
 		}
 	}
-	db.InsertRangeTrip(&rangeTrip)
 
-	consumeAmmo(rangeTrip.AmmoId.Hex(), rangeTrip.QuantityUsed)
+	err := consumeAmmo(rangeTrip.AmmoId.Hex(), rangeTrip.QuantityUsed)
 
-	c.JSON(http.StatusOK, models.Response{Success: true})
+	if err != nil {
+		c.JSON(500, models.Response{Success: false, Error: "Not enough ammo"})
+	} else {
+		db.InsertRangeTrip(&rangeTrip)
+		c.JSON(http.StatusOK, models.Response{Success: true})
+	}
+	
+
+	
+
+	
 }

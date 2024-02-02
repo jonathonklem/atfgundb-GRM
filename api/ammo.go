@@ -3,7 +3,7 @@ package api
 import (
 	"log"
 	"net/http"
-
+	"errors"
 	"strconv"
 	"time"
 	"atfgundb.com/app/db"
@@ -67,9 +67,15 @@ func DisposeAmmo(c *gin.Context) {
 		// convert quantity to int
 		squantity, _ := strconv.Atoi(quantity)
 
-		consumeAmmo(ammoId, squantity)
+		err := consumeAmmo(ammoId, squantity)
 
-		c.JSON(http.StatusOK, models.Response{Success: true})
+		if err != nil {
+			c.JSON(500, models.Response{Success: false, Error: "Not enough ammo"})
+		} else {
+			c.JSON(http.StatusOK, models.Response{Success: true})
+		}
+
+		
 	} else {
 		c.JSON(http.StatusUnauthorized, models.Response{Success: false, Error: "Unauthorized"})
 	}
@@ -78,7 +84,13 @@ func DisposeAmmo(c *gin.Context) {
 // would have loved to done this as a method on AmmoPurchase, but that was causing circular import issues
 // since db and model are separate packages
 func consumeAmmo(ammoId string, quantity int) error {
+	ammo := db.GetAmmoById(ammoId)
+	if (ammo.Count < quantity) {
+		return errors.New("Not enough ammo")
+	}
+
 	ammoPurchases := db.GetAmmoActivePurchases(ammoId)
+	
 	quantityConsumed := int(0)
 
 	for _, ammoPurchase := range ammoPurchases {
@@ -100,10 +112,7 @@ func consumeAmmo(ammoId string, quantity int) error {
 	}
 
 	// next update quantity on actual ammo id
-	ammo := db.GetAmmoById(ammoId)
-	log.Printf("ammo: %v", ammo)
 	ammo.Count -= quantityConsumed
-	log.Printf("ammo: %v", ammo)
 	db.InsertUpdateAmmo(&ammo)
 
 	// i guess we're not really returning an error...
