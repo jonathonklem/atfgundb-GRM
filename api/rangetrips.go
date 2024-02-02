@@ -34,21 +34,22 @@ func AddRangeTrip(c *gin.Context) {
 	if err := c.BindJSON(&rangeTrip); err != nil {
 		log.Printf("Error binding JSON: %v", err)
 		log.Fatal("Unable to BindJSON RangeTrip")
+		c.JSON(http.StatusUnauthorized, models.Response{Success: false, Error: "System error"})
 	}
 
 	if os.Getenv("ALLOWED_ORIGIN") != "http://localhost:3000" && os.Getenv("ALLOWED_ORIGIN") != "http://localhost:8100" {
 		if rangeTrip.UserId != routing.UserId {
-			c.JSON(http.StatusUnauthorized, "{error: 'Unauthorized'}")
+			c.JSON(http.StatusUnauthorized, models.Response{Success: false, Error: "Unauthorized"})
 			return
 		}
 
 		if !db.UserOwnsGun(rangeTrip.GunId.Hex(), routing.UserId) {
-			c.JSON(http.StatusUnauthorized, "{error: 'Unauthorized'}")
+			c.JSON(http.StatusUnauthorized, models.Response{Success: false, Error: "Unauthorized"})
 			return
 		}
 
 		if !db.UserOwnsAmmo(rangeTrip.AmmoId.Hex(), routing.UserId) {
-			c.JSON(http.StatusUnauthorized, "{error: 'Unauthorized'}")
+			c.JSON(http.StatusUnauthorized, models.Response{Success: false, Error: "Unauthorized"})
 			return
 		}
 	}
@@ -56,5 +57,5 @@ func AddRangeTrip(c *gin.Context) {
 
 	consumeAmmo(rangeTrip.AmmoId.Hex(), rangeTrip.QuantityUsed)
 
-	c.JSON(http.StatusOK, "{success: true}")
+	c.JSON(http.StatusOK, models.Response{Success: true})
 }

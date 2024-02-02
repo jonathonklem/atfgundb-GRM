@@ -17,14 +17,14 @@ import (
 func RemoveGun(c *gin.Context) {
 	gun_id := c.Query("gun_id")
 	if gun_id == "" {
-		c.JSON(http.StatusOK, "{error: 'Invalid GunID'}")
+		c.JSON(500, models.Response{Success: false, Error: "Invalid GunID"})
 	}
 
 	if db.UserOwnsGun(gun_id, routing.UserId) {
 		db.RemoveGun(gun_id)
-		c.JSON(http.StatusOK, "{success: true}")		
+		c.JSON(http.StatusOK, models.Response{Success: true})	
 	} else {
-		c.JSON(http.StatusUnauthorized, "{error: 'Unauthorized'}")
+		c.JSON(http.StatusUnauthorized, models.Response{Success: false, Error: "Unauthorized"})
 	}
 	
 }
@@ -38,15 +38,16 @@ func AddAccessoryToGun(c *gin.Context) {
 
 	if err := c.BindJSON(&accessory); err != nil {
 		log.Fatal("Unable to BindJSON")
+		c.JSON(500, models.Response{Success: false, Error: "System error"})
 	}
 
 	if db.UserOwnsGun(c.Query("gun_id"), routing.UserId) {
 		gun.Accessories = append(gun.Accessories, accessory)
 
 		db.UpdateGun(gun)
-		c.JSON(http.StatusOK, "{success: true}")
+		c.JSON(http.StatusOK, models.Response{Success: true})
 	} else {
-		c.JSON(http.StatusUnauthorized, "{error: 'Unauthorized'}")
+		c.JSON(http.StatusUnauthorized, models.Response{Success: false, Error: "Unauthorized"})
 	}
 
 	
@@ -56,13 +57,15 @@ func EditGun(c *gin.Context) {
 
 	if err := c.BindJSON(&gun); err != nil {
 		log.Fatal("Unable to BindJSON")
+		c.JSON(500, models.Response{Success: false, Error: "System error"})
+
 	}
 
 	if (gun.UserID != routing.UserId) {
-		c.JSON(http.StatusUnauthorized, "{error: 'Unauthorized'}")
+		c.JSON(http.StatusUnauthorized, models.Response{Success: false, Error: "Unauthorized"})
 	} else {
 		db.EditGun(&gun)
-		c.JSON(http.StatusOK, "{success: true}")
+		c.JSON(http.StatusOK, models.Response{Success: true})
 	}
 }
 
@@ -77,6 +80,7 @@ func AddMaintenanceToGun(c *gin.Context) {
 
 		if err := c.BindJSON(&maintenance); err != nil {
 			log.Fatal("Unable to BindJSON")
+			c.JSON(500, models.Response{Success: false, Error: "System error"})
 		}
 
 		// set maintenance datetime to right now
@@ -85,9 +89,9 @@ func AddMaintenanceToGun(c *gin.Context) {
 		gun.Maintenance = append(gun.Maintenance, maintenance)
 
 		db.UpdateGun(gun)
-		c.JSON(http.StatusOK, "{success: true}")
+		c.JSON(http.StatusOK, models.Response{Success: true})
 	} else {
-		c.JSON(http.StatusUnauthorized, "{error: 'Unauthorized'}")
+		c.JSON(http.StatusUnauthorized, models.Response{Success: false, Error: "Unauthorized"})
 	}
 }
 
@@ -96,13 +100,14 @@ func AddGun(c *gin.Context) {
 
 	if err := c.BindJSON(&gun); err != nil {
 		log.Fatal("Unable to BindJSON")
+		c.JSON(http.StatusUnauthorized, models.Response{Success: false, Error: "Unauthorized"})
 	}
 
 	if (gun.UserID != routing.UserId) {
-		c.JSON(http.StatusUnauthorized, "{error: 'Unauthorized'}")
+		c.JSON(http.StatusUnauthorized, models.Response{Success: false, Error: "Unauthorized"})
 	} else {
 		db.InsertGun(&gun)
-		c.JSON(http.StatusOK, "{success: true}")
+		c.JSON(http.StatusOK, models.Response{Success: true})
 	}
 }
 
@@ -111,9 +116,6 @@ func ListGuns(c *gin.Context) {
 	user.ID = c.Query("user_id")	// automatically blocked in router if invalid auth
 
 	guns := db.GetGuns(&user)
-	for i := range guns {
-		log.Printf("Round count: %d\n", guns[i].RoundCount)
-	}
 
 	c.JSON(http.StatusOK, guns)
 }

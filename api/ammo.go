@@ -18,9 +18,9 @@ func RemoveAmmo(c *gin.Context) {
 
 	if (db.UserOwnsAmmo(ammoId, routing.UserId)) {
 		db.RemoveAmmo(ammoId)
-		c.JSON(http.StatusOK, "{success: true}")
+		c.JSON(http.StatusOK, models.Response{Success: true})
 	} else {
-		c.JSON(http.StatusUnauthorized, "{error: 'Unauthorized'}")
+		c.JSON(http.StatusUnauthorized, models.Response{Success: false, Error: "Unauthorized"})
 	}
 }
 
@@ -29,13 +29,14 @@ func EditAmmo(c *gin.Context) {
 
 	if err := c.BindJSON(&ammo); err != nil {
 		log.Fatal("Unable to BindJSON")
+		c.JSON(500, models.Response{Success: false, Error: "System error"})
 	}
 
 	if (ammo.UserID != routing.UserId) {
-		c.JSON(http.StatusUnauthorized, "{error: 'Unauthorized'}")
+		c.JSON(http.StatusUnauthorized, models.Response{Success: false, Error: "Unauthorized"})
 	} else {
 		db.EditAmmo(&ammo)
-		c.JSON(http.StatusOK, "{success: true}")
+		c.JSON(http.StatusOK, models.Response{Success: true})
 	}
 }
 
@@ -44,15 +45,16 @@ func AddAmmoPurchase(c *gin.Context) {
 
 	if err := c.BindJSON(&ammoPurchase); err != nil {
 		log.Fatal("Unable to BindJSON")
+		c.JSON(http.StatusUnauthorized, models.Response{Success: false, Error: "Unauthorized"})
 	}
 
 	if (db.UserOwnsAmmo(ammoPurchase.AmmoId, routing.UserId)) {
 		ammoPurchase.DatePurchased = primitive.NewDateTimeFromTime(time.Now())
 		db.InsertAmmoPurchase(&ammoPurchase)
 
-		c.JSON(http.StatusOK, "{success: true}")
+		c.JSON(http.StatusOK, models.Response{Success: true})
 	} else {
-		c.JSON(http.StatusUnauthorized, "{error: 'Unauthorized'}")
+		c.JSON(http.StatusUnauthorized, models.Response{Success: false, Error: "Unauthorized"})
 	}
 	
 }
@@ -67,9 +69,9 @@ func DisposeAmmo(c *gin.Context) {
 
 		consumeAmmo(ammoId, squantity)
 
-		c.JSON(http.StatusOK, "{success: true}")
+		c.JSON(http.StatusOK, models.Response{Success: true})
 	} else {
-		c.JSON(http.StatusUnauthorized, "{error: 'Unauthorized'}")
+		c.JSON(http.StatusUnauthorized, models.Response{Success: false, Error: "Unauthorized"})
 	}
 }
 
@@ -113,13 +115,14 @@ func AddAmmo(c *gin.Context) {
 
 	if err := c.BindJSON(&ammo); err != nil {
 		log.Fatal("Unable to BindJSON")
+		c.JSON(500, models.Response{Success: false, Error: "System error"})
 	}
 
 	if ammo.UserID != routing.UserId {
-		c.JSON(http.StatusUnauthorized, "{error: 'Unauthorized'}")
+		c.JSON(http.StatusUnauthorized, models.Response{Success: false, Error: "Unauthorized"})
 	} else {
 		db.InsertUpdateAmmo(&ammo)
-		c.JSON(http.StatusOK, "{success: true}")
+		c.JSON(http.StatusOK, models.Response{Success: true})
 	}
 	
 }
