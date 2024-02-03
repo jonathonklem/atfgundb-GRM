@@ -55,7 +55,8 @@ func CheckJWT() gin.HandlerFunc {
 			for key, value := range claims {
 				if key == "sub" {
 					valueString := string(value.(string))
-					UserId = strings.Split(valueString, "|")[1]
+					UserId = valueString	// we now use the whole id
+					//UserId = strings.Split(valueString, "|")[1]
 				}
 			}
 

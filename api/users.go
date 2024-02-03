@@ -8,7 +8,6 @@ import (
 	"log"
 	"fmt"
 	"strings"
-    "strconv"
 	"io/ioutil"
     "encoding/json"
 )
@@ -45,13 +44,7 @@ func UserDelete(c *gin.Context) {
 
 	// now we need to delete in auth0
 	response := getToken()
-	if isNumeric(user_id) {
-        deleteUser("google-oauth2|"+user_id,response.AccessToken)
-    } else if hasDot(user_id) {
-        deleteUser("apple|"+user_id, response.AccessToken)
-    } else {
-        deleteUser("auth0|"+user_id, response.AccessToken)
-    }
+	deleteUser(user_id, response.AccessToken)
 
 	c.JSON(http.StatusOK, models.Response{Success: true})
 }
@@ -125,13 +118,4 @@ func deleteUser(id string, token string) int {
   fmt.Println(string(body))
   json.Unmarshal([]byte(body), &deleteResponse);
   return deleteResponse.StatusCode
-}
-
-func isNumeric(s string) bool {
-    _, err := strconv.ParseFloat(s, 64)
-    return err == nil
-}
-
-func hasDot(s string) bool {
-    return strings.Contains(s, ".")
 }

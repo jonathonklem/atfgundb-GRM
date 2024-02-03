@@ -96,7 +96,7 @@ const Dashboard = (props) => {
             setAuthToken(props.authToken);
             setUserId(defaultUserId);
         } else {
-            setUserId(user?.sub?.split("|")[1] || '');
+            setUserId(user?.sub || '');
         }
     }, [user]);
 

@@ -18,7 +18,7 @@ export const UserDataProvider = ({ children }) => {
 
 
     function removeAccount() {
-        fetch(url+'/users/delete?user_id='+userId, {
+        fetch(url+'/users/delete?user_id='+encodeURIComponent(userId as string), {
             method: 'GET',
             headers: {
                 'Accept': 'application/json',

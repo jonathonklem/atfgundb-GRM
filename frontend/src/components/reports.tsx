@@ -54,7 +54,7 @@ const Reports = (props) => {
             setTo(from);
             setFrom(oldTo);
         }
-        fetch(url + '/range/getDateAndAmmoReport?user_id='+userId+'&date_done=2024-01-01&date_from=' + from +'&date_to=' + to, {
+        fetch(url + '/range/getDateAndAmmoReport?user_id='+encodeURIComponent(userId as string)+'&date_done=2024-01-01&date_from=' + from +'&date_to=' + to, {
             method: 'GET',
             headers: {
                 'Accept': 'application/json',

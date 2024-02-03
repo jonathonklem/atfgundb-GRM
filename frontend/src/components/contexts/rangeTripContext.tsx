@@ -52,7 +52,7 @@ export const RangeTripProvider = ({ children }) => {
         if (fetchingRangeTrips) { return }
 
         setFetchingRangeTrips(true);
-        fetch(url+'/range/getRangeTrips?user_id='+userId, {
+        fetch(url+'/range/getRangeTrips?user_id='+encodeURIComponent(userId as string), {
             method: 'GET',
             headers: {
                 'Accept': 'application/json',

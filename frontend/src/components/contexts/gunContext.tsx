@@ -44,7 +44,7 @@ export const GunProvider = ({ children }) => {
         if (fetchingGuns) { return }
 
         setFetchingGuns(true);
-        fetch(url+'/guns?user_id='+userId, {
+        fetch(url+'/guns?user_id='+encodeURIComponent(userId as string), {
             method: 'GET',
             headers: {
                 'Accept': 'application/json',

@@ -60,7 +60,7 @@ export const AmmoProvider = ({ children }) => {
         if (fetchingAmmo) { return }
 
         setFetchingAmmo(true);
-        fetch(url+'/ammo?user_id='+userId, {
+        fetch(url+'/ammo?user_id='+encodeURIComponent(userId as string), {
             method: 'GET',
             headers: {
                 'Accept': 'application/json',
