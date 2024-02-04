@@ -17,7 +17,9 @@ const RangeTrip = (props) => {
     const { guns } = React.useContext(GunContext) as GunContextType;
     const { ammo } = React.useContext(AmmoContext) as AmmoContextType;
 
-    
+    const [staticQtyUsed, setStaticQtyUsed] = React.useState(0);
+
+    const [incremental, setIncremental] = React.useState(false);
     const [filteredAmmo, setFilteredAmmo] = React.useState<Ammo[]>(ammo);
     
     React.useEffect(() => {
@@ -109,10 +111,34 @@ const RangeTrip = (props) => {
                             )
                         }
                     </div></label> 
+                {!incremental && (
+                    <>
+                        <label className="block my-4 mx-auto"><div className="block text-sm block font-extralight tracking-wider">Quantity Used</div><div className="block w-full mx-auto"><div className="block w-full p-2 w-1/2 mx-auto"><input type="text" value={staticQtyUsed} onChange={(e) => setStaticQtyUsed(Number(e.target.value))} name="quantity_used" /></div></div></label>
+                    </>
+                
+                )}
+                {incremental && (
+                    <>
+                        <label className="block my-2 mx-auto grid grid-cols-3">
+                            <label className="inline my-4"><div className="text-sm block font-extralight text-center tracking-wider">Total Quantity Used</div><div className="w-full mx-auto"><div className="block w-full p-2 w-full mx-auto"><input type="text" readOnly={incremental} value={staticQtyUsed} name="quantity_used" /></div></div></label>
+                            <label className="inline my-4"><div className="text-sm block font-extralight text-center tracking-wider">Rounds to Add</div><div className="w-full mx-auto"><div className="block w-full p-2 w-full mx-auto"><input type="text" name="quantity_addl" /></div></div></label>
+                            <div className="inline text-sm font-extralight tracking-wider align-middle"><button className="rounded-3xl tracking-wider text-xs mt-12 bg-redbg drop-shadow-lg text-white py-1 px-2 block text-center mx-auto" onClick={(e) => {
+                                e.preventDefault();
+                                const qtyUsed = parseInt((document.querySelector('input[name="quantity_used"]') as HTMLInputElement).value);
+                                const qtyAddl = parseInt((document.querySelector('input[name="quantity_addl"]') as HTMLInputElement).value);
+                                setStaticQtyUsed(qtyUsed + qtyAddl);
+                            }}>Increase Rounds</button></div>
+                        </label>
+                    </>
+                
+                )}
+                <button onClick={(e) => {e.preventDefault(); setIncremental(!incremental)}} className="rounded-3xl tracking-wider text-xs mt-4 bg-redbg drop-shadow-lg text-white py-1 px-2 block text-center mx-auto">Toggle Incremental</button>
+
+                
                 <label className="block my-2 mx-auto"><div className="block text-sm block font-extralight tracking-wider">Location</div><div className="block w-full p-2 mx-auto"><div className="block w-full w-1/2 mx-auto">
                     <CreatableSelect styles={customStyles} className="block w-full tracking-wider text-sm rounded-md" name="location" options={rangeOptions} />    
                 </div></div></label>
-                <label className="block my-4 mx-auto"><div className="block text-sm block font-extralight tracking-wider">Quantity Used</div><div className="block w-full mx-auto"><div className="block w-full p-2 w-1/2 mx-auto"><input type="text" name="quantity_used" /></div></div></label>
+               
                 <label className="block my-2 mb-24 mx-auto"><div className="block text-sm block font-extralight tracking-wider">Note</div><div className="block w-full mx-auto"><div className="block w-full p-2 w-1/2 mx-auto"><textarea name="note"></textarea></div></div></label>                
                 
                 <div className="bg-darkbg mt-4 flex justify-between pt-2 fixed bottom-[53px] w-full left-0 text-center">
