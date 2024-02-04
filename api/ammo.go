@@ -1,11 +1,12 @@
 package api
 
 import (
+	"errors"
 	"log"
 	"net/http"
-	"errors"
 	"strconv"
 	"time"
+
 	"atfgundb.com/app/db"
 	"atfgundb.com/app/models"
 	"atfgundb.com/app/routing"
@@ -16,7 +17,7 @@ import (
 func RemoveAmmo(c *gin.Context) {
 	ammoId := c.Query("ammo_id")
 
-	if (db.UserOwnsAmmo(ammoId, routing.UserId)) {
+	if db.UserOwnsAmmo(ammoId, routing.UserId) {
 		db.RemoveAmmo(ammoId)
 		c.JSON(http.StatusOK, models.Response{Success: true})
 	} else {
@@ -32,7 +33,7 @@ func EditAmmo(c *gin.Context) {
 		c.JSON(500, models.Response{Success: false, Error: "System error"})
 	}
 
-	if (ammo.UserID != routing.UserId) {
+	if ammo.UserID != routing.UserId {
 		c.JSON(http.StatusUnauthorized, models.Response{Success: false, Error: "Unauthorized"})
 	} else {
 		db.EditAmmo(&ammo)
@@ -48,7 +49,7 @@ func AddAmmoPurchase(c *gin.Context) {
 		c.JSON(http.StatusUnauthorized, models.Response{Success: false, Error: "Unauthorized"})
 	}
 
-	if (db.UserOwnsAmmo(ammoPurchase.AmmoId, routing.UserId)) {
+	if db.UserOwnsAmmo(ammoPurchase.AmmoId, routing.UserId) {
 		ammoPurchase.DatePurchased = primitive.NewDateTimeFromTime(time.Now())
 		db.InsertAmmoPurchase(&ammoPurchase)
 
@@ -56,14 +57,14 @@ func AddAmmoPurchase(c *gin.Context) {
 	} else {
 		c.JSON(http.StatusUnauthorized, models.Response{Success: false, Error: "Unauthorized"})
 	}
-	
+
 }
 
 func DisposeAmmo(c *gin.Context) {
 	ammoId := c.Query("ammo_id")
 	quantity := c.Query("quantity")
 
-	if (db.UserOwnsAmmo(ammoId, routing.UserId)) {
+	if db.UserOwnsAmmo(ammoId, routing.UserId) {
 		// convert quantity to int
 		squantity, _ := strconv.Atoi(quantity)
 
@@ -75,7 +76,6 @@ func DisposeAmmo(c *gin.Context) {
 			c.JSON(http.StatusOK, models.Response{Success: true})
 		}
 
-		
 	} else {
 		c.JSON(http.StatusUnauthorized, models.Response{Success: false, Error: "Unauthorized"})
 	}
@@ -85,12 +85,12 @@ func DisposeAmmo(c *gin.Context) {
 // since db and model are separate packages
 func consumeAmmo(ammoId string, quantity int) error {
 	ammo := db.GetAmmoById(ammoId)
-	if (ammo.Count < quantity) {
-		return errors.New("Not enough ammo")
+	if ammo.Count < quantity {
+		return errors.New("Not enough " + ammo.Name + " - " + strconv.Itoa(ammo.Count) + " available.")
 	}
 
 	ammoPurchases := db.GetAmmoActivePurchases(ammoId)
-	
+
 	quantityConsumed := int(0)
 
 	for _, ammoPurchase := range ammoPurchases {
@@ -112,7 +112,7 @@ func consumeAmmo(ammoId string, quantity int) error {
 	}
 
 	// next update quantity on actual ammo id
-	ammo.Count -= quantityConsumed
+	ammo.Count -= quantity
 	db.InsertUpdateAmmo(&ammo)
 
 	// i guess we're not really returning an error...
@@ -133,7 +133,7 @@ func AddAmmo(c *gin.Context) {
 		db.InsertUpdateAmmo(&ammo)
 		c.JSON(http.StatusOK, models.Response{Success: true})
 	}
-	
+
 }
 
 func ListAmmo(c *gin.Context) {

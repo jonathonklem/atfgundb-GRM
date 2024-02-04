@@ -58,8 +58,6 @@ func GetGunById(gunId primitive.ObjectID) models.Gun {
 		log.Fatal(err)
 	}
 
-	fmt.Printf("Found gun %s - %d\n", gun.Name, gun.RoundCount)
-
 	return gun
 }
 func GetGun(gunId string) models.Gun {
@@ -77,8 +75,6 @@ func GetGun(gunId string) models.Gun {
 	if err != nil {
 		log.Fatal(err)
 	}
-
-	fmt.Printf("Found gun %s - %d\n", gun.Name, gun.RoundCount)
 
 	return gun
 }
@@ -165,8 +161,6 @@ func GetGuns(user *models.User) []models.Gun {
 		if err != nil {
 			log.Fatal(err)
 		}
-
-		fmt.Printf("Found gun %s - %d\n", elem.Name, elem.RoundCount)
 		results = append(results, elem)
 	}
 
