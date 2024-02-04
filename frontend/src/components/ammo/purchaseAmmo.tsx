@@ -7,6 +7,9 @@ import {AmmoContextType} from "../../Types";
 
 const PurchaseAmmo = (props) => {
     const [successMessage, setSuccessMessage] = React.useState('');
+    const [calculateCpr, setCalculateCpr] = React.useState(false);
+    const [costPerRound, setCostPerRound] = React.useState(0);
+    const [costOfPurchase, setCostOfPurchase] = React.useState(0);
 
     const { purchaseAmmo } = React.useContext(AmmoPurchaseContext) as AmmoPurchaseContextType;
     const { ammo } = React.useContext(AmmoContext) as AmmoContextType;
@@ -23,7 +26,12 @@ const PurchaseAmmo = (props) => {
         const clearObject = JSON.parse(JSON.stringify(formJson));
         clearObject.user_id = props.UserId;
         clearObject.quantity =  Number(formJson.quantity);
-        clearObject.price =  Number(formJson.price);
+
+        if (calculateCpr) {
+            clearObject.price =  Math.round((Number(costOfPurchase)/clearObject.quantity)*100)/100;
+        } else {
+            clearObject.price =  Number(costPerRound);
+        }
 
         setSuccessMessage("Saving.....");
         purchaseAmmo(clearObject, (data) => {
@@ -53,7 +61,24 @@ const PurchaseAmmo = (props) => {
                             ))}
                         </select>
                     </div></label> 
-                <label className="block my-2 mx-auto"><div className="block text-sm font-extralight tracking-wider">Cost Per Round</div><div className="block w-full p-2 w-1/2 mx-auto"><input type="text" name="price" /></div></label>
+                {calculateCpr && (
+                    <>
+                        <label className="block my-2 mx-auto">
+                            <div className="block text-sm font-extralight tracking-wider">Cost of Purchase</div>
+                            <div className="block w-full p-2 w-1/2 mx-auto"><input onChange={(e) => setCostOfPurchase(parseFloat(e.target.value))} type="number" name="price" /></div>
+                        </label>
+                        <button onClick={(e) => setCalculateCpr(false)} className="rounded-3xl tracking-wider text-xs mt-4 bg-redbg drop-shadow-lg text-white py-1 px-2 block text-center mx-auto">Switch to Cost Per Round</button>
+                    </>
+                )}
+                {!calculateCpr && (
+                    <>
+                        <label className="block my-2 mx-auto">
+                            <div className="block text-sm font-extralight tracking-wider">Cost Per Round</div>
+                            <div className="block w-full p-2 w-1/2 mx-auto"><input onChange={(e) => setCostPerRound(parseFloat(e.target.value)) } type="number" name="price" /></div>
+                        </label>
+                        <button onClick={(e) => setCalculateCpr(true)} className="rounded-3xl tracking-wider text-xs mt-4 bg-redbg drop-shadow-lg text-white py-1 px-2 block text-center mx-auto">Switch to Total Cost of Purchase</button>
+                    </>
+                )}
                 <label className="block my-2 mx-auto mb-24"><div className="block text-sm font-extralight tracking-wider">Quantity</div><div className="block w-full p-2 w-1/2 mx-auto"><input type="text" name="quantity" /></div></label>
                 <div className="bg-darkbg mt-4 flex justify-between pt-2 fixed bottom-[53px] w-full left-0 text-center">
                     <button className="rounded-3xl tracking-wider text-lg bg-redbg drop-shadow-lg text-white py-2 px-4 w-1/4 block text-center mx-auto">Submit</button>
