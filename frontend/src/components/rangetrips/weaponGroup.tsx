@@ -66,8 +66,8 @@ const WeaponGroup = (props) => {
                         <label className="inline my-4"><div className="text-sm block font-extralight text-center tracking-wider">Rounds to Add</div><div className="w-full mx-auto"><div className="block w-full p-2 w-full mx-auto"><input type="text" name={"weapongroup_" + props.rowNum + "_quantity_addl"} /></div></div></label>
                         <div className="inline text-sm font-extralight tracking-wider align-middle"><button className="rounded-3xl tracking-wider text-xs mt-12 bg-redbg drop-shadow-lg text-white py-1 px-2 block text-center mx-auto" onClick={(e) => {
                             e.preventDefault();
-                            const qtyUsed = parseInt((document.querySelector('input[name="weapongroup[' + props.rowNum + ']quantity_used"_') as HTMLInputElement).value);
-                            const qtyAddl = parseInt((document.querySelector('input[name="weapongroup[' + props.rowNum + ']quantity_addl"_') as HTMLInputElement).value);
+                            const qtyUsed = parseInt((document.querySelector('input[name="weapongroup_' + props.rowNum + '_quantity_used"]') as HTMLInputElement).value);
+                            const qtyAddl = parseInt((document.querySelector('input[name="weapongroup_' + props.rowNum + '_quantity_addl"]') as HTMLInputElement).value);
                             setStaticQtyUsed(qtyUsed + qtyAddl);
                         }}>Increase Rounds</button></div>
                     </label>
