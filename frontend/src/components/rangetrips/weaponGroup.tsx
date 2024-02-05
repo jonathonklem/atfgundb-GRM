@@ -8,7 +8,7 @@ const WeaponGroup = (props) => {
     const { ammo } = React.useContext(AmmoContext) as AmmoContextType;
 
     const [filteredAmmo, setFilteredAmmo] = React.useState<Ammo[]>(ammo);
-    const [staticQtyUsed, setStaticQtyUsed] = React.useState(0);
+    const [staticQtyUsed, setStaticQtyUsed] = React.useState("");
     const [incremental, setIncremental] = React.useState(false);
 
 
@@ -55,7 +55,7 @@ const WeaponGroup = (props) => {
             </label>
             {!incremental && (
                 <>
-                    <label className="block my-4 mx-auto"><div className="block text-sm block font-extralight tracking-wider">Quantity Used</div><div className="block w-full mx-auto"><div className="block w-full p-2 w-1/2 mx-auto"><input type="text" value={staticQtyUsed} onChange={(e) => setStaticQtyUsed(Number(e.target.value))} name={"weapongroup_" + props.rowNum + "_quantity_used"} /></div></div></label>
+                    <label className="block my-4 mx-auto"><div className="block text-sm block font-extralight tracking-wider">Quantity Used</div><div className="block w-full mx-auto"><div className="block w-full p-2 w-1/2 mx-auto"><input type="text" value={staticQtyUsed} onChange={(e) => setStaticQtyUsed(e.target.value)} name={"weapongroup_" + props.rowNum + "_quantity_used"} /></div></div></label>
                 </>
                 
             )}
@@ -68,7 +68,13 @@ const WeaponGroup = (props) => {
                             e.preventDefault();
                             const qtyUsed = parseInt((document.querySelector('input[name="weapongroup_' + props.rowNum + '_quantity_used"]') as HTMLInputElement).value);
                             const qtyAddl = parseInt((document.querySelector('input[name="weapongroup_' + props.rowNum + '_quantity_addl"]') as HTMLInputElement).value);
-                            setStaticQtyUsed(qtyUsed + qtyAddl);
+                            let total = 0;
+                            if (isNaN(qtyUsed)) {
+                                total = qtyAddl;
+                            } else {
+                                total = qtyUsed + qtyAddl;
+                            }
+                            setStaticQtyUsed(total.toString());
                         }}>Increase Rounds</button></div>
                     </label>
                 </>
