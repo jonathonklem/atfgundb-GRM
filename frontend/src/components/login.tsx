@@ -8,7 +8,7 @@ const LoginButton = () => {
     <>
       <img className="mt-28 center m-auto" src="/biglogo.png" />
       <button className="rounded-3xl tracking-wider text-lg bg-redbg mt-28 drop-shadow-lg text-white py-2 px-4 w-1/4 block my-2 text-center mx-auto" onClick={() => loginWithRedirect()}>Log In</button>
-      <p className="text-sm tracking-wider mt-14 text-center">Don't have an account? <span className="cursor-pointer text-redbg" onClick={() => loginWithRedirect({ authorizationParams: {screen_hint: 'signup' }})}>Sign up</span></p>
+      <p className="text-sm tracking-wider mt-14 text-center">Don't have an account? <span className="cursor-pointer text-redbg" onClick={() => loginWithRedirect({ authorizationParams: {screen_hint: 'signup' }})}>Sign up for free!</span></p>
     </>
     
   );

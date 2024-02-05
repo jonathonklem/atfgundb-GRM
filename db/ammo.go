@@ -110,7 +110,7 @@ func UserOwnsAmmo(ammoId string, userId string) bool {
 	err := ammoCollection.FindOne(context.Background(), filter).Decode(&result)
 	if err != nil {
 		log.Fatal(err)
-		return false;
+		return false
 		//log.Fatal(err)
 	}
 
@@ -252,6 +252,9 @@ func InsertUpdateAmmo(ammo *models.Ammo) {
 	opts := options.Update().SetUpsert(true)
 
 	filter := bson.D{{"name", ammo.Name}, {"caliber", ammo.Caliber}, {"grain", ammo.Grain}, {"user_id", ammo.UserID}}
+	if ammo.ID != primitive.NilObjectID {
+		filter = bson.D{{"_id", ammo.ID}, {"name", ammo.Name}, {"caliber", ammo.Caliber}, {"grain", ammo.Grain}, {"user_id", ammo.UserID}}
+	}
 
 	update := bson.D{
 		{"$set", bson.D{{"count", ammo.Count}}},

@@ -27,6 +27,23 @@ export const RangeTripProvider = ({ children }) => {
 
     function addRangeTrip(clearObject, callback) {
         clearObject.user_id = userId;
+
+        // massage data for backend
+        clearObject.weapon_groups = [];
+        for (let i = 0; i < 5; i++) {
+            if (!clearObject[`weapongroup_${i}_gun_id`]) { continue; }
+            clearObject.weapon_groups.push({
+                gun_id: clearObject[`weapongroup_${i}_gun_id`],
+                ammo_id: clearObject[`weapongroup_${i}_ammo_id`],
+                quantity_used: clearObject[`weapongroup_${i}_quantity_used`]
+            });
+            // remove the old keys
+            delete clearObject[`weapongroup_${i}_gun_id`];
+            delete clearObject[`weapongroup_${i}_ammo_id`];
+            delete clearObject[`weapongroup_${i}_quantity_used`];
+        }
+
+        console.log(clearObject);
         // post formJson to our env var url
         fetch(url+ '/range/addTrip', {
            method: 'POST',

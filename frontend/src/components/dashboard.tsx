@@ -38,7 +38,7 @@ const getenv = require('getenv');
 const url = getenv.string('REACT_APP_API');
 
 const Dashboard = (props) => {
-    const defaultUserId = props.LocalDev ? '659f2cdfc8528e10ee4dbecb' : '';
+    const defaultUserId = props.LocalDev ? 'auth0|659f2cdfc8528e10ee4dbecb' : '';
 
     const {userId, saveProfile, setUserId, setAuthToken, authToken} = useContext(UserDataContext) as UserDataContextType;
 

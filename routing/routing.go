@@ -4,6 +4,7 @@ import (
 	"errors"
 	"os"
 	"strings"
+
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
 	"github.com/lestrrat/go-jwx/jwk"
@@ -26,12 +27,13 @@ func Build() *gin.Engine {
 
 	return engine
 }
+
 var UserId string
 
 func CheckJWT() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		if os.Getenv("ALLOWED_ORIGIN") == "http://localhost:3000" || os.Getenv("ALLOWED_ORIGIN") == "http://localhost:8100" {
-			UserId = "659f2cdfc8528e10ee4dbecb" // our testing user
+			UserId = "auth0|659f2cdfc8528e10ee4dbecb" // our testing user
 			c.Next()
 		} else {
 			// fetch authorization header from context
@@ -55,7 +57,7 @@ func CheckJWT() gin.HandlerFunc {
 			for key, value := range claims {
 				if key == "sub" {
 					valueString := string(value.(string))
-					UserId = valueString	// we now use the whole id
+					UserId = valueString // we now use the whole id
 					//UserId = strings.Split(valueString, "|")[1]
 				}
 			}
@@ -95,7 +97,7 @@ func getKey(token *jwt.Token) (interface{}, error) {
 
 func CORS() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		
+
 		//allowedOrigin := os.Getenv("ALLOWED_ORIGIN")
 		allowedOrigin := "*" // test for now.  issue with app
 
