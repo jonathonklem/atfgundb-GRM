@@ -4,7 +4,7 @@ service: atfgundbmiddleware # Name of our service
 provider:
   name: aws
   runtime: go1.x
-  stage: dev
+  stage: prod
   region: us-east-1
   memorySize: 128 # 1MB increments, minimum 128, affects pricing
   environment:
@@ -30,121 +30,73 @@ custom:
 
 # Endpoint config
 functions:
-  GetGuns:
+  DoEverything:
     handler: bin/aws
     events:
       - http:
           path: /guns
           method: get
           cors: true # This allows OPTION requests to pass trough the AWS API Gateway
-  AddGun:
-    handler: bin/aws
-    events:
       - http:
           path: /guns/add
           method: post
           cors: true # This allows OPTION requests to pass trough the AWS API Gateway
-  EditGun:
-    handler: bin/aws
-    events:
       - http:
           path: /guns/edit
           method: post
           cors: true # This allows OPTION requests to pass trough the AWS API Gateway
-  AddMaintenanceToGun:
-    handler: bin/aws
-    events:
       - http:
           path: /guns/addMaintenance
           method: post
           cors: true # This allows OPTION requests to pass trough the AWS API Gateway
-  AddAccessoryToGun:
-    handler: bin/aws
-    events:
       - http:
           path: /guns/addAccessory
           method: post
           cors: true # This allows OPTION requests to pass trough the AWS API Gateway
-  ListAmmo:
-    handler: bin/aws
-    events:
       - http:
           path: /ammo
           method: get
           cors: true # This allows OPTION requests to pass trough the AWS API Gateway
-  AddAmmo:
-    handler: bin/aws
-    events:
       - http:
           path: /ammo/add
           method: post
           cors: true # This allows OPTION requests to pass trough the AWS API Gateway
-  EditAmmo:
-    handler: bin/aws
-    events:
       - http:
           path: /ammo/edit
           method: post
           cors: true # This allows OPTION requests to pass trough the AWS API Gateway
-  DisposeAmmo: 
-    handler: bin/aws
-    events:
       - http:
           path: /ammo/dispose
           method: get
           cors: true # This allows OPTION requests to pass trough the AWS API Gateway
-  PurchaseAmmo:
-    handler: bin/aws
-    events:
       - http:
           path: /ammo/purchase
           method: post
           cors: true # This allows OPTION requests to pass trough the AWS API Gateway
-  UserSaveVisit:
-    handler: bin/aws
-    events:
       - http:
           path: /users/saveVisit
           method: post
           cors: true # This allows OPTION requests to pass trough the AWS API Gateway
-  AddRangeTrip:
-    handler: bin/aws
-    events:
       - http:
           path: /range/addTrip
           method: post
           cors: true # This allows OPTION requests to pass trough the AWS API Gateway
-  GetDateAndAmmoReport:
-    handler: bin/aws
-    events:
       - http:
           path: /range/getDateAndAmmoReport
           method: get
           cors: true # This allows OPTION requests to pass trough the AWS API Gateway
-  RemoveGun:
-    handler: bin/aws
-    events:
       - http:
           path: /guns/remove
           method: get
           cors: true # This allows OPTION requests to pass trough the AWS API Gateway
-  RemoveUser:
-    handler: bin/aws
-    events:
       - http:
           path: /users/delete
           method: get
           cors: true # This allows OPTION requests to pass trough the AWS API Gateway
-  RemoveAmmo:
-    handler: bin/aws
-    events:
       - http:
           path: /ammo/remove
           method: get
           cors: true # This allows OPTION requests to pass trough the AWS API Gateway
-  GetRangeTrips:
-    handler: bin/aws
-    events:
       - http:
           path: /range/getRangeTrips
           method: get
