@@ -2,8 +2,8 @@ package main
 
 import (
 	"atfgundb.com/app/api"
-	"atfgundb.com/app/routing"
 	"atfgundb.com/app/db"
+	"atfgundb.com/app/routing"
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
 	ginadapter "github.com/awslabs/aws-lambda-go-api-proxy/gin"
@@ -37,6 +37,8 @@ func main() {
 	routing.AddRoute(engine, "/users/delete", routing.GET, api.UserDelete)
 	routing.AddRoute(engine, "/range/getDateAndAmmoReport", routing.GET, api.GetDateAndAmmoReport)
 	routing.AddRoute(engine, "/range/getRangeTrips", routing.GET, api.GetRangeTrips)
+	routing.AddRoute(engine, "/range/getAmmoReport", routing.GET, api.GetAmmoReport)
+	routing.AddRoute(engine, "/range/getGunReport", routing.GET, api.GetGunReport)
 
 	proxy := func(req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 		adapter := ginadapter.New(engine)

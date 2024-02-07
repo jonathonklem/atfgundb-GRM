@@ -15,6 +15,11 @@ type Ammo struct {
 	ID           primitive.ObjectID `bson:"_id"`
 }
 
+type AmmoReportEntry struct {
+	AmmoName    []string `json:"ammo_name"  bson:"ammo_name"`
+	TotalRounds int      `json:"count" bson:"count"`
+}
+
 type AmmoPurchase struct {
 	ID            primitive.ObjectID `bson:"_id"`
 	AmmoId        string             `json:"ammo_id" bson:"ammo_id"`

@@ -19,6 +19,26 @@ func GetRangeTrips(c *gin.Context) {
 	c.JSON(http.StatusOK, rangeTrips)
 }
 
+func GetAmmoReport(c *gin.Context) {
+	userId := c.Query("user_id")
+	dateFrom := c.Query("date_from")
+	dateTo := c.Query("date_to")
+
+	ammoReport := db.GetAmmoReport(userId, dateFrom, dateTo)
+
+	c.JSON(http.StatusOK, ammoReport)
+}
+
+func GetGunReport(c *gin.Context) {
+	userId := c.Query("user_id")
+	dateFrom := c.Query("date_from")
+	dateTo := c.Query("date_to")
+
+	gunReport := db.GetGunReport(userId, dateFrom, dateTo)
+
+	c.JSON(http.StatusOK, gunReport)
+}
+
 func GetDateAndAmmoReport(c *gin.Context) {
 	userId := c.Query("user_id")
 	dateFrom := c.Query("date_from")
