@@ -74,7 +74,7 @@ const Reports = (props) => {
             labels.push(data[i].ammo_name[0] as string);
             roundCounts.push(data[i].count as number);
           }
-          const myColors = colorArr;
+          const myColors = [...colorArr];
           myColors.length = labels.length;
           setAmmoPieData({
             labels: labels,
@@ -108,7 +108,7 @@ const Reports = (props) => {
             labels.push(data[i].gun_name[0] as string);
             roundCounts.push(data[i].count as number);
           }
-          const myColors = colorArr;
+          const myColors = [...colorArr];
           myColors.length = labels.length;
 
           setGunPieData({
