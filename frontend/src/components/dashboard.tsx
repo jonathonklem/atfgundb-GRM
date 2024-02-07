@@ -126,7 +126,7 @@ const Dashboard = (props) => {
                                 <h1 className="mt-0 tracking-widest text-center text-lg mb-4">Welcome to GunDB</h1>
                                 <p className="font-extralight opacity-80 mx-auto p-4 block max-w-md tracking-wider text-base">With GunDB, you can effortlessly keep tabs on your ammo purchases, range trips, and gun collection, providing a streamlined approach to firearm management. Easily log details of each ammunition purchase, including quantity, caliber, and date, ensuring you always have an accurate inventory at your fingertips.  
                                 </p><p className="font-extralight opacity-80 mx-auto p-4 block max-w-md tracking-wider text-base">Track your range sessions, recording the firearms used, and rounds fired. Organize your gun collection with comprehensive profiles, featuring essential information about each firearm. Whether you're a seasoned gun enthusiast or a new firearm owner, GunDB simplifies the process of monitoring and maintaining your shooting supplies and equipment.</p>
-                                <Link className="rounded-3xl tracking-wider text-lg bg-redbg drop-shadow-lg text-white py-2 px-4 max-w-md w-1/2 block mb-24 text-center mx-auto" to="/preferences">Account Preferences</Link>
+                                <Link className="rounded-3xl tracking-wider bg-redbg drop-shadow-lg text-white py-2 px-4 max-w-md w-1/6 block mt-24 text-center text-sm mx-auto" to="/preferences">Account Preferences</Link>
                             </div>
                         }
                     ></Route>

@@ -68,6 +68,9 @@ const Reports = (props) => {
           const roundCounts: number[] = [];
 
           for (var i = 0; i < data.length; i++) {
+            if (data[i].ammo_name[0] === undefined) {
+              continue; // deleted ammo can cause problems with data
+            }
             labels.push(data[i].ammo_name[0] as string);
             roundCounts.push(data[i].count as number);
           }
@@ -99,6 +102,9 @@ const Reports = (props) => {
           const roundCounts: number[] = [];
 
           for (var i = 0; i < data.length; i++) {
+            if (data[i].gun_name[0] === undefined) {
+              continue; // deleted guns can cause problems with data
+            }
             labels.push(data[i].gun_name[0] as string);
             roundCounts.push(data[i].count as number);
           }
@@ -288,78 +294,82 @@ const Reports = (props) => {
                   },
                 }}
             />
-            <Pie className="mt-2 bg-gray-500 mb-14 h-4/6" data={gunPieData}
-            
-            options={{
-              plugins: {
-                  title: {
-                    display: true,
-                    text: "Round Count by Gun",
-                    color: "black",
-                  },
-                  legend: {
-                    labels : {
+            <div className="h-96 mx-auto lg:h-auto lg:w-6/12 lg:inline-block">
+              <Pie className="mx-auto mt-2 bg-gray-500 mb-14 w-full" data={gunPieData}
+              
+              options={{
+                plugins: {
+                    title: {
+                      display: true,
+                      text: "Round Count by Gun",
                       color: "black",
                     },
-                    display: true,
-                  }
-              },
-              // set font color to black for all labels
-              scales: {
-                x: {
-                  ticks: {
-                    color: "black",
-                  },
-                  grid: {
-                    color: "black",
-                  },
+                    legend: {
+                      labels : {
+                        color: "black",
+                      },
+                      display: true,
+                    }
                 },
-                y: {
-                  ticks: {
-                    color: "black",
-                  },
-                  grid: {
-                    color: "black",
-                  },
-                },
-              },
-            }}/>
-            <Pie className="mt-2 bg-gray-500 mb-14 h-4/6" data={ammoPieData}
-            
-            options={{
-              plugins: {
-                  title: {
-                    display: true,
-                    text: "Round Count by Ammo",
-                    color: "black",
-                  },
-                  legend: {
-                    labels : {
+                // set font color to black for all labels
+                scales: {
+                  x: {
+                    ticks: {
                       color: "black",
                     },
-                    display: true,
-                  }
-              },
-              // set font color to black for all labels
-              scales: {
-                x: {
-                  ticks: {
-                    color: "black",
+                    grid: {
+                      color: "black",
+                    },
                   },
-                  grid: {
-                    color: "black",
-                  },
-                },
-                y: {
-                  ticks: {
-                    color: "black",
-                  },
-                  grid: {
-                    color: "black",
+                  y: {
+                    ticks: {
+                      color: "black",
+                    },
+                    grid: {
+                      color: "black",
+                    },
                   },
                 },
-              },
-            }}/>
+              }}/>
+            </div>
+            <div className="h-96 block text-center mx-auto lg:h-auto lg:w-6/12 lg:inline-block">
+              <Pie className="mx-auto mt-2 bg-gray-500 mb-14 w-full" data={ammoPieData}
+              
+              options={{
+                plugins: {
+                    title: {
+                      display: true,
+                      text: "Round Count by Ammo",
+                      color: "black",
+                    },
+                    legend: {
+                      labels : {
+                        color: "black",
+                      },
+                      display: true,
+                    }
+                },
+                // set font color to black for all labels
+                scales: {
+                  x: {
+                    ticks: {
+                      color: "black",
+                    },
+                    grid: {
+                      color: "black",
+                    },
+                  },
+                  y: {
+                    ticks: {
+                      color: "black",
+                    },
+                    grid: {
+                      color: "black",
+                    },
+                  },
+                },
+              }}/>
+            </div>
         </>
     )
 }
