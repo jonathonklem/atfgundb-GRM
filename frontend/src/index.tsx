@@ -12,7 +12,7 @@ const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 
-const localDev = false;
+const localDev = true;
 
 if (localDev) {
   root.render(

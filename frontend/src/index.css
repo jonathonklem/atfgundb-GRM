@@ -642,6 +642,10 @@ video {
   margin-bottom: 6rem;
 }
 
+.mb-32 {
+  margin-bottom: 8rem;
+}
+
 .mb-4 {
   margin-bottom: 1rem;
 }
@@ -732,10 +736,6 @@ video {
 
 .w-16 {
   width: 4rem;
-}
-
-.w-3\/4 {
-  width: 75%;
 }
 
 .w-9\/12 {
