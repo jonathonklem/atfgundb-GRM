@@ -86,6 +86,14 @@ functions:
           method: get
           cors: true # This allows OPTION requests to pass trough the AWS API Gateway
       - http:
+          path: /range/getAmmoReport
+          method: get
+          cors: true # This allows OPTION requests to pass trough the AWS API Gateway
+      - http:
+          path: /range/getGunReport
+          method: get
+          cors: true # This allows OPTION requests to pass trough the AWS API Gateway
+      - http:
           path: /guns/remove
           method: get
           cors: true # This allows OPTION requests to pass trough the AWS API Gateway
