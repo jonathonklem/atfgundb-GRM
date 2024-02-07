@@ -1,8 +1,9 @@
 package main // Important: Packages with endpoints must be named 'main'
 import (
 	"log"
-	"atfgundb.com/app/db"
+
 	"atfgundb.com/app/api"
+	"atfgundb.com/app/db"
 	"atfgundb.com/app/routing"
 )
 
@@ -14,8 +15,8 @@ func main() {
 	defer func() {
 		log.Printf("Killing mongo client")
 		db.KillClient()
-	} ()
-	
+	}()
+
 	routing.AddRoute(engine, "/guns", routing.GET, api.ListGuns)
 	routing.AddRoute(engine, "/guns/add", routing.POST, api.AddGun)
 	routing.AddRoute(engine, "/guns/addMaintenance", routing.POST, api.AddMaintenanceToGun)
@@ -33,6 +34,8 @@ func main() {
 	routing.AddRoute(engine, "/range/addTrip", routing.POST, api.AddRangeTrip)
 	routing.AddRoute(engine, "/range/getDateAndAmmoReport", routing.GET, api.GetDateAndAmmoReport)
 	routing.AddRoute(engine, "/range/getRangeTrips", routing.GET, api.GetRangeTrips)
+	routing.AddRoute(engine, "/range/getAmmoReport", routing.GET, api.GetAmmoReport)
+	routing.AddRoute(engine, "/range/getGunReport", routing.GET, api.GetGunReport)
 
 	if err := engine.Run(); err != nil {
 		log.Printf("Error starting gin %v", err)

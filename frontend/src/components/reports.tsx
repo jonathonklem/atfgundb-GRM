@@ -6,7 +6,7 @@ import { Chart } from 'react-chartjs-2'
 import { UserDataContextType } from "../Types";
 import { UserDataContext } from "./contexts/userDataContext";
 
-import { Bar } from "react-chartjs-2";
+import { Bar, Pie } from "react-chartjs-2";
 ChartJS.register(...registerables);
 const Data = [
     {
@@ -54,6 +54,75 @@ const Reports = (props) => {
             setTo(from);
             setFrom(oldTo);
         }
+
+        fetch(url + '/range/getAmmoReport?user_id='+encodeURIComponent(userId as string)+'&date_done=2024-01-01&date_from=' + from +'&date_to=' + to, {
+          method: 'GET',
+          headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json',
+              'Authorization' : 'Bearer ' + authToken
+        }})
+        .then((response) => response.json())
+        .then((data) => {
+          const labels: string[] = [];
+          const roundCounts: number[] = [];
+
+          for (var i = 0; i < data.length; i++) {
+            if (data[i].ammo_name[0] === undefined) {
+              continue; // deleted ammo can cause problems with data
+            }
+            labels.push(data[i].ammo_name[0] as string);
+            roundCounts.push(data[i].count as number);
+          }
+          const myColors = colorArr;
+          myColors.length = labels.length;
+          setAmmoPieData({
+            labels: labels,
+            datasets: [
+              {
+                label: '# of Rounds',
+                data: roundCounts,
+                backgroundColor: myColors,
+                borderColor: "black",
+              }
+            ]
+          });
+        });
+
+        fetch(url + '/range/getGunReport?user_id='+encodeURIComponent(userId as string)+'&date_done=2024-01-01&date_from=' + from +'&date_to=' + to, {
+          method: 'GET',
+          headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json',
+              'Authorization' : 'Bearer ' + authToken
+        }})
+        .then((response) => response.json())
+        .then((data) => {
+          const labels: string[] = [];
+          const roundCounts: number[] = [];
+
+          for (var i = 0; i < data.length; i++) {
+            if (data[i].gun_name[0] === undefined) {
+              continue; // deleted guns can cause problems with data
+            }
+            labels.push(data[i].gun_name[0] as string);
+            roundCounts.push(data[i].count as number);
+          }
+          const myColors = colorArr;
+          myColors.length = labels.length;
+
+          setGunPieData({
+            labels: labels,
+            datasets: [
+              {
+                label: '# of Rounds',
+                data: roundCounts,
+                backgroundColor: myColors,
+                borderColor: "black",
+              }
+            ]
+          });
+        });
         fetch(url + '/range/getDateAndAmmoReport?user_id='+encodeURIComponent(userId as string)+'&date_done=2024-01-01&date_from=' + from +'&date_to=' + to, {
             method: 'GET',
             headers: {
@@ -125,12 +194,43 @@ const Reports = (props) => {
 
     }, [from,to]);
 
+    const [gunPieData, setGunPieData] = useState({
+      labels: ['ak', 'ar'],
+      datasets: [
+        {
+          label: '# of Rounds',
+          data: [12, 19],
+          backgroundColor: [
+            colorArr[0],colorArr[1]
+          ],
+          borderColor: "black",
+        }
+      ]
+    });
+
+    const [ammoPieData, setAmmoPieData] = useState({
+      labels: ['9mm', '.22'],
+      datasets: [
+        {
+          label: '# of Rounds',
+          data: [12, 19],
+          backgroundColor: [
+            colorArr[0],colorArr[1]
+          ],
+          borderColor: "black",
+        }
+      ]
+    });
+
     const [chartData, setChartData] = useState({
         labels: ["2024-01-01", "2024-01-02"], 
         datasets: [
           {
             label: "5.56",
             data: [0,0],
+            backgroundColor: [
+              colorArr[0],colorArr[1]
+            ],
           }
         ]
     });
@@ -194,6 +294,82 @@ const Reports = (props) => {
                   },
                 }}
             />
+            <div className="h-96 mx-auto lg:h-auto lg:w-6/12 lg:inline-block">
+              <Pie className="mx-auto mt-2 bg-gray-500 mb-14 w-full" data={gunPieData}
+              
+              options={{
+                plugins: {
+                    title: {
+                      display: true,
+                      text: "Round Count by Gun",
+                      color: "black",
+                    },
+                    legend: {
+                      labels : {
+                        color: "black",
+                      },
+                      display: true,
+                    }
+                },
+                // set font color to black for all labels
+                scales: {
+                  x: {
+                    ticks: {
+                      color: "black",
+                    },
+                    grid: {
+                      color: "black",
+                    },
+                  },
+                  y: {
+                    ticks: {
+                      color: "black",
+                    },
+                    grid: {
+                      color: "black",
+                    },
+                  },
+                },
+              }}/>
+            </div>
+            <div className="h-96 block text-center mx-auto lg:h-auto lg:w-6/12 lg:inline-block">
+              <Pie className="mx-auto mt-2 bg-gray-500 mb-14 w-full" data={ammoPieData}
+              
+              options={{
+                plugins: {
+                    title: {
+                      display: true,
+                      text: "Round Count by Ammo",
+                      color: "black",
+                    },
+                    legend: {
+                      labels : {
+                        color: "black",
+                      },
+                      display: true,
+                    }
+                },
+                // set font color to black for all labels
+                scales: {
+                  x: {
+                    ticks: {
+                      color: "black",
+                    },
+                    grid: {
+                      color: "black",
+                    },
+                  },
+                  y: {
+                    ticks: {
+                      color: "black",
+                    },
+                    grid: {
+                      color: "black",
+                    },
+                  },
+                },
+              }}/>
+            </div>
         </>
     )
 }

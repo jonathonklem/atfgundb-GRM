@@ -2,6 +2,10 @@ package models
 
 import "go.mongodb.org/mongo-driver/bson/primitive"
 
+type GunReportEntry struct {
+	GunName     []string `json:"gun_name" bson:"gun_name"`
+	TotalRounds int      `json:"count" bson:"count"`
+}
 type Gun struct {
 	Name         string             `json:"name"`
 	Manufacturer string             `json:"manufacturer"`

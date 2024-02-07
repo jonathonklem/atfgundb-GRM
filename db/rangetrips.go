@@ -51,6 +51,139 @@ func GetRangeTrips(userId string) []models.RangeTrip {
 
 }
 
+func GetAmmoReport(userId string, date_from string, date_to string) []models.AmmoReportEntry {
+	client := GetClient()
+
+	rangeTripsCollection := client.Database("ATFGunDB").Collection("rangetrips")
+
+	// example query
+	/* [{
+	       $match: {user_id: "google-oauth2|110522579750586824658", date_done: {$gte:  ISODate("2024-01-07"), $lt: ISODate("2024-02-10")} }
+	   },{
+	       $group: {
+	           "_id": {
+	               ammo_id: "$ammo_id"
+	           },
+	           count: {$sum: "$quantity_used"}
+	       }
+	   },{
+	           $lookup: {
+	               from: "ammo",
+	               localField: "_id.ammo_id",
+	               foreignField: "_id",
+	               as: "ammo"
+	           }
+	   }, {
+	       $project: {
+	           ammo_name: "$ammo.name",
+	           count: "$count"
+	       }
+	   }]*/
+
+	date_from_time, err := time.Parse("2006-01-02 15:04:05.000000", date_from+" 00:00:00.000000")
+
+	if err != nil {
+		log.Fatal(err)
+	}
+	date_to_time, err := time.Parse("2006-01-02 15:04:05.000000", date_to+" 23:59:59.000000")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	primitiveFrom := primitive.NewDateTimeFromTime(date_from_time)
+	primitiveTo := primitive.NewDateTimeFromTime(date_to_time)
+
+	results, err := rangeTripsCollection.Aggregate(context.Background(), bson.A{
+		bson.D{{"$match", bson.D{{"user_id", userId}, {"date_done", bson.D{{"$gte", primitiveFrom}, {"$lte", primitiveTo}}}}}},
+		bson.D{{"$group", bson.D{{"_id", bson.D{{"ammo_id", "$ammo_id"}}}, {"count", bson.D{{"$sum", "$quantity_used"}}}}}},
+		bson.D{{"$lookup", bson.D{{"from", "ammo"}, {"localField", "_id.ammo_id"}, {"foreignField", "_id"}, {"as", "ammo"}}}},
+		bson.D{{"$project", bson.D{{"ammo_name", "$ammo.name"}, {"count", "$count"}}}},
+	})
+
+	var ammoReport []models.AmmoReportEntry = make([]models.AmmoReportEntry, 0)
+
+	for results.Next(context.Background()) {
+		var elem models.AmmoReportEntry
+		err := results.Decode(&elem)
+		if err != nil {
+			log.Fatal(err)
+		}
+		log.Printf("ELEM FROM AMMO FETCH")
+		log.Printf("Found result: %v", elem)
+		ammoReport = append(ammoReport, elem)
+	}
+
+	results.Close(context.Background())
+
+	return ammoReport
+}
+
+func GetGunReport(userId string, date_from string, date_to string) []models.GunReportEntry {
+	client := GetClient()
+
+	rangeTripsCollection := client.Database("ATFGunDB").Collection("rangetrips")
+
+	// example query
+	/* [{
+	       $match: {user_id: "google-oauth2|110522579750586824658", date_done: {$gte:  ISODate("2024-01-07"), $lt: ISODate("2024-02-10")} }
+	   },{
+	       $group: {
+	           "_id": {
+	               gun_id: "$gun_id"
+	           },
+	           count: {$sum: "$quantity_used"}
+	       }
+	   },{
+	           $lookup: {
+	               from: "guns",
+	               localField: "_id.gun_id",
+	               foreignField: "_id",
+	               as: "gun"
+	           }
+	   }, {
+	       $project: {
+	           gun_name: "$gun.name",
+	           count: "$count"
+	       }
+	   }]*/
+
+	date_from_time, err := time.Parse("2006-01-02 15:04:05.000000", date_from+" 00:00:00.000000")
+
+	if err != nil {
+		log.Fatal(err)
+	}
+	date_to_time, err := time.Parse("2006-01-02 15:04:05.000000", date_to+" 23:59:59.000000")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	primitiveFrom := primitive.NewDateTimeFromTime(date_from_time)
+	primitiveTo := primitive.NewDateTimeFromTime(date_to_time)
+
+	results, err := rangeTripsCollection.Aggregate(context.Background(), bson.A{
+		bson.D{{"$match", bson.D{{"user_id", userId}, {"date_done", bson.D{{"$gte", primitiveFrom}, {"$lte", primitiveTo}}}}}},
+		bson.D{{"$group", bson.D{{"_id", bson.D{{"gun_id", "$gun_id"}}}, {"count", bson.D{{"$sum", "$quantity_used"}}}}}},
+		bson.D{{"$lookup", bson.D{{"from", "guns"}, {"localField", "_id.gun_id"}, {"foreignField", "_id"}, {"as", "gun"}}}},
+		bson.D{{"$project", bson.D{{"gun_name", "$gun.name"}, {"count", "$count"}}}},
+	})
+
+	var gunReport []models.GunReportEntry = make([]models.GunReportEntry, 0)
+
+	for results.Next(context.Background()) {
+		log.Printf("Found result: %v", results.Current)
+		var elem models.GunReportEntry
+		err := results.Decode(&elem)
+		if err != nil {
+			log.Fatal(err)
+		}
+		gunReport = append(gunReport, elem)
+	}
+
+	results.Close(context.Background())
+
+	return gunReport
+}
+
 func GetDateAndAmmoReport(userId string, date_from string, date_to string) []models.DateAndAmmoReport {
 	client := GetClient()
 

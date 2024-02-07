@@ -28,6 +28,7 @@ import EditAmmo from "./ammo/edit";
 
 import { GunContext } from "./contexts/gunContext";
 import { UserDataContext } from "./contexts/userDataContext";
+import Preferences from './preferences';
 
 
 // Initialize React Ga with your tracking ID
@@ -66,7 +67,6 @@ const Dashboard = (props) => {
         const pieElement = document.getElementById('piechart') as HTMLImageElement;
         pieElement.src = '/pie-chart.png';
 
-        console.log(pathname);
         switch (pathname.split('/')[1]) {
             case 'trips':
                 tripElement.src = '/range-red.png';
@@ -126,11 +126,11 @@ const Dashboard = (props) => {
                                 <h1 className="mt-0 tracking-widest text-center text-lg mb-4">Welcome to GunDB</h1>
                                 <p className="font-extralight opacity-80 mx-auto p-4 block max-w-md tracking-wider text-base">With GunDB, you can effortlessly keep tabs on your ammo purchases, range trips, and gun collection, providing a streamlined approach to firearm management. Easily log details of each ammunition purchase, including quantity, caliber, and date, ensuring you always have an accurate inventory at your fingertips.  
                                 </p><p className="font-extralight opacity-80 mx-auto p-4 block max-w-md tracking-wider text-base">Track your range sessions, recording the firearms used, and rounds fired. Organize your gun collection with comprehensive profiles, featuring essential information about each firearm. Whether you're a seasoned gun enthusiast or a new firearm owner, GunDB simplifies the process of monitoring and maintaining your shooting supplies and equipment.</p>
-                                <p className="font-extralight mx-auto opacity-80 mb-4 p-4 block max-w-md tracking-wider text-base">If you would like to delete your account have have your information wiped from our database you can click the following button at any time:</p>
-                                <Link className="rounded-3xl tracking-wider text-lg bg-redbg drop-shadow-lg text-white py-2 px-4 max-w-md w-3/4 block mb-24 text-center mx-auto" to="/delete">Account Deletion</Link>
+                                <Link className="rounded-3xl tracking-wider bg-redbg drop-shadow-lg text-white py-2 px-4 max-w-md w-1/6 block mt-24 text-center text-sm mx-auto" to="/preferences">Account Preferences</Link>
                             </div>
                         }
                     ></Route>
+                    <Route path="/preferences" element={<Preferences />}/>
                     <Route path="/delete" element={<DeleteScreen />}/>
                     <Route path="guns">
                         <Route index  element={<Guns />} />
