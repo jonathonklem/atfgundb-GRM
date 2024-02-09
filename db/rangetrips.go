@@ -58,6 +58,10 @@ func GetAmmoReport(userId string, date_from string, date_to string) []models.Amm
 
 	// example query
 	/* [{
+			$addFields: {
+				cst_date: {$subtract: ["$date_done", 6*60*60*1000]},
+			}
+		},{
 	       $match: {user_id: "google-oauth2|110522579750586824658", date_done: {$gte:  ISODate("2024-01-07"), $lt: ISODate("2024-02-10")} }
 	   },{
 	       $group: {
@@ -94,7 +98,8 @@ func GetAmmoReport(userId string, date_from string, date_to string) []models.Amm
 	primitiveTo := primitive.NewDateTimeFromTime(date_to_time)
 
 	results, err := rangeTripsCollection.Aggregate(context.Background(), bson.A{
-		bson.D{{"$match", bson.D{{"user_id", userId}, {"date_done", bson.D{{"$gte", primitiveFrom}, {"$lte", primitiveTo}}}}}},
+		bson.D{{"$addFields", bson.D{{"cst_date", bson.D{{"$subtract", bson.A{"$date_done", 6*60*60*1000}}}}}}},
+		bson.D{{"$match", bson.D{{"user_id", userId}, {"cst_date", bson.D{{"$gte", primitiveFrom}, {"$lte", primitiveTo}}}}}},
 		bson.D{{"$group", bson.D{{"_id", bson.D{{"ammo_id", "$ammo_id"}}}, {"count", bson.D{{"$sum", "$quantity_used"}}}}}},
 		bson.D{{"$lookup", bson.D{{"from", "ammo"}, {"localField", "_id.ammo_id"}, {"foreignField", "_id"}, {"as", "ammo"}}}},
 		bson.D{{"$project", bson.D{{"ammo_name", "$ammo.name"}, {"count", "$count"}}}},
@@ -125,6 +130,10 @@ func GetGunReport(userId string, date_from string, date_to string) []models.GunR
 
 	// example query
 	/* [{
+			$addFields: {
+				cst_date: {$subtract: ["$date_done", 6*60*60*1000]},
+			}
+		},{
 	       $match: {user_id: "google-oauth2|110522579750586824658", date_done: {$gte:  ISODate("2024-01-07"), $lt: ISODate("2024-02-10")} }
 	   },{
 	       $group: {
@@ -161,7 +170,8 @@ func GetGunReport(userId string, date_from string, date_to string) []models.GunR
 	primitiveTo := primitive.NewDateTimeFromTime(date_to_time)
 
 	results, err := rangeTripsCollection.Aggregate(context.Background(), bson.A{
-		bson.D{{"$match", bson.D{{"user_id", userId}, {"date_done", bson.D{{"$gte", primitiveFrom}, {"$lte", primitiveTo}}}}}},
+		bson.D{{"$addFields", bson.D{{"cst_date", bson.D{{"$subtract", bson.A{"$date_done", 6*60*60*1000}}}}}}},
+		bson.D{{"$match", bson.D{{"user_id", userId}, {"cst_date", bson.D{{"$gte", primitiveFrom}, {"$lte", primitiveTo}}}}}},
 		bson.D{{"$group", bson.D{{"_id", bson.D{{"gun_id", "$gun_id"}}}, {"count", bson.D{{"$sum", "$quantity_used"}}}}}},
 		bson.D{{"$lookup", bson.D{{"from", "guns"}, {"localField", "_id.gun_id"}, {"foreignField", "_id"}, {"as", "gun"}}}},
 		bson.D{{"$project", bson.D{{"gun_name", "$gun.name"}, {"count", "$count"}}}},
@@ -191,7 +201,11 @@ func GetDateAndAmmoReport(userId string, date_from string, date_to string) []mod
 
 	// example query
 	/* [{
-		$match: {user_id: "110522579750586824658", date_done: {$gte:  ISODate("2024-01-07"), $lt: ISODate("2024-01-10")} }
+		$addFields: {
+			cst_date: {$subtract: ["$date_done", 6*60*60*1000]},
+		}
+	},{
+		$match: {user_id: "google-oauth2|110522579750586824658", date_done: {$gte:  ISODate("2024-01-07"), $lt: ISODate("2024-01-10")} }
 	},{
 		$group: {
 			"_id": {
@@ -220,8 +234,7 @@ func GetDateAndAmmoReport(userId string, date_from string, date_to string) []mod
 	// give me the code now
 
 	// doing the date conversion piecemeal because having one long bson.D entry was causing problems
-	date_from_time, err := time.Parse("2006-01-02 15:04:05.000000", date_from+" 00:00:00.000000")
-
+	date_from_time, err := time.Parse("2006-01-02 15:04:05.000000", date_from+" 00:00:00.000000")	
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -234,9 +247,10 @@ func GetDateAndAmmoReport(userId string, date_from string, date_to string) []mod
 	primitiveTo := primitive.NewDateTimeFromTime(date_to_time)
 
 	results, err := rangeTripsCollection.Aggregate(context.Background(), bson.A{
-		bson.D{{"$match", bson.D{{"user_id", userId}, {"date_done", bson.D{{"$gte", primitiveFrom}, {"$lte", primitiveTo}}}}}},
+		bson.D{{"$addFields", bson.D{{"cst_date", bson.D{{"$subtract", bson.A{"$date_done", 6*60*60*1000}}}}}}},
+		bson.D{{"$match", bson.D{{"user_id", userId}, {"cst_date", bson.D{{"$gte", primitiveFrom}, {"$lte", primitiveTo}}}}}},
 		//bson.D{{"$group", bson.D{{"_id", bson.D{{"date_done", "$date_done"}, {"ammo_id", "$ammo_id"}}}, {"count", bson.D{{"$sum", "$quantity_used"}}}}}},
-		bson.D{{"$group", bson.D{{"_id", bson.D{{"date_done", bson.D{{"$dateToString", bson.D{{"format", "%Y-%m-%dT00:00:00.00Z"}, {"date", "$date_done"}}}}}, {"ammo_id", "$ammo_id"}}}, {"count", bson.D{{"$sum", "$quantity_used"}}}}}},
+		bson.D{{"$group", bson.D{{"_id", bson.D{{"date_done", bson.D{{"$dateToString", bson.D{{"format", "%Y-%m-%dT00:00:00.00Z"}, {"date", "$cst_date"}}}}}, {"ammo_id", "$ammo_id"}}}, {"count", bson.D{{"$sum", "$quantity_used"}}}}}},
 		bson.D{{"$lookup", bson.D{{"from", "ammo"}, {"localField", "_id.ammo_id"}, {"foreignField", "_id"}, {"as", "ammo"}}}},
 		bson.D{{"$project", bson.D{{"ammo_name", "$ammo.name"}, {"date", "$_id.date_done"}, {"count", "$count"}}}},
 		bson.D{{"$sort", bson.D{{"date", 1}}}},
@@ -266,10 +280,15 @@ func GetDateAndAmmoReport(userId string, date_from string, date_to string) []mod
 func InsertRangeTrip(rangeTrip *models.RangeTrip) {
 	client := GetClient()
 
+	log.Println("NOT!!!  Loading america/chicago location time")
+
 	rangeTripsCollection := client.Database("ATFGunDB").Collection("rangetrips")
 
 	rangeTrip.ID = primitive.NewObjectID()
 	rangeTrip.DateDone = primitive.NewDateTimeFromTime(time.Now())
+
+	log.Println("Sending the following time to mongo")
+	log.Println(time.Now())
 
 	log.Println("Right before updateone()")
 	_, err := rangeTripsCollection.InsertOne(context.Background(), rangeTrip)
