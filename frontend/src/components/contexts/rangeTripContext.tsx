@@ -25,7 +25,7 @@ export const RangeTripProvider = ({ children }) => {
         fetchRangeTrips();
     }, [authToken]);
 
-    function addRangeTrip(clearObject, callback) {
+    const addRangeTrip = (clearObject, callback) => {
         clearObject.user_id = userId;
 
         // massage data for backend
@@ -64,7 +64,7 @@ export const RangeTripProvider = ({ children }) => {
 
    }
 
-   function fetchRangeTrips() {
+   const fetchRangeTrips = () => {
         if (!userId) { return; }
         if (fetchingRangeTrips) { return }
 

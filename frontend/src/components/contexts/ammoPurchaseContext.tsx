@@ -14,7 +14,7 @@ export const AmmoPurchaseProvider = ({ children }) => {
     const { authToken } = React.useContext(UserDataContext) as UserDataContextType;
     const { fetchAmmo } = React.useContext(AmmoContext) as AmmoContextType;
 
-    function purchaseAmmo(clearObject, callback) {
+    const purchaseAmmo = (clearObject, callback) => {
         // post formJson to our env var url
         fetch(`${url}/ammo/purchase`, {
             method: 'POST',

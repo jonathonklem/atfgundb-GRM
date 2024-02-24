@@ -19,7 +19,7 @@ const PurchaseAmmo = (props) => {
         quantity: 0,
     } as AmmoPurchase);
 
-    function savePurchase(e) {
+    const savePurchase = (e) => {
         e.preventDefault();
 
         const purchaseToSave = {...ammoPurchase};

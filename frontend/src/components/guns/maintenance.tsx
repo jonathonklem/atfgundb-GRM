@@ -16,7 +16,7 @@ const Maintenance = (props) => {
     const { authToken } = React.useContext(UserDataContext) as UserDataContextType;
     const { guns, fetchGuns } = React.useContext(GunContext) as GunContextType;
 
-    function addMaintenance(gunId, formJson, callback) {
+    const addMaintenance = (gunId, formJson, callback) => {
         // post formJson to our env var url
         fetch(url + '/guns/addMaintenance?gun_id='+gunId, {
             method: 'POST',
@@ -31,7 +31,7 @@ const Maintenance = (props) => {
             .then(data => console.log(data)).then(() => callback());
     }
 
-    function saveMaintenance(e)  {
+    const saveMaintenance = (e) => {
         e.preventDefault();
 
         if (maintenance.maintenance_type === "" || !maintenance.gun_id) {

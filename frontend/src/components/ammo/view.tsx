@@ -25,7 +25,7 @@ const ViewAmmo = (props) => {
         });
     }, []);
 
-    function handleRemove() {
+    const handleRemove = () => {
         if (!confirmText) {
             setClickDelete(true);
         }

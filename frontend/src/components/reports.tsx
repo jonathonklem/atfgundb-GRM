@@ -235,7 +235,7 @@ const Reports = (props) => {
         ]
     });
 
-    function getFormattedDate(date) {
+    const getFormattedDate = (date) => {
         var year = date.getFullYear();
       
         var month = (1 + date.getMonth()).toString();

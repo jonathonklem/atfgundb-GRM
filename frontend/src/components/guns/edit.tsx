@@ -36,7 +36,7 @@ const EditGun = (props) => {
         });
     }, []);
     
-    function saveGun(e) {
+    const saveGun = (e) => {
         e.preventDefault();
 
         if (gun.name === "") {

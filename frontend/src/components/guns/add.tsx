@@ -31,7 +31,7 @@ const AddGun = (props) => {
         setGun({...gun, [field]: value});
     }
 
-    function saveGun(e) {
+    const saveGun = (e) => {
         e.preventDefault();
 
         if (gun.name === "") {

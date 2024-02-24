@@ -15,7 +15,7 @@ const Accessory = (props) => {
     const [accessory, setAccessory] = React.useState({} as AccessoryType);
     const formRef = React.useRef(null);
 
-    function addAccessory(gunId, formJson, callback) {
+    const addAccessory = (gunId, formJson, callback) => {
         // post formJson to our env var url
         fetch(url+ '/guns/addAccessory?gun_id='+gunId, {
             method: 'POST',

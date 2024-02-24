@@ -16,7 +16,7 @@ export const AmmoProvider = ({ children }) => {
         fetchAmmo();
     }, [authToken]);
 
-    function editAmmo(id: string, clearObject:any, callback:any) {
+    const editAmmo = (id: string, clearObject:any, callback:any) => {
         clearObject.user_id = userId;
         clearObject.id = id;
         
@@ -37,7 +37,7 @@ export const AmmoProvider = ({ children }) => {
             });
     }
 
-    function addAmmo (clearObject, callback) {
+    const addAmmo = (clearObject, callback) => {
         // post formJson to our env var url
         fetch(`${url}/ammo/add`, {
             method: 'POST',
@@ -54,7 +54,7 @@ export const AmmoProvider = ({ children }) => {
             callback(data);
         })
     }
-    function fetchAmmo() {
+    const fetchAmmo = () => {
         if (!userId) { return; }
 
         if (fetchingAmmo) { return }
@@ -71,7 +71,7 @@ export const AmmoProvider = ({ children }) => {
             .then(response => response.json()) 
             .then(data => setAmmo(data)).then(() => setFetchingAmmo(false));
     }
-    function removeAmmo(id, callback) {
+    const removeAmmo = (id, callback) => {
         fetch(url+ '/ammo/remove?ammo_id='+id, {
             method: 'GET',
             headers: {
@@ -87,7 +87,7 @@ export const AmmoProvider = ({ children }) => {
         });
     }
 
-    function disposeAmmo(ammoId, quantity, callback) {
+    const disposeAmmo = (ammoId, quantity, callback) => {
         fetch(`${url}/ammo/dispose?ammo_id=`+ammoId+`&quantity=`+quantity, {
             method: 'GET',
             headers: {

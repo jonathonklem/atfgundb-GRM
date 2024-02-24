@@ -36,7 +36,7 @@ const AddAmmo = (props) => {
         });
     }, []);
 
-    function saveAmmo(e) {
+    const saveAmmo = (e) => {
         e.preventDefault();
 
         setSuccessMessage("");
