@@ -39,12 +39,12 @@ const RangeTrip = (props) => {
     }
 
     const renderWeaponGroups = () => {
-        let weaponGroups: React.ReactNode[] = [];
+        let retval: React.ReactNode[] = [];
         weaponGroups.forEach((element, index) => {
-            weaponGroups.push(<WeaponGroup rowNum={index} key={index} updateWeaponGroup={updateWeaponGroup} weaponGroup={element}/>);
+            retval.push(<WeaponGroup rowNum={index} key={index} updateWeaponGroup={updateWeaponGroup} weaponGroup={element}/>);
         
         })
-        return weaponGroups;
+        return retval;
     }
 
     const saveTrip = (e) => {
@@ -52,17 +52,23 @@ const RangeTrip = (props) => {
         let hasErrors = false;
 
         weaponGroups.forEach((weaponGroup) => {
-            if (weaponGroup.gun_id === "" || weaponGroup.ammo_id === "" || weaponGroup.quantity_used < 1) {
+            if (weaponGroup.gun_id == "" || weaponGroup.ammo_id == "" || weaponGroup.quantity_used < 1 || JSON.stringify(weaponGroup) === '{}') {
                 setSuccessMessage("*** All fields except note are required ***");
                 hasErrors = true;
                 return;
             }
         });
+
         if (hasErrors) {
             return;
         }
 
-        const rangeTripToSave = { ...rangeTrip, weaponGroups: weaponGroups };
+        if (rangeTrip.location === "") {
+            setSuccessMessage("*** Location is required ***");
+            return;
+        }
+
+        const rangeTripToSave = { ...rangeTrip, weapon_groups: weaponGroups };
         setSuccessMessage("Saving.....");
         addRangeTrip(rangeTripToSave, (data) => {
             if (data.success) {
@@ -118,8 +124,8 @@ const RangeTrip = (props) => {
                     <CreatableSelect styles={customStyles} className="block w-full tracking-wider text-sm rounded-md" name="location" value={{label: rangeTrip.location, value: rangeTrip.location }} onChange={(e) => updateRangeTrip('location', e?.value)} options={rangeOptions} />    
                 </div></div></label>
                
-                <label className="block my-2 mb-24 mx-auto"><div className="block text-sm block font-extralight tracking-wider">Note</div><div className="block w-full mx-auto"><div className="block w-full p-2 w-1/2 mx-auto"><textarea value={rangeTrip.note} onChange={(e) => updateRangeTrip('note', e.target.value)} name="note"></textarea></div></div></label>                
-                
+                <label className="block my-2 mx-auto"><div className="block text-sm block font-extralight tracking-wider">Note</div><div className="block w-full mx-auto"><div className="block w-full p-2 w-1/2 mx-auto"><textarea value={rangeTrip.note} onChange={(e) => updateRangeTrip('note', e.target.value)} name="note"></textarea></div></div></label>                
+                <p className="mb-24">{successMessage}</p>
                 <div className="bg-darkbg mt-4 flex justify-between pt-2 fixed bottom-[53px] w-full left-0 text-center">
                     <button onClick={saveTrip} className="rounded-3xl tracking-wider text-lg bg-redbg drop-shadow-lg text-white py-2 px-4 w-1/4 block text-center mx-auto">Submit</button>
                 </div>

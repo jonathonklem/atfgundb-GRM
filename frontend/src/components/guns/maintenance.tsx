@@ -1,6 +1,6 @@
 import React from "react";
 import { UserDataContext } from "../contexts/userDataContext";
-import { Maintenance, UserDataContextType } from "../../Types";
+import { Maintenance as MaintenanceType, UserDataContextType } from "../../Types";
 import { GunContext } from "../contexts/gunContext";
 import { GunContextType } from "../../Types";
 
@@ -12,7 +12,7 @@ const Maintenance = (props) => {
 
     const formRef = React.useRef(null);
     
-    const [maintenance, setMaintenance] = React.useState({} as Maintenance);
+    const [maintenance, setMaintenance] = React.useState({} as MaintenanceType);
     const { authToken } = React.useContext(UserDataContext) as UserDataContextType;
     const { guns, fetchGuns } = React.useContext(GunContext) as GunContextType;
 
@@ -58,7 +58,7 @@ const Maintenance = (props) => {
             <em className="text-center green-600 block my-2">{successMessage}</em>
             <form ref={formRef} className="px-4 pb-16">
                 <label className="block my-2 mx-auto"><div className="block text-sm font-extralight tracking-wider">Gun</div><div className="block w-full p-2 mx-auto">
-                    <select name="gun_id" onChange={e => {updateMaintenance('gun_id', Number(e.target.value))}}>
+                    <select name="gun_id" onChange={e => {updateMaintenance('gun_id', e.target.value)}}>
                         <option>Choose</option>
                         {guns.map((gun) => (
                             <option value={gun.ID}>{gun.name}</option>

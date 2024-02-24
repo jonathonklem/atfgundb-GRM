@@ -27,31 +27,29 @@ const Accessory = (props) => {
             body: JSON.stringify(formJson)
         })
             .then(response => response.json())
-            .then(data => callback());
+            .then(callback());
     }
 
     const saveAccessory = (e) => {
         e.preventDefault();
-        const form = e.target;
-        const formData = new FormData(form);
-        
-        const formJson = Object.fromEntries(formData.entries());
 
         if (gunId === "") {
             setSuccessMessage("*** Gun is required ***");
             return;
         }
 
-        if (formJson.name === "") {
+        if (accessory.name === "") {
             setSuccessMessage("*** Name is required ***");
             return;
         }
         
         setSuccessMessage("Adding.....")
-        addAccessory(gunId, formJson, () => {
+        addAccessory(gunId, accessory, () => {
             setSuccessMessage("Accessory added successfully!");
             fetchGuns();
-            form.reset();
+            if (formRef.current) {
+                (formRef.current as HTMLFormElement)?.reset();
+            }
         });
     }
 

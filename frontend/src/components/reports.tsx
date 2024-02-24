@@ -44,6 +44,18 @@ const Reports = (props) => {
 
     today.toDateString()
     
+    const getFormattedDate = (date) => {
+      var year = date.getFullYear();
+    
+      var month = (1 + date.getMonth()).toString();
+      month = month.length > 1 ? month : '0' + month;
+    
+      var day = date.getDate().toString();
+      day = day.length > 1 ? day : '0' + day;
+      
+      return year + '-' + month + '-' + day;
+    }
+    
     const [from, setFrom] = useState(getFormattedDate(thirtyDaysAgo));
     const [to, setTo] = useState(getFormattedDate(today));
     const [totalRoundCount, setTotalRoundCount] = useState(0);
@@ -235,17 +247,7 @@ const Reports = (props) => {
         ]
     });
 
-    const getFormattedDate = (date) => {
-        var year = date.getFullYear();
-      
-        var month = (1 + date.getMonth()).toString();
-        month = month.length > 1 ? month : '0' + month;
-      
-        var day = date.getDate().toString();
-        day = day.length > 1 ? day : '0' + day;
-        
-        return year + '-' + month + '-' + day;
-      }
+
 
  
 

@@ -30,7 +30,7 @@ const WeaponGroup = (props) => {
         <div className={(props.rowNum%2) ? "bg-altrow p-4" : "p-4"}>
             <label className="my-2">
                     <div className="block font-extralight text-sm tracking-wider">Gun #{props.rowNum+1}</div><div className="block w-full p-2 mx-auto">
-                    <select onChange={gunHandler} value={props.weaponGroup.gun_id}>
+                    <select onChange={gunHandler} name="gun_id" value={props.weaponGroup.gun_id}>
                         <option>Choose</option>
                         {guns.map((gun) => (
                             <option key={gun.ID} value={gun.ID}>{gun.name}</option>
@@ -41,7 +41,7 @@ const WeaponGroup = (props) => {
             <label className="block my-4 mx-auto">
                 <div className="block text-sm font-extralight tracking-wider">Ammo</div>
                 <div className="block w-full p-2 mx-auto">
-                    <select value={props.weaponGroup.ammo_id} onChange={(e) => props.updateWeaponGroup(props.rowNum, e.target.name, e.target.value)}>
+                    <select name="ammo_id" value={props.weaponGroup.ammo_id} onChange={(e) => props.updateWeaponGroup(props.rowNum, e.target.name, e.target.value)}>
                         <option>Choose</option>
                         {filteredAmmo.map((item: Ammo) => (
                             <option value={item?.ID?.toString()}>{item.name}</option>
@@ -58,15 +58,15 @@ const WeaponGroup = (props) => {
             </label>
             {!incremental && (
                 <>
-                    <label className="block my-4 mx-auto"><div className="block text-sm block font-extralight tracking-wider">Quantity Used</div><div className="block w-full mx-auto"><div className="block w-full p-2 w-1/2 mx-auto"><input type="text" value={props.weaponGroup.quantity_used}  onChange={(e) => props.updateWeaponGroup(props.rowNum, e.target.name, Number(e.target.value))} /></div></div></label>
+                    <label className="block my-4 mx-auto"><div className="block text-sm block font-extralight tracking-wider">Quantity Used</div><div className="block w-full mx-auto"><div className="block w-full p-2 w-1/2 mx-auto"><input type="text" value={props.weaponGroup.quantity_used} name="quantity_used" onChange={(e) => props.updateWeaponGroup(props.rowNum, e.target.name, Number(e.target.value))} /></div></div></label>
                 </>
                 
             )}
             {incremental && (
                 <>
                     <label className="block my-2 mx-auto grid grid-cols-3">
-                        <label className="inline my-4"><div className="text-sm block font-extralight text-center tracking-wider">Total Quantity Used</div><div className="w-full mx-auto"><div className="block w-full p-2 w-full mx-auto"><input type="text" readOnly={incremental} value={props.weaponGroup.quantity_used} /></div></div></label>
-                        <label className="inline my-4"><div className="text-sm block font-extralight text-center tracking-wider">Rounds to Add</div><div className="w-full mx-auto"><div className="block w-full p-2 w-full mx-auto"><input type="text" value={props.weaponGroup.quantity_addl} onChange={(e) => props.updateWeaponGroup(props.rowNum, e.target.name, Number(e.target.value)) } /></div></div></label>
+                        <label className="inline my-4"><div className="text-sm block font-extralight text-center tracking-wider">Total Quantity Used</div><div className="w-full mx-auto"><div className="block w-full p-2 w-full mx-auto"><input type="text" readOnly={incremental} value={props.weaponGroup.quantity_used} name="quantity_used"/></div></div></label>
+                        <label className="inline my-4"><div className="text-sm block font-extralight text-center tracking-wider">Rounds to Add</div><div className="w-full mx-auto"><div className="block w-full p-2 w-full mx-auto"><input type="text" value={props.weaponGroup.quantity_addl}  name="quantity_addl" onChange={(e) => props.updateWeaponGroup(props.rowNum, e.target.name, Number(e.target.value)) } /></div></div></label>
                         <div className="inline text-sm font-extralight tracking-wider align-middle"><button className="rounded-3xl tracking-wider text-xs mt-12 bg-redbg drop-shadow-lg text-white py-1 px-2 block text-center mx-auto" onClick={(e) => {
                             e.preventDefault();
                             const qtyUsed = Number(props.weaponGroup.quantity_used);
