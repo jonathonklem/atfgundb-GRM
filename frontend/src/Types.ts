@@ -9,7 +9,7 @@ export interface Gun {
     manufacturer: string,
     model: string,
     caliber: string,
-    roundcount: Number,
+    roundcount: number,
     user_id: string,
     accessories: Accessory[],
     maintenance: Maintenance[],
@@ -18,10 +18,10 @@ export interface Gun {
 
 export interface AmmoPurchase {
     name: string,
-    count: Number,
+    count: number,
     grain: string,
     user_id: string,
-    price: Number,
+    price: number,
     date: string,
 }
 
@@ -30,24 +30,24 @@ export interface Maintenance {
     date_done: string,
 }
 export interface Ammo {
-    ID?: Number,
+    ID?: number,
     name: string,
-    amount: Number,
+    amount: number,
     grain: string,
     user_id: string,
-    average_price: Number,
-    last_price: Number,
+    average_price: number,
+    last_price: number,
     caliber: string,
 }
 
 export interface RangeTripType {
-    ID?: Number,
+    ID?: number,
     date_done: Date,
     location: string,
     gun_id: string,
     ammo_id: string,
-    round_count?: Number,
-    quantity_used?: Number,
+    round_count?: number,
+    quantity_used?: number,
     user_id: string,
     note?: string,
 }
@@ -66,7 +66,7 @@ export type GunContextType = {
     setGuns: (guns: Gun[]) => void;
     addGun: (clearObject:any, callback:any) => void;
     fetchGuns: () => void;
-    removeGun: (id: String, callback:any) => void;
+    removeGun: (id: string, callback:any) => void;
     editGun: (id: string, clearObject:any, callback:any) => void;
 };
 
@@ -75,8 +75,8 @@ export type AmmoContextType = {
     setAmmo: (ammo: Ammo[]) => void;
     addAmmo: (clearObject:any, callback:any) => void;
     fetchAmmo: () => void;
-    removeAmmo: (id: String, callback:any) => void;
-    disposeAmmo: (id: String, quantity: Number, callback:any) => void;
+    removeAmmo: (id: string, callback:any) => void;
+    disposeAmmo: (id: string, quantity: number, callback:any) => void;
     editAmmo: (id: string, clearObject:any, callback:any) => void;
 };
 
