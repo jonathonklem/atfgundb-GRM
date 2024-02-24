@@ -34,6 +34,15 @@ export interface Maintenance {
     maintenance_type: string,
     date_done: string,
 }
+
+export interface WeaponGroupType {
+    ID: string,
+    gun_id: string,
+    ammo_id: string,
+    quantity_used: number,
+    quantity_addl: number,
+}
+
 export interface Ammo {
     ID?: number,
     name: string,
