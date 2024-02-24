@@ -19,7 +19,7 @@ const ViewGun = (props) => {
 
     let { id } = useParams();
 
-    function dateFormat(date: Date) {
+    const dateFormat = (date: Date) => {
         date.getMonth()
         var month = date.getMonth()+1;
         var day   = date.getDate().toString().padStart(2,'0');
@@ -29,7 +29,7 @@ const ViewGun = (props) => {
         return month + "/" + day + "/" + year;
     }
 
-    function showAllTrips() {
+    const showAllTrips = () => {
         setCurrentFilter(gunRangeTrips.length);
     }
 
@@ -47,7 +47,7 @@ const ViewGun = (props) => {
         });
     }, []);
 
-    function handleRemove() {
+    const handleRemove = () => {
         if (!confirmText) {
             setClickDelete(true);
         }

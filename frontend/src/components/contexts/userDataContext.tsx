@@ -17,7 +17,7 @@ export const UserDataProvider = ({ children }) => {
     const { logout  } = useAuth0();
 
 
-    function removeAccount() {
+    const removeAccount = () => {
         fetch(url+'/users/delete?user_id='+encodeURIComponent(userId as string), {
             method: 'GET',
             headers: {
@@ -31,7 +31,7 @@ export const UserDataProvider = ({ children }) => {
     }
     
     // pass freshUserId to avoid waiting for state to consolidate
-    function saveProfile(freshUserId, user) {
+    const saveProfile = (freshUserId, user) => {
         user.id = freshUserId;      
         fetch(`${url}/users/saveVisit`, {
             method: 'POST',

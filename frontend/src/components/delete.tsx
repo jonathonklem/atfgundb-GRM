@@ -7,9 +7,7 @@ const DeleteScreen = (props) => {
     const [successMessage, setSuccessMessage] = useState<string>('');
 
     const { removeAccount } = React.useContext(UserDataContext) as UserDataContextType;
-    function handleRemove() {
-        console.log("In handle remove");
-
+    const handleRemove = () => {
         if (confirmText === "PROCEED") {
             removeAccount();
             setSuccessMessage("Account Deleted");

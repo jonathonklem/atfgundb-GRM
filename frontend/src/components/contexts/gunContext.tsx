@@ -17,7 +17,7 @@ export const GunProvider = ({ children }) => {
         fetchGuns();
     }, [authToken]);
 
-    function editGun(id: string, clearObject:any, callback:any) {
+    const editGun = (id: string, clearObject:any, callback:any) => {
         clearObject.user_id = userId;
         clearObject.id = id;
         
@@ -37,7 +37,7 @@ export const GunProvider = ({ children }) => {
         });
     }
 
-    function fetchGuns() {
+    const fetchGuns = () => {
         console.log("Fetch guns auth token: " + authToken);
         if (!authToken) { return; }
 
@@ -56,7 +56,7 @@ export const GunProvider = ({ children }) => {
             .then(data => setGuns(data)).then(() => setFetchingGuns(false));
     }
 
-    function addGun(clearObject, callback) {
+    const addGun = (clearObject, callback) => {
         clearObject.user_id = userId;
         // post formJson to our env var url
         fetch(`${url}/guns/add`, {
@@ -75,7 +75,7 @@ export const GunProvider = ({ children }) => {
         });
     }
 
-    function removeGun(gunId, callback) {
+    const removeGun = (gunId, callback) => {
         fetch(url+ '/guns/remove?gun_id='+gunId, {
             method: 'GET',
             headers: {
