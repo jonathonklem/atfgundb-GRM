@@ -17,15 +17,20 @@ export interface Gun {
 }
 
 export interface AmmoPurchase {
-    name: string,
-    count: number,
-    grain: string,
-    user_id: string,
+    ammo_id: number,
+    quantity: number,
     price: number,
-    date: string,
+    date?: string,
+    cost?: number
+}
+export interface Accessory {
+    name: string,
+    manufacturer: string,
+    model: string,
 }
 
 export interface Maintenance {
+    gun_id: number,
     maintenance_type: string,
     date_done: string,
 }
