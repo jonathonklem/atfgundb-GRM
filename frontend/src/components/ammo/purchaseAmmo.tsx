@@ -79,7 +79,7 @@ const PurchaseAmmo = (props) => {
                         <button onClick={(e) => setCalculateCpr(true)} className="rounded-3xl tracking-wider text-xs mt-4 bg-redbg drop-shadow-lg text-white py-1 px-2 block text-center mx-auto">Switch to Total Cost of Purchase</button>
                     </>
                 )}
-                <label className="block my-2 mx-auto mb-24"><div className="block text-sm font-extralight tracking-wider">Quantity</div><div className="block w-full p-2 w-1/2 mx-auto"><input type="number" value={ammoPurchase.quantity} onChange={(e) => updateAmmoPurchase('quantity', Number(e.target.value))} name="quantity" /></div></label>
+                <label className="block my-2 mx-auto mb-24"><div className="block text-sm font-extralight tracking-wider">Quantity</div><div className="block w-full p-2 w-1/2 mx-auto"><input type="number" value={ammoPurchase.quantity ? ammoPurchase.quantity : ""} onChange={(e) => updateAmmoPurchase('quantity', Number(e.target.value))} name="quantity" /></div></label>
                 <div className="bg-darkbg mt-4 flex justify-between pt-2 fixed bottom-[53px] w-full left-0 text-center">
                     <button onClick={savePurchase} className="rounded-3xl tracking-wider text-lg bg-redbg drop-shadow-lg text-white py-2 px-4 w-1/4 block text-center mx-auto">Submit</button>
                 </div>

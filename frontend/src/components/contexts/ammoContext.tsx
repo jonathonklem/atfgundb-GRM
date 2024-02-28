@@ -38,6 +38,7 @@ export const AmmoProvider = ({ children }) => {
     }
 
     const addAmmo = (clearObject, callback) => {
+        clearObject.user_id = userId;
         // post formJson to our env var url
         fetch(`${url}/ammo/add`, {
             method: 'POST',
