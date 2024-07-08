@@ -1,10 +1,15 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { GunContext } from "../contexts/gunContext";
+import { AmmoContext } from "../contexts/ammoContext";
 import { RangeTripContext } from "../contexts/rangeTripContext";
-import { RangeTripType, RangeTripContextType } from "../../Types";
+import { RangeTripType, RangeTripContextType, AmmoContextType } from "../../Types";
 import {Gun, GunContextType} from "../../Types";
 
+interface AmmoList {
+    name: string,
+    amount: number,
+}
 
 const ViewGun = (props) => {
     const [gun, setGun] = useState<Gun>({} as Gun);
@@ -12,7 +17,10 @@ const ViewGun = (props) => {
     const [confirmText, setConfirmText] = useState<string>('');
     const [gunRangeTrips, setGunRangeTrips] = useState<RangeTripType[]>([]);
     const [currentFilter, setCurrentFilter] = useState<number>(5);
+    const [consumedAmmo, setConsumedAmmo] = useState<AmmoList[]>([]);
+
     const { guns, removeGun } = React.useContext(GunContext) as GunContextType;
+    const { ammo } = React.useContext(AmmoContext) as AmmoContextType;
     const { rangeTrips } = React.useContext(RangeTripContext) as RangeTripContextType;
 
     const navigate = useNavigate();
@@ -40,11 +48,34 @@ const ViewGun = (props) => {
             }
         });
 
+        const tempAmmoMap = {} as any;
         rangeTrips.filter((rangeTrip) => {
             if (rangeTrip.gun_id === id) {
                 setGunRangeTrips(gunRangeTrips => [rangeTrip, ...gunRangeTrips]);
+
+                if (!tempAmmoMap[rangeTrip.ammo_id]) {
+                    tempAmmoMap[rangeTrip.ammo_id] = rangeTrip.quantity_used;
+                } else {
+                    tempAmmoMap[rangeTrip.ammo_id] += rangeTrip.quantity_used;
+                }
             }
         });
+
+        const tempAmmoArray = [] as AmmoList[];
+        Object.keys(tempAmmoMap).map((ammoId) => {
+            ammo.map((ammoElement) => {
+                if (ammoElement.ID === ammoId) {
+                    tempAmmoArray.push(
+                        {
+                            name: ammoElement.name,
+                            amount: tempAmmoMap[ammoId]
+                        }
+                    );
+                }
+            });
+        });
+
+        setConsumedAmmo(tempAmmoArray);
     }, []);
 
     const handleRemove = () => {
@@ -84,6 +115,28 @@ const ViewGun = (props) => {
             </table>
             <Link to={`/guns/edit/`+gun.ID} className="mb-4 rounded-3xl tracking-wider text-xs mt-4 bg-redbg drop-shadow-lg text-white py-1 px-2 w-16 block text-center mx-auto">Edit</Link>
 
+            {consumedAmmo.length > 0 && (
+                <>
+                    <h1 className="tracking-widest text-xl px-4 py-2"><img className="float-left"  src="/pie-chart-red.png" />Consumed Ammo</h1>
+                    <table className="mx-auto mb-4 font-light text-sm tracking-wider">
+                        <thead>
+                            <tr>
+                                <th className="text-left">Type</th>
+                                <th className="text-right">Rounds</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {consumedAmmo.map((ammo) => (
+                                <tr>
+                                    <td className="text-left">{ammo.name}</td>
+                                    <td className="text-right">{String(ammo.amount)}</td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </>
+            )}
+            
             {gunRangeTrips.length > 0 && (
                 <>
                     <h1 className="tracking-widest text-xl px-4 py-2"><img className="float-left" src="/range-red.png" />Recent Range Trips</h1>

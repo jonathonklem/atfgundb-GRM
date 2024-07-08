@@ -44,7 +44,7 @@ export interface WeaponGroupType {
 }
 
 export interface Ammo {
-    ID?: number,
+    ID?: string,
     name: string,
     amount: number,
     grain: string,
