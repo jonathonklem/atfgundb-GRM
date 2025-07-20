@@ -1,6 +1,9 @@
 # ATFGunDB
 
-# latest redesign notes:
+This project has been made open source after discontinuing support.  This was my first larger go project and my first project that leaned heavily into AWS Lambda.  My goal was to get more familiar with MongoDB, Go, Auth0, and Lambda.  If I had to redo this, I'd probably use Laravel + Sanctum rather than Go+Auth0 and host it on an ec2 instance with a MySQL database.  
+
+
+## latest redesign notes:
     buttons get:
     rounded-3xl bg-redbg drop-shadow-lg
 
